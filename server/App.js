@@ -2,8 +2,11 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv');
 const express = require('express');
 const cookieParser = require('cookie-parser')
+const cors = require('cors');
 
 const app = express();
+// Enable All CORS Requests
+app.use(cors());
 
 app.use(cookieParser())
 

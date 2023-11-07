@@ -9,6 +9,7 @@ import Owner from './pages/Owner';
 import Registration from './componentsOwner/Registration';
 import Login from './componentsOwner/Login';
 import ErrorPage from './components/ErrorPage';
+import AddRestaurant from './componentsRestaurant/AddRestaurant';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route exact path="/owner-home" element={<Owner/>}></Route>
       <Route exact path="/owner-registration" element={<Registration/>}></Route>
       <Route exact path="/owner-login" element={<Login/>}></Route>
+      <Route exact path="/add-restaurant" element={<AddRestaurant/>}></Route>
       <Route path="*" element={<ErrorPage />} />
     </Routes>
     </BrowserRouter>

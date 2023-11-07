@@ -4,6 +4,7 @@
     position: fixed;
     bottom: 100px;
     right: 100px;
+    color: black;
   }
   
   .logout-button {

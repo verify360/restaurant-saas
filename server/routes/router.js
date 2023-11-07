@@ -12,10 +12,6 @@ const Booking = require("../models/bookingModel");
 const Review = require("../models/reviewModel");
 const Owner = require("../models/restaurantOwnerModel");
 
-router.get("/", (req, res) => {
-  res.send("Hello");
-});
-
 // router.post("/register", (req, res) => {
 //   const { username, password, email, fullName, phoneNumber } = req.body;
 //   if (!username || !password || !email || !fullName || !phoneNumber) {
@@ -102,9 +98,78 @@ router.post("/owner-login",async(req, res) =>{
   }
 })  
 
+
+router.post("/update-owner-details", authMiddleware, async (req, res) => {
+  const userId = req.user._id; 
+  const { username, password, email, fullName, phoneNumber } = req.body;
+
+  if (!username || !password || !email || !fullName || !phoneNumber) {
+    return res.status(422).json({ error: "All Fields are Mandatory." });
+  }
+
+  try {
+    const existingUser = await Owner.findById(userId);
+
+    if (!existingUser) {
+      return res.status(404).json({ error: "User not found." });
+    }
+    
+    // Update user's details if provided, otherwise keep the existing values
+    existingUser.username = username || existingUser.username;
+    existingUser.password = password || existingUser.password;
+    existingUser.email = email || existingUser.email;
+    existingUser.fullName = fullName || existingUser.fullName;
+    existingUser.phoneNumber = phoneNumber || existingUser.phoneNumber;
+    
+    await existingUser.save();
+    res.status(200).json({ message: "User details updated successfully." });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 router.get("/owner-home",authMiddleware,(req,res) => {
   res.send(req.user);
 })
+
+router.get("/owner-logout", (req,res) => {
+  res.clearCookie('jwtoken');
+  res.status(200).send("Logged Out Successfully.");
+});
+
+router.get("/add-restaurant",authMiddleware,(req,res) => {
+  // console.log("hey");
+  res.send(req.user);
+})
+
+router.post("/add-restaurant", async (req, res) => {
+  const owner = req.user;
+  
+  const {name,city,area,location,averageCostForTwo,cuisine,openingHours,
+    contactNumber,website,extraDiscount,types,offers,images,menu,
+    amenities} = req.body;
+    
+  if (!name || !city || !area || !location || !cuisine || !contactNumber || !owner){
+      res.status(402).json({error: "Marked Fields Are Mandatory"});
+    }
+    try {
+      const restaurant = new Restaurant({
+          name,city,area,location,averageCostForTwo,cuisine,openingHours,
+          contactNumber,website,extraDiscount,types,offers,images,menu,amenities,
+          owner, 
+      });
+
+      await restaurant.save();
+      res.status(200).json({message: "Restaurant Added Successfully."})
+
+    } catch (error) {
+      res.status(401).json({error: error});
+    }
+         
+});
+
   
 
 module.exports = router;

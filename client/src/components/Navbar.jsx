@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import logo from "../assets/logo.png";
-import Login from "./Signin";
+import Signin from "./Signin";
 import {useAuthState} from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 
@@ -72,7 +72,7 @@ function Navbar() {
           </button>
         </div>
       </nav>
-      {showLogin && <Login onClose={() => setShowLogin(false)} />}
+      {showLogin && <Signin onClose={() => setShowLogin(false)} />}
     </>
   );
 }

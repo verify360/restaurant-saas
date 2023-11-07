@@ -9,11 +9,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px 20px 40px;
     box-shadow: 1px 1px 13px 13px rgba(0, 0, 0, 0.05);
     border-radius: 10px;
 }
-
+.subItems{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px 20px 40px;
+    border-radius: 10px;
+}
 .icon{
     font-size: 40px;
 }
@@ -22,7 +27,7 @@
     cursor: pointer;
 }
 .editIcon :hover{
-    color:blue;
+    color:red;
 }
 .content{
     padding: 5px 5px 12px 12px;

@@ -5,20 +5,24 @@ const authMiddleware = async (req,res,next) =>{
     try {
         const token = req.cookies.jwtoken;
         // console.log("token:",token);
-        const tokenVerify = jwt.verify(token,process.env.SECRET_KEY);
-
-        const user = await Owner.findOne({_id:tokenVerify._id,"tokens.token":token});
-        if(!user){
-            throw new Error("User not Found.");
+        if(token){
+            const tokenVerify = jwt.verify(token,process.env.SECRET_KEY);
+    
+            const user = await Owner.findOne({_id:tokenVerify._id,"tokens.token":token});
+            if(!user){
+                throw new Error("User not Found.");
+            }
+            req.token = token;
+            req.user = user;
+            req.userID = user._id;
+            
+            next();
+        }else{
+            res.status(401).send("Unauthorized: Invalid Tokenn.");
         }
-        req.token = token;
-        req.user = user;
-        req.userID = user._id;
-        
-        next();
 
     } catch (error) {
-        res.status(401).send("Unauthorized: No Token Found.");
+        res.status(401).send("Unauthorized: Invalid Token.");
         console.log(error);
     }
 };
