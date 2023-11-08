@@ -140,25 +140,36 @@ router.get("/owner-logout", (req,res) => {
 });
 
 router.get("/add-restaurant",authMiddleware,(req,res) => {
-  // console.log("hey");
   res.send(req.user);
 })
 
-router.post("/add-restaurant", async (req, res) => {
+router.post("/add-restaurant",authMiddleware, async (req, res) => {
   const owner = req.user;
-  
+  // console.log(req.user);
   const {name,city,area,location,averageCostForTwo,cuisine,openingHours,
     contactNumber,website,extraDiscount,types,offers,images,menu,
     amenities} = req.body;
     
-  if (!name || !city || !area || !location || !cuisine || !contactNumber || !owner){
+  if (!name || !city || !area || !location || !cuisine || !contactNumber){
       res.status(402).json({error: "Marked Fields Are Mandatory"});
+      return;
+    }else if(!owner){
+      res.status(403).json({error: "Unauthorized Access."});
+      return;
     }
     try {
+      const ownerDetails = {
+        _id: owner._id,
+        username: owner.username,
+        email: owner.email,
+        fullName: owner.fullName,
+        phoneNumber: owner.phoneNumber
+      };
+
       const restaurant = new Restaurant({
           name,city,area,location,averageCostForTwo,cuisine,openingHours,
           contactNumber,website,extraDiscount,types,offers,images,menu,amenities,
-          owner, 
+          owner : ownerDetails, 
       });
 
       await restaurant.save();

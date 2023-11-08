@@ -4,14 +4,16 @@ const express = require('express');
 const cookieParser = require('cookie-parser')
 const cors = require('cors');
 
+dotenv.config({path: './config.env'})
+require('./database/connection');
+
+
 const app = express();
 // Enable All CORS Requests
 app.use(cors());
 
 app.use(cookieParser())
 
-dotenv.config({path: './config.env'})
-require('./database/connection');
 app.use(express.json());
 
 app.use(require('./routes/router'));
