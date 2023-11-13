@@ -6,12 +6,10 @@ import { useNavigate } from 'react-router-dom';
 const initialState = {
   name: '', city: '', area: '', location: '', contactNumber: '',
   averageCostForTwo: '', cuisine: [], types: [], offers: [],
-  openingHours: {
-    startTime: '',
-    endTime: '',
-  },
-  website: '', extraDiscount: [], amenities: [], images: [], menu: [],
+  startTime: '', endTime: '', website: '',
+  extraDiscount: [], amenities: [], images: [], menu: [],
 };
+const MAX_FILE_SIZE_MB = 5; // 5MB in bytes
 
 const AddRestaurant = () => {
 
@@ -23,25 +21,12 @@ const AddRestaurant = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name.startsWith("openingHours.")) {
-      // Handle opening hours fields
-      const openingHoursField = name.split(".")[1];
-      setFormData((prevData) => ({
-        ...prevData,
-        openingHours: {
-          ...prevData.openingHours,
-          [openingHoursField]: value,
-        },
-      }));
-    } else {
-      // Handle other fields
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
-  };
 
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const [amenities, setAmenities] = useState({
     wifi: false,
@@ -71,39 +56,46 @@ const AddRestaurant = () => {
 
   const handleImageChange = (e) => {
     const files = e.target.files;
-    setFormData({ ...formData, images: files });
-    const fileNames = Array.from(files).map((file) => ({ name: file.name, file }));
-    setImageFileNames(fileNames);
-  };
+    const selectedFiles = Array.from(files).filter((file) => file.size <= MAX_FILE_SIZE_MB * 1024 * 1024);
 
-  const handleImageRemove = (index) => {
-    const updatedImages = [...imageFileNames];
-    updatedImages.splice(index, 1);
-    setImageFileNames(updatedImages);
-    const updatedFiles = updatedImages.map((item) => item.file);
-    setFormData({ ...formData, images: updatedFiles });
+    if (selectedFiles.length === files.length) {
+      setFormData({ ...formData, images: selectedFiles });
+      setImageFileNames(selectedFiles.map((file) => ({ name: file.name })));
+    } else {
+      window.alert(`Some images exceed ${MAX_FILE_SIZE_MB}MB.`);
+    }
   };
 
   const handleMenuChange = (e) => {
     const files = e.target.files;
-    setFormData({ ...formData, menu: files });
-    const fileNames = Array.from(files).map((file) => ({ name: file.name, file }));
-    setMenuFileNames(fileNames);
+    const selectedFiles = Array.from(files).filter((file) => file.size <= MAX_FILE_SIZE_MB * 1024 * 1024);
+
+    if (selectedFiles.length === files.length) {
+      setFormData({ ...formData, menu: selectedFiles });
+      setMenuFileNames(selectedFiles.map((file) => ({ name: file.name })));
+    } else {
+      window.alert(`Some files exceed ${MAX_FILE_SIZE_MB}MB.`);
+    }
+  };
+
+  const handleImageRemove = (index) => {
+    const updatedImages = [...formData.images];
+    updatedImages.splice(index, 1);
+    setFormData({ ...formData, images: updatedImages });
+    setImageFileNames(updatedImages.map((file) => ({ name: file.name })));
   };
 
   const handleMenuRemove = (index) => {
-    const updatedMenu = [...menuFileNames];
+    const updatedMenu = [...formData.menu];
     updatedMenu.splice(index, 1);
-    setMenuFileNames(updatedMenu);
-    const updatedFiles = updatedMenu.map((item) => item.file);
-    setFormData({ ...formData, menu: updatedFiles });
+    setFormData({ ...formData, menu: updatedMenu });
+    setMenuFileNames(updatedMenu.map((file) => ({ name: file.name })));
   };
 
   function truncateFileName(fileName, maxLength = 15) {
     if (fileName.length <= maxLength) {
       return fileName;
     } else {
-      // Truncate the file name and add ellipsis (...) at the end
       return fileName.substring(0, maxLength - 3) + '...';
     }
   }
@@ -111,13 +103,30 @@ const AddRestaurant = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === 'openingHours') {
+          Object.entries(value).forEach(([timeKey, timeValue]) => {
+            formDataToSend.append(`openingHours.${timeKey}`, timeValue);
+          });
+        } else if (key === 'amenities') {
+          value.forEach((amenity) => {
+            formDataToSend.append('amenities', amenity);
+          });
+        } else if (key === 'images' || key === 'menu') {
+          value.forEach((file) => {
+            formDataToSend.append(key, file);
+          });
+        } else {
+          formDataToSend.append(key, value);
+        }
+      });
+
       const res = await fetch('/add-restaurant', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: formDataToSend,
       });
+
       const data = await res.json();
       if (res.status === 200) {
         window.alert("Restaurant Added Successfully.");
@@ -131,7 +140,7 @@ const AddRestaurant = () => {
         setError("Failed to add restaurant. Please try again.");
       }
     } catch (error) {
-      setError("Failed to add restaurant. Please try again.");
+      setError("Failed to add restaurant.");
       console.error(error);
     }
   };
@@ -174,26 +183,27 @@ const AddRestaurant = () => {
 
         <div className="info">
           <div className="contents">
-            <div className='subHeading'>Restaurant Details<span><small>(mandatory)</small></span></div>
+            <div className='subHeading'>Restaurant Details<span><small>(not mandatory)</small></span></div>
             <div className="resItem">
               <div className="">
-                <label>Opening Hours:</label>
-                <input className='resHours' type="text" name="openingHours.startTime" value={formData.openingHours.startTime} onChange={handleInputChange} placeholder="Start Time e.g: 4 PM" required />
+                <label>Open Hours:</label>
+                <input className='resHours' type="text" name="startTime" value={formData.startTime} onChange={handleInputChange} placeholder="Opening Time e.g: 4 PM" />
                 <span className="separator"> -- </span>
-                <input className='resHours' type="text" name="openingHours.endTime" value={formData.openingHours.endTime} onChange={handleInputChange} placeholder="End Time e.g: 11 PM" required />
+                <input className='resHours' type="text" name="endTime" value={formData.endTime} onChange={handleInputChange} placeholder="Closing Time e.g: 11 PM" />
               </div>
             </div>
+
             <div className="resItem">
               <label>Cuisine:</label>
-              <input className='resInput' type="text" name="cuisine" placeholder='Separate by commas (e.g., Chinese, Italian, French,etc.)' value={formData.cuisine.join(',')} onChange={(e) => setFormData({ ...formData, cuisine: e.target.value.split(',') })} required />
+              <input className='resInput' type="text" name="cuisine" placeholder='Separate by commas (e.g., Chinese, Italian, French,etc.)' value={formData.cuisine.join(',')} onChange={(e) => setFormData({ ...formData, cuisine: e.target.value.split(',') })} />
             </div>
             <div className="resItem">
               <label>Types:</label>
-              <input className='resInput' type="text" name="types" placeholder='Separate by commas (e.g., Fine Dining, 5 Star,etc.)' value={formData.types.join(',')} onChange={(e) => setFormData({ ...formData, types: e.target.value.split(',') })} required />
+              <input className='resInput' type="text" name="types" placeholder='Separate by commas (e.g., Fine Dining, 5 Star,etc.)' value={formData.types.join(',')} onChange={(e) => setFormData({ ...formData, types: e.target.value.split(',') })} />
             </div>
             <div className="resItem">
               <label>Offers:</label>
-              <input className='resInput' type="text" name="offers" placeholder='Separate by commas (e.g., 10% Off, Happy Hour,etc.)' value={formData.offers.join(',')} onChange={(e) => setFormData({ ...formData, offers: e.target.value.split(',') })} required />
+              <input className='resInput' type="text" name="offers" placeholder='Separate by commas (e.g., 10% Off, Happy Hour,etc.)' value={formData.offers.join(',')} onChange={(e) => setFormData({ ...formData, offers: e.target.value.split(',') })} />
             </div>
           </div>
         </div>
@@ -250,7 +260,7 @@ const AddRestaurant = () => {
                 {imageFileNames.map((item, index) => (
                   <div className='resImage' key={index}>
                     <p>{truncateFileName(item.name)}</p>
-                    <div className='resImageRemove' onClick={() => handleImageRemove(index)}><RiDeleteBin6Line/></div>
+                    <div className='resImageRemove' onClick={() => handleImageRemove(index)}><RiDeleteBin6Line /></div>
                   </div>
                 ))}
               </div>
@@ -262,7 +272,7 @@ const AddRestaurant = () => {
                 {menuFileNames.map((item, index) => (
                   <div className='resImage' key={index}>
                     <p>{truncateFileName(item.name)}</p>
-                    <div className='resImageRemove' onClick={() => handleMenuRemove(index)}><RiDeleteBin6Line/></div>
+                    <div className='resImageRemove' onClick={() => handleMenuRemove(index)}><RiDeleteBin6Line /></div>
                   </div>
                 ))}
               </div>

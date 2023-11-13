@@ -1,0 +1,21 @@
+.headingContainer {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 20px 200px 0px 200px;
+}
+
+.item{
+    align-self: start;
+}
+.fetchedImage{
+    /* border: 1px solid black; */
+    margin-top: 1px;
+}
+.fetchedImage > img{
+    /* border: 1px solid red; */
+    max-width: 50px;
+    max-height: 50px;
+    margin-right: 5px;
+}

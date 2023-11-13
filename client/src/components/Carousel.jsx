@@ -1,10 +1,25 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Card from './Card';
 
 export default function Carousel() {
+    const [restaurants, setRestaurants] = useState([]);
+
+    useEffect(() => {
+        const fetchRestaurants = async () => {
+            try {
+                const response = await fetch('/restaurants-slider');
+                const data = await response.json();
+                setRestaurants(data.restaurants || []);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchRestaurants();
+    }, []);
 
     const settings = {
         dots: false,
@@ -13,51 +28,6 @@ export default function Carousel() {
         slidesToShow: 4,
         slidesToScroll: 1
     };
-
-    const data = [
-        {
-            restaurantImg: `/assets/res1.jpeg`,
-            restaurantName: `Turin Cafe`,
-            restaurantLocation: `Saltlake,Kolkata`,
-            restaurantRating: `4.3`,
-            discount: NaN,
-        },
-        {
-            restaurantImg: `/assets/res2.jpeg`,
-            restaurantName: `Bulbul Cafe`,
-            restaurantLocation: `Newtown,Kolkata`,
-            restaurantRating: `4.2`,
-            discount: NaN,
-        },
-        {
-            restaurantImg: `/assets/res3.jpeg`,
-            restaurantName: `Arpan's Rannaghor`,
-            restaurantLocation: `Garia,Kolkata`,
-            restaurantRating: `4.6`,
-            discount: 15,
-        },
-        {
-            restaurantImg: `/assets/res4.jpeg`,
-            restaurantName: `Cafe Cafe`,
-            restaurantLocation: `Sovabazar,Kolkata`,
-            restaurantRating: `4.3`,
-            discount: NaN,
-        },
-        {
-            restaurantImg: `/assets/res5.jpeg`,
-            restaurantName: `Kolkata Teahouse`,
-            restaurantLocation: `College Street,Kolkata`,
-            restaurantRating: `4.3`,
-            discount: 10,
-        },
-        {
-            restaurantImg: `/assets/res6.jpeg`,
-            restaurantName: `Bulbul Cafe`,
-            restaurantLocation: `Newtown,Kolkata`,
-            restaurantRating: `4.2`,
-            discount: NaN,
-        },
-    ];
 
     return (
         <>
@@ -68,12 +38,12 @@ export default function Carousel() {
                 </div>
                 <div className="restaurantSlider">
                     <Slider {...settings}>
-                        {data.map((d) => (
-                            <Card d={d}/>
+                        {restaurants.map((restaurant, index) => (
+                            <Card key={index} restaurant={restaurant} />
                         ))}
                     </Slider>
                 </div>
             </section>
         </>
-    )
+    );
 }

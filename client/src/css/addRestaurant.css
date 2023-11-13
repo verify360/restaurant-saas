@@ -50,6 +50,10 @@
 .resFile{
     margin-left: 10px;
     margin-top: 10px;
+    width: 90px;
+}
+::-webkit-file-upload-button {
+    cursor:pointer;
 }
 .resImages{
     margin-top: 10px;

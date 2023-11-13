@@ -10,6 +10,8 @@ import Registration from './componentsOwner/Registration';
 import Login from './componentsOwner/Login';
 import ErrorPage from './components/ErrorPage';
 import AddRestaurant from './componentsRestaurant/AddRestaurant';
+import RestaurentDetails from './componentsRestaurant/RestaurentDetails';
+import Restaurant from './pages/Restaurant';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
       <Route exact path="/owner-registration" element={<Registration/>}></Route>
       <Route exact path="/owner-login" element={<Login/>}></Route>
       <Route exact path="/add-restaurant" element={<AddRestaurant/>}></Route>
+      <Route exact path="/restaurant/:restaurantId" element={<RestaurentDetails/>}></Route>
+      <Route exact path="/:city/:area/:name/:_id" element={<Restaurant/>}></Route>
       <Route path="*" element={<ErrorPage />} />
     </Routes>
     </BrowserRouter>
