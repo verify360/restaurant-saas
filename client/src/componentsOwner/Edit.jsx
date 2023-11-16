@@ -82,8 +82,8 @@ export default function Edit({ onClose, data }) {
             <label>Contact:</label>
             <input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required />
           </div>
-          <button className='subLogin' type="submit">Save</button>
-          <span><button className='close' onClick={onClose}>Close</button></span>
+          <button className='subLogin button' type="submit">Save</button>
+          <span><button className='close button' onClick={onClose}>Close</button></span>
         </form>
       </div>
     </div>

@@ -29,11 +29,21 @@ const AddRestaurant = () => {
   };
 
   const [amenities, setAmenities] = useState({
-    wifi: false,
-    parking: false,
-    ac: false,
-    petsAllowed: false,
-    outdoorSeating: false,
+    Wifi: false,
+    Parking: false,
+    AC: false,
+    PetsAllowed: false,
+    OutdoorSeating: false,
+    CardsAccepted: false,
+    WalletAccepted: false,
+    HomeDelivery: false,
+    ValetAvailable: false,
+    RoofTop: false,
+    FullBarAvailable: false,
+    Lift: false,
+    SmokingArea: false,
+    LivePerformance: false,
+    LiveScreening: false,
   });
 
   const handleAmenitiesChange = (e) => {
@@ -112,6 +122,20 @@ const AddRestaurant = () => {
         } else if (key === 'amenities') {
           value.forEach((amenity) => {
             formDataToSend.append('amenities', amenity);
+          });
+        } else if (key === 'cuisine') {
+          value.forEach((cuisine) => {
+            formDataToSend.append('cuisine', cuisine);
+          });
+        }
+        else if (key === 'types') {
+          value.forEach((type) => {
+            formDataToSend.append('types', type);
+          });
+        }
+        else if (key === 'offers') {
+          value.forEach((offer) => {
+            formDataToSend.append('offers', offer);
           });
         } else if (key === 'images' || key === 'menu') {
           value.forEach((file) => {
@@ -229,20 +253,52 @@ const AddRestaurant = () => {
             <div className="resItem">
               <label>Amenities:</label>
               <div className="amenities-input">
-                <input className='resCheck' type="checkbox" id="wifi" name="wifi" checked={amenities.wifi} onChange={handleAmenitiesChange} />
-                <label className='resCheckElement' htmlFor="wifi">Wifi</label>
+                <input className='resCheck' type="checkbox" id="Wifi" name="Wifi" checked={amenities.Wifi} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="Wifi">Wifi</label>
 
-                <input className='resCheck' type="checkbox" id="parking" name="parking" checked={amenities.parking} onChange={handleAmenitiesChange} />
-                <label className='resCheckElement' htmlFor="parking">Parking</label>
+                <input className='resCheck' type="checkbox" id="Parking" name="Parking" checked={amenities.Parking} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="Parking">Parking</label>
 
-                <input className='resCheck' type="checkbox" id="ac" name="ac" checked={amenities.ac} onChange={handleAmenitiesChange} />
-                <label className='resCheckElement' htmlFor="ac">Air Conditioning</label>
+                <input className='resCheck' type="checkbox" id="AC" name="AC" checked={amenities.AC} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="AC">Air Conditioning</label>
 
-                <input className='resCheck' type="checkbox" id="petsAllowed" name="petsAllowed" checked={amenities.petsAllowed} onChange={handleAmenitiesChange} />
-                <label className='resCheckElement' htmlFor="petsAllowed">Pets Allowed</label>
+                <input className='resCheck' type="checkbox" id="PetsAllowed" name="PetsAllowed" checked={amenities.PetsAllowed} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="PetsAllowed">Pets Allowed</label>
 
-                <input className='resCheck' type="checkbox" id="outdoorSeating" name="outdoorSeating" checked={amenities.outdoorSeating} onChange={handleAmenitiesChange} />
-                <label className='resCheckElement' htmlFor="outdoorSeating">Outdoor Seating</label>
+                <input className='resCheck' type="checkbox" id="OutdoorSeating" name="OutdoorSeating" checked={amenities.OutdoorSeating} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="OutdoorSeating">Outdoor Seating</label>
+              </div>
+              <div className="amenities-input">
+                <input className='resCheck' type="checkbox" id="CardsAccepted" name="CardsAccepted" checked={amenities.CardsAccepted} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="CardsAccepted">Cards Accepted</label>
+
+                <input className='resCheck' type="checkbox" id="WalletAccepted" name="WalletAccepted" checked={amenities.WalletAccepted} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="WalletAccepted">Wallet Accepted</label>
+
+                <input className='resCheck' type="checkbox" id="HomeDelivery" name="HomeDelivery" checked={amenities.HomeDelivery} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="HomeDelivery">Home Delivery</label>
+
+                <input className='resCheck' type="checkbox" id="ValetAvailable" name="ValetAvailable" checked={amenities.ValetAvailable} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="ValetAvailable">Valet Available</label>
+
+                <input className='resCheck' type="checkbox" id="RoofTop" name="RoofTop" checked={amenities.RoofTop} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="RoofTop">Roof Top</label>
+              </div>
+              <div className="amenities-input">
+                <input className='resCheck' type="checkbox" id="FullBarAvailable" name="FullBarAvailable" checked={amenities.FullBarAvailable} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="FullBarAvailable">Full Bar Available</label>
+
+                <input className='resCheck' type="checkbox" id="Lift" name="Lift" checked={amenities.Lift} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="Lift">Lift</label>
+
+                <input className='resCheck' type="checkbox" id="SmokingArea" name="SmokingArea" checked={amenities.SmokingArea} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="SmokingArea">Smoking Area</label>
+
+                <input className='resCheck' type="checkbox" id="LivePerformance" name="LivePerformance" checked={amenities.LivePerformance} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="LivePerformance">Live Performance</label>
+
+                <input className='resCheck' type="checkbox" id="LiveScreening" name="LiveScreening" checked={amenities.LiveScreening} onChange={handleAmenitiesChange} />
+                <label className='resCheckElement' htmlFor="LiveScreening">Live Screening</label>
               </div>
             </div>
           </div>
@@ -281,7 +337,7 @@ const AddRestaurant = () => {
         </div>
         <div className="info">
           {error && <div className="error-message">{error}</div>}
-          <button className='resButton' type="submit">Add Restaurant</button>
+          <button className='resButton button' type="submit">Add Restaurant</button>
         </div>
       </form>
     </div>

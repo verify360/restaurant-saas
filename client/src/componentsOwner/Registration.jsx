@@ -78,7 +78,7 @@ const Registration = () => {
                 <label for="phoneNumber">Phone Number:</label>
                 <input type="tel" id="phoneNumber" name="phoneNumber" placeholder='+91 96x245x35x'  required value={owner.phoneNumber} onChange={handleInputs}/>
             </div>
-            <button type="submit" class="submit-btn">Register</button>
+            <button type="submit" class="submit-btn button">Register</button>
         </form>
         <br/>
         <p>Already registered? <Link to="/owner-login">Login here</Link></p>

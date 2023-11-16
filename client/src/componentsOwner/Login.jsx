@@ -60,7 +60,7 @@ const Login = () => {
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder='Enter The Password' required value={owner.password} onChange={handleInputs}/>
             </div>
-            <button type="submit" class="submit-btn">Login</button>
+            <button type="submit" class="submit-btn button">Login</button>
         </form>
         <br/>
         <p>New here? <Link to="/owner-registration">Register here</Link></p>

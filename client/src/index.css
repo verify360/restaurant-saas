@@ -38,12 +38,12 @@
   border-bottom: 3px solid #FF5757;
 }
 
-button ,.loginButton{
+.button ,.loginButton{
   background-color: #FF5757 !important;
   cursor: pointer;
 }
 
-button:hover ,.loginButton:hover{
+.button:hover ,.loginButton:hover{
   background-color: #fc0404 !important;
 }
 

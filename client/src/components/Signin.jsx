@@ -50,8 +50,8 @@ export default function Signin({ onClose}) {
             <label>Password:</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
-          <button className='subLogin' type="submit">Login</button>
-          <span><button className='close' onClick={onClose}>Close</button></span>
+          <button className='subLogin button' type="submit">Login</button>
+          <span><button className='close button' onClick={onClose}>Close</button></span>
         </form>
       </div>
     </div>

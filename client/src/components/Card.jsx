@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 export default function Card({ key, restaurant }) {
 
     const navigate = useNavigate();
-    // Assuming 'restaurant.images' is an array of objects with 'data' and 'contentType' properties
     const firstImage = restaurant.images && restaurant.images.length > 0 ? restaurant.images[0] : null;
 
     return (

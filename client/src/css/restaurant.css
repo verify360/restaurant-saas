@@ -1,0 +1,132 @@
+.resMainUrls{
+    padding-bottom: 25px;
+    font-size: 13px;
+}
+.url{
+    font-size: 13px
+}
+.resMain{
+    padding: 10px 370px 50px 370px;
+    height: 1500px;
+    background-color: #f3f3f3;
+    
+}
+.resMainOne{
+    padding: 0 15px;
+    width: 810px;
+    float: left;
+}
+.resMainImages{
+    border-radius: 5px 5px 0px 0px;
+}
+.resMainDetails{
+    padding: 12px;
+    display: flex;
+    background-color: #fff;
+    border-radius: 0px 0px 5px 5px;
+    justify-content: space-between;    
+}
+.resMainInfo h1{
+    font-size: 22px;
+    color: #202020;
+}
+.resMainRating{
+    flex-shrink: 0;
+    text-align: right;
+}
+.resMainInfos{
+    padding: 8px 0px 0px 0px;
+    color: #5c5757;
+}
+.textRating{
+    margin: 0px 0px 25px 54px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #8cbb0f;
+    color: #fff;
+    font-size: larger;
+    font-weight: 600;
+    width: 20px;
+    padding-right: 17px;
+}
+.numberRating{
+    color: #3595ff;
+    border-bottom: 2px dotted #3595ff;
+    width: fit-content;
+    margin-left: 23px;
+}
+.resMainSchema{
+    display: flex;
+    margin-top: 12px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.resMainSchemas{
+    padding: 15px 30px 15px 30px;
+    border-right: 1px solid #f3f3f3;
+    text-align: center;
+}
+.resMainSchemas:last-child{
+    border: none;
+}
+.resMainSchemas h1{
+    font-size: 16px;
+    color: #202020;
+}
+.resMainMenu, .resMainAbout{
+    margin-top: 12px;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 10px 0px 15px 10px;
+}
+.resMainMenu h1, .resMainAbout h1{
+    font-size: 18px;
+    color: #202020;
+}
+.resMainMenu img{
+    margin-top: 10px;
+    margin-right: 7px;
+    height: 130px;
+    width: 125px;
+    border-radius: 5px;
+}
+.resMainAboutInfo{
+    margin-top: 15px;
+}
+.resMainAboutInfos{
+    display: flex;
+    margin-top: 15px;
+}
+.resMainAboutIcon{
+    font-size: 30px;
+    margin-right: 25px;
+    color: #ac8e48;
+}
+.resMainAboutContent,.resFeature{
+    font-size: 15.5px;
+    color: #5c5757;
+}
+.resMainAboutContent h3{
+    margin: 0px 0px 2px 0px;
+    color: #ac8e48;
+    font-size: 15px;
+}
+.resFeatures{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0px 55px 5px 55px;
+}
+.resFeature{
+    display: flex;
+    align-items: center;
+    margin-right: 85px;
+    margin-bottom: 5px;
+}
+.resFeatureIcon{
+    font-size: 25px;
+    color: #ac8e48;
+    font-weight: lighter;
+    margin-right: 10px;
+    padding-top: 5px;
+}
+
