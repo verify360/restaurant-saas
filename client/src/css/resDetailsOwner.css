@@ -8,14 +8,24 @@
 
 .item{
     align-self: start;
+    /* border: 1px solid red; */
+    height: max-content;
+    width: 500px;
 }
 .fetchedImage{
-    /* border: 1px solid black; */
     margin-top: 1px;
 }
 .fetchedImage > img{
-    /* border: 1px solid red; */
     max-width: 50px;
     max-height: 50px;
     margin-right: 5px;
+}
+.containerRes {
+    /* border: 1px solid black; */
+    margin-top: 50px;
+    padding-left: 297px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }

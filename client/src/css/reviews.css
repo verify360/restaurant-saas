@@ -1,0 +1,124 @@
+.rating-container {
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin: 16px 14px 35px 3px;
+}
+
+.rating-stat {
+    display: flex;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    margin: 10px;
+}
+
+.star-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #8d8b8b;
+}
+
+.fill {
+    width: 150px;
+    background-color: rgb(227, 222, 222);
+    margin: 0px 10px 0px 10px
+}
+
+.stats {
+    height: max-content;
+    margin-right: 25px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    font-weight: bold;
+}
+.average-rating{
+    width: max-content;
+    color: white;
+    padding: 12px;
+    background-color: #5ba727;
+    font-size: 22px;
+    border-radius: 5px;
+}
+.num-ratings{
+    margin-top: 20px;
+    color: rgb(48, 46, 46);
+}
+.num-reviews{
+    margin-top: 10px;
+    color: rgb(173, 171, 171);
+}
+
+.star-stat {
+    font-size: 16px;
+    font-weight: bolder;
+}
+
+.star {
+    font-size: 16px;
+    color: rgb(227, 222, 222);
+}
+
+.bar {
+    height: 3px;
+    margin-right: 5px;
+}
+
+.count {
+    font-weight: bolder;
+}
+
+.star-bar:nth-child(5) .bar {
+    background-color: #e74c3c;
+}
+
+.star-bar:nth-child(4) .bar {
+    background-color: #e67e22;
+}
+
+.star-bar:nth-child(3) .bar {
+    background-color: #f39c12;
+}
+
+.star-bar:nth-child(2) .bar {
+    background-color: #2ecc71;
+}
+
+.star-bar:nth-child(1) .bar {
+    background-color: #27ae60;
+}
+.reviews-container{
+    display: flex;
+    margin: 16px 14px 14px 3px;
+    border-bottom: 1px solid #ddd;
+}
+.profile-logo-main{
+    height: 50px;
+    width: 50px;
+    color: rgb(227, 222, 222);
+}
+.profile-logo{
+    height: max-content;
+    margin-right: 15px;
+}
+.profile-info{
+    margin-bottom: 10px;
+}
+.profile-info h3{
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.profile-info h4{
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #67ba2a;
+}
+.profile-info p{
+    font-size: 15px;
+    margin-bottom: 5px;
+    font-weight: 100;
+}

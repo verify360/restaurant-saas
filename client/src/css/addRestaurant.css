@@ -65,12 +65,17 @@
     margin: 0px 10px 5px 0px;
     padding: 5px;
     display: flex;
-    border-radius: 30px;
+    /* border-radius: 30px; */
     background-color: rgb(216, 211, 211);
 }
 .resImageRemove{
     font-size: 16px;
     cursor: pointer;
+}
+.resImageRemoveRen{
+    font-size: 20px;
+    cursor: pointer;
+    padding: 14px 0px 0px 3px;
 }
 .resButton{
     height: 30px;
@@ -80,4 +85,13 @@
     color: white;
     font-size: 15px;
     font-weight: 900;
+}
+.editIconArrow{
+    font-size: 40px;
+    cursor: pointer;
+    color: black;
+    height: max-content;
+}
+.editIconArrow :hover {
+    color: red;
 }

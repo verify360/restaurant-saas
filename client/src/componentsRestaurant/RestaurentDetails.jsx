@@ -76,13 +76,15 @@ const RestaurentDetails = () => {
             </div>
             <div className="headingContainer">
                 <div className="Heading">Restaurant Details
-                    <AiTwotoneEdit className="editIcon" title='Edit Restaurant Details' />
+                    <Link to="update-restaurant-details" className="editIcon" title='Edit Restaurant Details'>
+                        <AiTwotoneEdit  />
+                    </Link>
                 </div>
                 <div className="editIcon">
                     <MdDelete title='Delete Restaurant' onClick={handleDelete} />
                 </div>
             </div>
-            <div className="container">
+            <div className="containerRes">
                 <div className="item">
                     <div className="subHeading">Basic Information</div>
                     <p>Name: {restaurant.name}</p>
@@ -107,43 +109,19 @@ const RestaurentDetails = () => {
                     </p>
                     <p>Cuisine: {!restaurant.cuisine || restaurant.cuisine == "" ? (
                         "Not Specified"
-                    ) : restaurant.cuisine
+                    ) : restaurant.cuisine.join(',')
                     }
                     </p>
                     <p>Types: {!restaurant.types || restaurant.types == "" ? (
                         "Not Specified"
-                    ) : restaurant.types
+                    ) : restaurant.types.join(',')
                     }
                     </p>
                     <p>Offers: {!restaurant.offers || restaurant.offers == "" ? (
                         "Not Specified"
-                    ) : restaurant.offers
+                    ) : restaurant.offers.join(',')
                     }
                     </p>
-                </div>
-                <div className="item">
-                    <div className="subHeading">Additional Details</div>
-                    <p>Website: {restaurant.website ? (
-                        restaurant.website
-                    ) : "Not Specified"
-                    }
-                    </p>
-                    <p>Average For 2: {restaurant.averageCostForTwo ? (
-                        `₹${restaurant.averageCostForTwo}`
-                    ) : "Not Specified"
-                    }
-                    </p>
-                    <p>
-                        Extra Discount: {restaurant.extraDiscount && restaurant.extraDiscount.length > 0
-                            ? restaurant.extraDiscount.join(',')
-                            : "Not Specified"}
-                    </p>
-                    <p>
-                        Amenities: {restaurant.amenities && restaurant.amenities.length > 0
-                            ? restaurant.amenities.join(',')
-                            : "Not Specified"}
-                    </p>
-
                 </div>
                 <div className="item">
                     <div className="subHeading">Images and Menu</div>
@@ -179,6 +157,30 @@ const RestaurentDetails = () => {
                             "Not Specified"
                         )}
                     </div>
+                </div>
+                <div className="item">
+                    <div className="subHeading">Additional Details</div>
+                    <p>Website: {restaurant.website ? (
+                        restaurant.website
+                    ) : "Not Specified"
+                    }
+                    </p>
+                    <p>Average For 2: {restaurant.averageCostForTwo ? (
+                        `₹${restaurant.averageCostForTwo}`
+                    ) : "Not Specified"
+                    }
+                    </p>
+                    <p>
+                        Extra Discount: {restaurant.extraDiscount && restaurant.extraDiscount.length > 0
+                            ? restaurant.extraDiscount.join(',')
+                            : "Not Specified"}
+                    </p>
+                    <p>
+                        Amenities: {restaurant.amenities && restaurant.amenities.length > 0
+                            ? restaurant.amenities.join(',')
+                            : "Not Specified"}
+                    </p>
+
                 </div>
             </div>
             <div className="logout-button-container" title='Log Out'>

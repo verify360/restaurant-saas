@@ -1,44 +1,56 @@
-.resMainUrls{
+.resMainUrls {
     padding-bottom: 25px;
     font-size: 13px;
 }
-.url{
+
+.url {
     font-size: 13px
 }
-.resMain{
+
+.resMain {
     padding: 10px 370px 50px 370px;
-    height: 1500px;
+    height: 2000px;
     background-color: #f3f3f3;
-    
+    display: flex;
 }
-.resMainOne{
+
+.resMainOne {
     padding: 0 15px;
     width: 810px;
-    float: left;
 }
-.resMainImages{
-    border-radius: 5px 5px 0px 0px;
+
+.resMainImages>div {
+    background-color: #f3f3f3 !important;
 }
-.resMainDetails{
+
+.resMainImages>div>div {
+    border-radius: 5px 5px 0px 0px !important;
+}
+
+.resMainDetails {
     padding: 12px;
     display: flex;
     background-color: #fff;
     border-radius: 0px 0px 5px 5px;
-    justify-content: space-between;    
+    justify-content: space-between;
 }
-.resMainInfo h1{
+
+.resMainInfo h1 {
     font-size: 22px;
     color: #202020;
 }
-.resMainRating{
+
+.resMainRating {
     flex-shrink: 0;
     text-align: right;
 }
-.resMainInfos{
+
+.resMainInfos {
     padding: 8px 0px 0px 0px;
     color: #5c5757;
 }
-.textRating{
+
+.textRating {
     margin: 0px 0px 25px 54px;
     padding: 10px;
     border-radius: 5px;
@@ -49,80 +61,102 @@
     width: 20px;
     padding-right: 17px;
 }
-.numberRating{
+
+.numberRating {
     color: #3595ff;
     border-bottom: 2px dotted #3595ff;
     width: fit-content;
     margin-left: 23px;
 }
-.resMainSchema{
+
+.resMainSchema {
     display: flex;
     margin-top: 12px;
     border-radius: 5px;
     background-color: #fff;
 }
-.resMainSchemas{
-    padding: 15px 30px 15px 30px;
+
+.resMainSchemas {
+    padding: 15px 30px 10px 30px;
     border-right: 1px solid #f3f3f3;
     text-align: center;
+    border-bottom: 5px solid #fff;
+    cursor: pointer;
 }
-.resMainSchemas:last-child{
+
+.resMainSchemas h1 {
+    font-size: 16px;
+}
+
+.resMainSchemas:last-child {
     border: none;
 }
-.resMainSchemas h1{
-    font-size: 16px;
-    color: #202020;
+
+.resMainSchema .resMainSchemas:hover {
+    color: #71cf32;
+    border-bottom: 5px solid #71cf32;
 }
-.resMainMenu, .resMainAbout{
+
+.resMainMenu, .resMainAbout, .resMainReviews, .resMainHelp {
     margin-top: 12px;
     border-radius: 5px;
     background-color: #fff;
     padding: 10px 0px 15px 10px;
 }
-.resMainMenu h1, .resMainAbout h1{
+
+.resMainMenu h1, .resMainAbout h1, .resMainReviews h1, .resMainHelp h1 {
     font-size: 18px;
     color: #202020;
 }
-.resMainMenu img{
+
+.resMainMenu img {
     margin-top: 10px;
     margin-right: 7px;
     height: 130px;
     width: 125px;
     border-radius: 5px;
 }
-.resMainAboutInfo{
+
+.resMainAboutInfo {
     margin-top: 15px;
 }
-.resMainAboutInfos{
+
+.resMainAboutInfos {
     display: flex;
     margin-top: 15px;
 }
-.resMainAboutIcon{
+
+.resMainAboutIcon {
     font-size: 30px;
     margin-right: 25px;
     color: #ac8e48;
 }
-.resMainAboutContent,.resFeature{
+
+.resMainAboutContent, .resFeature {
     font-size: 15.5px;
     color: #5c5757;
 }
-.resMainAboutContent h3{
+
+.resMainAboutContent h3 {
     margin: 0px 0px 2px 0px;
     color: #ac8e48;
     font-size: 15px;
 }
-.resFeatures{
+
+.resFeatures {
     display: flex;
     flex-wrap: wrap;
     padding: 0px 55px 5px 55px;
 }
-.resFeature{
+
+.resFeature {
     display: flex;
     align-items: center;
-    margin-right: 85px;
+    margin-right: 80px;
     margin-bottom: 5px;
 }
-.resFeatureIcon{
+
+.resFeatureIcon {
     font-size: 25px;
     color: #ac8e48;
     font-weight: lighter;
@@ -130,3 +164,43 @@
     padding-top: 5px;
 }
 
+.help-container {
+    display: flex;
+    margin: 33px 14px 14px 3px;
+}
+
+.help-logo-main {
+    height: 40px;
+    width: 40px;
+    color: rgb(105, 105, 199);
+}
+
+.help-logo {
+    height: max-content;
+    margin-right: 15px;
+}
+
+.help-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.help-info p {
+    font-size: 17px;
+    font-weight: 100;
+}
+
+.resMainTwo {
+    height: 480px;
+    width: 340px;
+    margin: 40px 0px 0px 10px;
+    position: sticky;
+    top: 50px;
+    z-index: 1;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 0 28px -1px rgba(0, 0, 0, .15);
+    overflow-x: hidden;
+    overflow-y: auto;
+}

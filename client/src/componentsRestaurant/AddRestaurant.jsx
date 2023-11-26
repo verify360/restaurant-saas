@@ -211,9 +211,9 @@ const AddRestaurant = () => {
             <div className="resItem">
               <div className="">
                 <label>Open Hours:</label>
-                <input className='resHours' type="text" name="startTime" value={formData.startTime} onChange={handleInputChange} placeholder="Opening Time e.g: 4 PM" />
+                <input className='resHours' type="text" name="startTime" value={formData.startTime} onChange={handleInputChange} placeholder="Opening Time e.g: 13:00" />
                 <span className="separator"> -- </span>
-                <input className='resHours' type="text" name="endTime" value={formData.endTime} onChange={handleInputChange} placeholder="Closing Time e.g: 11 PM" />
+                <input className='resHours' type="text" name="endTime" value={formData.endTime} onChange={handleInputChange} placeholder="Closing Time e.g: 24:00" />
               </div>
             </div>
 

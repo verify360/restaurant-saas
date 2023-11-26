@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from "../components/Navbar";
 import ResDetails from "../components/ResDetails";
+import Footer from "../components/Footer";
 import "../css/restaurant.css";
+import Bookings from '../components/Bookings';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase';
 
 export default function Restaurant() {
     const { city, area, name, _id } = useParams();
     const [restaurant, setRestaurant] = useState(null);
+    const [user] = useAuthState(auth);
 
     useEffect(() => {
         const fetchRestaurantDetails = async () => {
@@ -41,9 +46,10 @@ export default function Restaurant() {
                     <ResDetails restaurant={restaurant} />
                 </div>
                 <div className="resMainTwo">
-
+                    {restaurant ? (<Bookings user={user} restaurant={restaurant} />) : ""}
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

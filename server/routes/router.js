@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const multer = require("multer");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -240,7 +240,6 @@ router.post(
 
       await restaurant.save();
 
-      // Adding the restaurant to the owner's document
       owner.restaurants.push({
         _id: restaurant._id,
         name: restaurant.name,
@@ -265,7 +264,9 @@ router.get("/restaurant/:restaurantId", authMiddleware, async (req, res) => {
     const { restaurantId } = req.params;
 
     try {
-      const restaurant = await Restaurant.findById(restaurantId);
+      const restaurant = await Restaurant.findById(restaurantId).select(
+        "-owner -reviews"
+      );
 
       if (!restaurant) {
         return res.status(404).json({ error: "Restaurant not found" });
@@ -281,73 +282,168 @@ router.get("/restaurant/:restaurantId", authMiddleware, async (req, res) => {
   }
 });
 
-router.delete("/delete-restaurant/:restaurantId", authMiddleware, async (req, res) => {
-  const owner = req.user;
-  const restaurantId = req.params.restaurantId;
+router.put("/update-restaurant/:restaurantId", async (req, res) => {
+  const { restaurantId } = req.params;
 
   try {
-    if (!owner) {
-      res.status(403).json({ error: "Unauthorized Access." });
-      return;
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(restaurantId)) {
-      res.status(400).json({ error: "Invalid Restaurant ID." });
-      return;
-    }
-
-    const restaurant = await Restaurant.findById(restaurantId);
+    const restaurant = await Restaurant.findById(restaurantId).select(
+      "-owner -reviews"
+    );
 
     if (!restaurant) {
-      res.status(404).json({ error: "Restaurant not found." });
-      return;
+      return res.status(404).json({ error: "Restaurant not found" });
     }
 
-    if (!restaurant.owner._id.equals(owner._id)) {
-      res.status(403).json({ error: "Unauthorized Access." });
-      return;
+    Object.assign(restaurant, req.body);
+
+    const updatedRestaurant = await restaurant.save();
+
+    const restaurantOwner = await Owner.findOne({ restaurantId });
+
+    if (restaurantOwner) {
+      Object.assign(restaurantOwner, req.body);
+
+      await restaurantOwner.save();
     }
 
-    await restaurant.deleteOne();
+    res.status(200).json({ restaurant: updatedRestaurant });
+  } catch (error) {
+    console.error("Error updating restaurant:", error);
+    res.status(500).json({ error: "Failed to update restaurant details" });
+  }
+});
 
-    owner.restaurants = owner.restaurants.filter(
-      (rest) => !rest.equals(restaurant._id)
-    );
-    await owner.save();
+router.delete(
+  "/delete-restaurant/:restaurantId",
+  authMiddleware,
+  async (req, res) => {
+    const owner = req.user;
+    const restaurantId = req.params.restaurantId;
 
-    res.status(200).json({ message: "Restaurant Deleted Successfully." });
+    try {
+      if (!owner) {
+        res.status(403).json({ error: "Unauthorized Access." });
+        return;
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(restaurantId)) {
+        res.status(400).json({ error: "Invalid Restaurant ID." });
+        return;
+      }
+
+      const restaurant = await Restaurant.findById(restaurantId);
+
+      if (!restaurant) {
+        res.status(404).json({ error: "Restaurant not found." });
+        return;
+      }
+
+      if (!restaurant.owner._id.equals(owner._id)) {
+        res.status(403).json({ error: "Unauthorized Access." });
+        return;
+      }
+
+      await restaurant.deleteOne();
+
+      owner.restaurants = owner.restaurants.filter(
+        (rest) => !rest.equals(restaurant._id)
+      );
+      await owner.save();
+
+      res.status(200).json({ message: "Restaurant Deleted Successfully." });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+);
+
+router.get("/restaurants-slider", async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find()
+      .limit(8)
+      .select(
+        "_id name city area location averageCostForTwo cuisine startTime endTime contactNumber website extraDiscount types offers amenities images menu"
+      );
+
+    res.json({ restaurants });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-router.get('/restaurants-slider', async (req, res) => {
-  try {
-    const restaurants = await Restaurant.find().limit(8).select(
-      '_id name city area location averageCostForTwo cuisine startTime endTime contactNumber website extraDiscount types offers amenities images menu'
-    );
-
-    res.json({restaurants});
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-router.get('/:city/:area/:name/:_id', async (req, res) => {
+router.get("/:city/:area/:name/:_id", async (req, res) => {
   const { city, area, name, _id } = req.params;
   try {
-    const restaurant = await Restaurant.findById(_id).select('-owner -reviews');
+    const restaurant = await Restaurant.findById(_id).select("-owner -reviews");
 
     if (!restaurant) {
-      return res.status(404).json({ error: 'Restaurant not found' });
+      return res.status(404).json({ error: "Restaurant not found" });
     }
 
     res.status(200).json({ restaurant });
   } catch (error) {
-    console.error('Error fetching restaurant details:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching restaurant details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/book", async (req, res) => {
+  try {
+    const {
+      userEmail,
+      restaurantId,
+      fullName,
+      phoneNumber,
+      numberOfPeople,
+      bookingDate,
+      entryTime,
+      specialRequest,
+    } = req.body;
+
+    if (!userEmail || !fullName || !phoneNumber) {
+      res.status(402).json({ error: "Marked Fields Are Mandatory" });
+      return;
+    }
+
+    const existingBooking = await Booking.findOne({
+      userEmail,
+      restaurant: restaurantId,
+      bookingDate,
+    });
+
+    if (existingBooking) {
+      // Update the existing booking instead of creating a new one
+      existingBooking.fullName = req.body.fullName;
+      existingBooking.phoneNumber = req.body.phoneNumber;
+      existingBooking.numberOfPeople = req.body.numberOfPeople;
+      existingBooking.entryTime = req.body.entryTime;
+      existingBooking.specialRequest = req.body.specialRequest;
+      existingBooking.status = "Pending";
+
+      await existingBooking.save();
+
+      return res.status(201).json({ message: 'Booking updated successfully!' });
+    }
+
+    const newBooking = new Booking({
+      userEmail,
+      restaurant: restaurantId,
+      fullName,
+      phoneNumber,
+      numberOfPeople,
+      bookingDate,
+      entryTime,
+      specialRequest,
+    });
+
+    await newBooking.save();
+
+    res.status(200).json({ message: "Booking successful!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
