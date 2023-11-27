@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import logo from "../assets/logo.png";
 import Signin from "./Signin";
-import {useAuthState} from 'react-firebase-hooks/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 
 function Navbar() {
@@ -64,6 +64,11 @@ function Navbar() {
                 </li>
               );
             })}
+            {user && (
+              <li key="History">
+                <Link to="/history">History</Link>
+              </li>
+            )}
           </ul>
         </div>
         <div className="flex-item login">

@@ -13,6 +13,7 @@ import AddRestaurant from './componentsRestaurant/AddRestaurant';
 import RestaurentDetails from './componentsRestaurant/RestaurentDetails';
 import UpdateRestaurant from './componentsRestaurant/UpdateRestaurant';
 import Restaurant from './pages/Restaurant';
+import History from './pages/History';
 
 function App() {
   return (
@@ -23,12 +24,15 @@ function App() {
       <Route exact path="/logout" element={<Home/>}></Route>
       <Route exact path="/book-a-table" element={<BookTable/>}></Route>
       <Route exact path="/blog" element={<Blog/>}></Route>
+      <Route exact path="/history" element={<History/>}></Route>
+
       <Route exact path="/owner-home" element={<Owner/>}></Route>
       <Route exact path="/owner-registration" element={<Registration/>}></Route>
       <Route exact path="/owner-login" element={<Login/>}></Route>
       <Route exact path="/add-restaurant" element={<AddRestaurant/>}></Route>
       <Route exact path="/restaurant/:restaurantId" element={<RestaurentDetails/>}></Route>
       <Route exact path="/restaurant/:restaurantId/update-restaurant-details" element={<UpdateRestaurant/>}></Route>
+
       <Route exact path="/:city/:area/:name/:_id" element={<Restaurant/>}></Route>
       <Route path="*" element={<ErrorPage />} />
     </Routes>

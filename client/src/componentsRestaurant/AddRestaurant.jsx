@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const initialState = {
   name: '', city: '', area: '', location: '', contactNumber: '',
   averageCostForTwo: '', cuisine: [], types: [], offers: [],
-  startTime: '', endTime: '', website: '',
+  startTime: '', endTime: '23:00', website: '',
   extraDiscount: [], amenities: [], images: [], menu: [],
 };
 const MAX_FILE_SIZE_MB = 5; // 5MB in bytes
@@ -211,9 +211,9 @@ const AddRestaurant = () => {
             <div className="resItem">
               <div className="">
                 <label>Open Hours:</label>
-                <input className='resHours' type="text" name="startTime" value={formData.startTime} onChange={handleInputChange} placeholder="Opening Time e.g: 13:00" />
+                <input className='resHours' type="text" name="startTime" value={formData.startTime} onChange={handleInputChange} placeholder="24 hrs format e.g: 13:00" />
                 <span className="separator"> -- </span>
-                <input className='resHours' type="text" name="endTime" value={formData.endTime} onChange={handleInputChange} placeholder="Closing Time e.g: 24:00" />
+                <input className='resHours' type="text" name="endTime" value={formData.endTime} onChange={handleInputChange} placeholder="Closing Time upto 24:00" />
               </div>
             </div>
 

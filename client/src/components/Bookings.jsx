@@ -10,7 +10,7 @@ const Bookings = ({ user, restaurant }) => {
     const [availableSlots, setAvailableSlots] = useState([]);
     const [showLogin, setShowLogin] = useState(false);
 
-    const navigate = useNavigate
+    const navigate = useNavigate();
 
     const [date, setDate] = useState(null);
     const [time, setTime] = useState(null);
@@ -162,7 +162,10 @@ const Bookings = ({ user, restaurant }) => {
         try {
             const bookingData = {
                 userEmail: user.email,
+                creationTime: user.metadata.creationTime,
+                lastSignInTime: user.metadata.lastSignInTime,
                 restaurantId: restaurant._id,
+                restaurantName: restaurant.name,
                 fullName: guestName,
                 phoneNumber: mobileNumber,
                 numberOfPeople: guests,
@@ -183,10 +186,10 @@ const Bookings = ({ user, restaurant }) => {
 
             if (res.status === 200) {
                 window.alert('Thank You! Restaurant will contact You Shortly.');
-                navigate("/home")
+                navigate("/")
             } else if (res.status === 201) {
                 window.alert('Booking updated successfully!');
-                navigate("/home")
+                navigate("/");
             } else if (res.status === 402 || !data) {
                 window.alert("Marked Fields Are Mandatory");
             } else {
@@ -201,7 +204,7 @@ const Bookings = ({ user, restaurant }) => {
 
     return (
         <>
-            <form onSubmit={handleBooking}>
+            <form method='POST' onSubmit={handleBooking}>
                 <div className="booking-header">
                     Book a Table or Deal
                 </div>

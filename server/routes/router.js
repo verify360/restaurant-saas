@@ -394,12 +394,15 @@ router.post("/book", async (req, res) => {
     const {
       userEmail,
       restaurantId,
+      restaurantName,
       fullName,
       phoneNumber,
       numberOfPeople,
       bookingDate,
       entryTime,
       specialRequest,
+      creationTime,
+      lastSignInTime,
     } = req.body;
 
     if (!userEmail || !fullName || !phoneNumber) {
@@ -414,7 +417,6 @@ router.post("/book", async (req, res) => {
     });
 
     if (existingBooking) {
-      // Update the existing booking instead of creating a new one
       existingBooking.fullName = req.body.fullName;
       existingBooking.phoneNumber = req.body.phoneNumber;
       existingBooking.numberOfPeople = req.body.numberOfPeople;
@@ -424,12 +426,13 @@ router.post("/book", async (req, res) => {
 
       await existingBooking.save();
 
-      return res.status(201).json({ message: 'Booking updated successfully!' });
+      return res.status(201).json({ message: "Booking updated successfully!" });
     }
 
     const newBooking = new Booking({
       userEmail,
       restaurant: restaurantId,
+      restaurantName,
       fullName,
       phoneNumber,
       numberOfPeople,
@@ -440,10 +443,62 @@ router.post("/book", async (req, res) => {
 
     await newBooking.save();
 
+    const existingUser = await User.findOne({ userEmail });
+
+    if (!existingUser) {
+      const newUser = new User({
+        userEmail,
+        fullName,
+        phoneNumber,
+        creationTime,
+        lastSignInTime,
+      });
+
+      await newUser.save();
+    }
+
+    const updatedUser = await User.findOne({ userEmail });
+    updatedUser.bookings.push(newBooking._id);
+    await updatedUser.save();
+
     res.status(200).json({ message: "Booking successful!" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.get('/bookings', async (req, res) => {
+  try {
+      const { userEmail } = req.query;
+      // Validate if userEmail is provided
+      if (!userEmail) {
+          return res.status(400).json({ error: 'User not Found.' });
+      }
+
+      // Fetch booking details based on user email
+      const bookings = await Booking.find({ userEmail: userEmail.toLowerCase() });
+
+      res.status(200).json(bookings);
+  } catch (error) {
+      console.error('Error fetching booking details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.delete('/bookings/:bookingId', async (req, res) => {
+  try {
+      const { bookingId } = req.params;
+      const updatedBooking = await Booking.findByIdAndUpdate(bookingId, { status: 'Cancelled' }, { new: true });
+
+      if (!updatedBooking) {
+          return res.status(404).json({ error: 'Booking not found' });
+      }
+
+      res.status(200).json(updatedBooking);
+  } catch (error) {
+      console.error('Error cancelling booking:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
