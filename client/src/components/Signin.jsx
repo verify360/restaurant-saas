@@ -28,7 +28,7 @@ export default function Signin({ onClose}) {
           onClose();
           navigate(currentPath);
         } catch (signupError) {
-          alert("Please Enter Valid Credentials.");
+          alert("Please Enter a Strong Password.");
         }
       } else {
         alert("Please Enter Valid Credentials.");

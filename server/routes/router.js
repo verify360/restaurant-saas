@@ -502,4 +502,42 @@ router.delete('/bookings/:bookingId', async (req, res) => {
   }
 });
 
+router.get('/reservations', async (req, res) => {
+  try {
+      const { restaurant } = req.query;
+      if (!restaurant) {
+        return res.status(400).json({ error: 'User not Found.' });
+      }
+
+      const reservations = await Booking.find({ restaurant: restaurant});
+      
+      res.status(200).json(reservations);
+    } catch (error) {
+      console.error('Error fetching booking details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  router.patch('/reservations/:bookingId', async (req, res) => {
+    try {
+        const { bookingId } = req.params;
+        const { status } = req.body;
+  
+        const updatedBooking = await Booking.findByIdAndUpdate(
+            bookingId,
+            { status },
+            { new: true }
+        );
+  
+        if (!updatedBooking) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+  
+        res.status(200).json(updatedBooking);
+    } catch (error) {
+        console.error(`Error updating booking:`, error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
 module.exports = router;

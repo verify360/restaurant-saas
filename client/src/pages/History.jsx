@@ -37,7 +37,7 @@ const History = () => {
                 method: 'DELETE',
             });
             if (res.ok) {
-                // Update the local state to reflect the cancellation
+                window.alert("Reservation Cancelled Successfully.")
                 setBookingDetails(prevDetails => prevDetails.map(booking => {
                     if (booking._id === bookingId) {
                         return { ...booking, status: 'Cancelled' };
@@ -69,7 +69,6 @@ const History = () => {
         }
     };
 
-
     return (
         <>
             <Navbar />
@@ -96,13 +95,13 @@ const History = () => {
                                     <div>
                                         <strong>Time of Arrival:</strong> {booking.entryTime}
                                     </div>
-                                    <div>
+                                    <div title={`${booking.restaurantName}`}>
                                         <strong>Restaurant:</strong> {booking.restaurantName.slice(0, 15)}
                                     </div>
                                     <div>
                                         <strong>Party Size:</strong> {booking.numberOfPeople}
                                     </div>
-                                    <div>
+                                    <div title={`${booking.specialRequest}`}>
                                         <strong>Special Requests:</strong> {booking.specialRequest ? booking.specialRequest.slice(0, 10) : 'N/A'}
                                     </div>
                                     <div>

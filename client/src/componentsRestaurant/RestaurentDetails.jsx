@@ -6,13 +6,82 @@ import { MdDelete } from "react-icons/md";
 import { AiFillHome, AiTwotoneEdit } from "react-icons/ai";
 import "../css/resDetailsOwner.css";
 import { Buffer } from 'buffer';
+import { IoFilterSharp } from 'react-icons/io5';
 
 const RestaurentDetails = () => {
+    const navigate = useNavigate();
     const { restaurantId } = useParams();
     const [restaurant, setRestaurant] = useState(null);
     const [error, setError] = useState(null);
 
-    const navigate = useNavigate();
+    const [bookingDetails, setBookingDetails] = useState([]);
+    const [showFilterOptions, setShowFilterOptions] = useState(false);
+    const [filter, setFilter] = useState('All');
+
+    const handleFilter = () => {
+        setShowFilterOptions(!showFilterOptions);
+    };
+
+    const handleFilterOptionClick = (option) => {
+        setFilter(option);
+        setShowFilterOptions(false);
+    };
+
+    const filteredReservations = bookingDetails.filter((booking) => {
+        switch (filter.toLowerCase()) {
+            case 'all':
+                return true;
+            case 'pending':
+                return booking.status === 'Pending';
+            case 'confirmed':
+                return booking.status === 'Confirmed';
+            case 'cancelled':
+                return booking.status === 'Cancelled';
+            case 'unattended':
+                return booking.status === 'Unattended';
+            case 'fulfilled':
+                return booking.status === 'Fulfilled';
+            default:
+                return true;
+        }
+    });
+
+    const getStatusCircleColor = (status) => {
+        switch (status) {
+            case 'Pending':
+                return '#ffcc00'; // Yellow
+            case 'Confirmed':
+                return '#00cc00'; // Green
+            case 'Cancelled':
+                return '#cc0000'; // Red
+            case 'Fulfilled':
+                return '#0066cc'; // Blue
+            case 'Unattended':
+                return '#cccccc';
+            default:
+                return '#000000'; // Black (default)
+        }
+    };
+
+    useEffect(() => {
+        const fetchBookingDetails = async () => {
+            try {
+                const res = await fetch(`/reservations?restaurant=${restaurant._id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setBookingDetails(data);
+                } else {
+                    console.error('Failed to fetch booking details');
+                }
+            } catch (error) {
+                console.error('Error fetching booking details:', error);
+            }
+        };
+
+        if (restaurant) {
+            fetchBookingDetails();
+        }
+    }, [restaurant]);
 
     useEffect(() => {
         const fetchRestaurantDetails = async () => {
@@ -60,6 +129,29 @@ const RestaurentDetails = () => {
         }
     };
 
+    const handleUpdateBooking = async (bookingId, newStatus) => {
+        try {
+            const res = await fetch(`/reservations/${bookingId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: newStatus }),
+            });
+
+            if (res.ok) {
+                window.alert(`Reservation Updated Successfully.`);
+                setBookingDetails(prevDetails => prevDetails.map(booking => (
+                    booking._id === bookingId ? { ...booking, status: newStatus } : booking
+                )));
+            } else {
+                console.error(`Failed to ${newStatus} booking`);
+            }
+        } catch (error) {
+            console.error(`Error ${newStatus} booking:`, error);
+        }
+    };
+
 
     if (!restaurant) {
         return <><PageLoading link={"/owner-home"} /></>;
@@ -77,7 +169,7 @@ const RestaurentDetails = () => {
             <div className="headingContainer">
                 <div className="Heading">Restaurant Details
                     <Link to="update-restaurant-details" className="editIcon" title='Edit Restaurant Details'>
-                        <AiTwotoneEdit  />
+                        <AiTwotoneEdit />
                     </Link>
                 </div>
                 <div className="editIcon">
@@ -183,6 +275,83 @@ const RestaurentDetails = () => {
 
                 </div>
             </div>
+
+            <div className="headingContainer">
+                <div className="Heading">Reservation Details
+                </div>
+                <div className="filterIcon">
+                    <IoFilterSharp title='Filter' onClick={handleFilter} />
+                    {showFilterOptions && (
+                        <div className="filterOptions" onClick={(e) => handleFilterOptionClick(e.target.innerText)}>
+                            <div>All</div>
+                            <div>Pending</div>
+                            <div>Confirmed</div>
+                            <div>Cancelled</div>
+                            <div>Unattended</div>
+                            <div>Fulfilled</div>
+                        </div>
+                    )}
+                </div>
+            </div>
+            <div className="reservations-container">
+                {filteredReservations.length === 0 ? (
+                    <p className='history-not-found'>No {filter === "All" ? " " : filter} Reservations Found.</p>
+                ) : (
+                    <div className='history-list'>
+                        {filteredReservations.map((booking) => (
+                            <div key={booking._id} className='history-items'>
+                                <div className='history-item booked-item' title={`Reservation ${booking.status}`}>
+                                    <span
+                                        style={{
+                                            backgroundColor: getStatusCircleColor(booking.status),
+                                        }}
+                                    />
+                                    {/* <div>
+                                        <strong>Status:</strong> {booking.status}
+                                    </div> */}
+                                    <div title={`${booking.fullName}`}>
+                                        <strong>Customer:</strong> {booking.fullName.slice(0, 15)}
+                                    </div>
+                                    <div title={`${booking.userEmail},${booking.phoneNumber}`}>
+                                        <strong>Contact:</strong> {booking.userEmail.slice(0, 15)}, {booking.phoneNumber}
+                                    </div>
+                                    <div>
+                                        <strong>Reserved for:</strong> {booking.entryTime},{booking.bookingDate}
+                                    </div>
+                                    {/* <div>
+                                        <strong>Time of Arrival:</strong> 
+                                    </div> */}
+                                    <div>
+                                        <strong>Party Size:</strong> {booking.numberOfPeople}
+                                    </div>
+                                    <div title={`${booking.specialRequest}`}>
+                                        <strong>Special Requests:</strong> {booking.specialRequest ? booking.specialRequest.slice(0, 10) : 'N/A'}
+                                    </div>
+                                    <div>
+                                        <strong>Booked At:</strong> {new Date(booking.createdAt).toLocaleDateString('en-US', {
+                                            month: 'short',
+                                            day: 'numeric',
+                                            year: 'numeric',
+                                        })}
+                                    </div>
+                                </div>
+                                {booking.status === 'Pending' ? (
+                                    <div type='button' title='Update'>
+                                        <select className='book-button' onChange={(e) => handleUpdateBooking(booking._id, e.target.value)}>
+                                            <option selected>{booking.status}</option>
+                                            <option value="Confirmed">Confirmed</option>
+                                            <option value="Unattended">Unattended</option>
+                                        </select>
+                                    </div>
+                                ) : (
+                                    <button className='book-button' type='button' disabled >{booking.status}</button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
             <div className="logout-button-container" title='Log Out'>
                 <LogoutButton userData />
             </div>

@@ -186,10 +186,10 @@ const Bookings = ({ user, restaurant }) => {
 
             if (res.status === 200) {
                 window.alert('Thank You! Restaurant will contact You Shortly.');
-                navigate("/")
+                navigate("/history");
             } else if (res.status === 201) {
                 window.alert('Booking updated successfully!');
-                navigate("/");
+                navigate("/history");
             } else if (res.status === 402 || !data) {
                 window.alert("Marked Fields Are Mandatory");
             } else {

@@ -182,7 +182,7 @@ const AddRestaurant = () => {
             <div className='subHeading'>Basic Information<span><small>(mandatory)</small></span></div>
             <div className="resItem">
               <label>Name:</label>
-              <input className='resInput' type="text" name="name" placeholder='Rahul Sharma' value={formData.name} onChange={handleInputChange} required />
+              <input className='resInput' type="text" name="name" placeholder='Taste & Flavor' value={formData.name} onChange={handleInputChange} required />
             </div>
             <div className="resItem">
               <label>City:</label>

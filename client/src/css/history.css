@@ -24,6 +24,8 @@
 }
 
 .history-item {
+    background-color: white;
+    border-radius: 4px;
     width: 1500px;
     display: flex;
     gap: 30px;
@@ -33,7 +35,7 @@
 }
 
 .history-item>div {
-    max-width: 270px;
+    width: max-content;
 }
 
 .history-item>span {
