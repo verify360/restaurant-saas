@@ -57,3 +57,19 @@
     width: 65px;
     margin: 10px 0px 0px 17px;
 }
+.history-filter{
+    position: absolute;
+    right: 300px;
+    top: 90px;
+    font-size: 30px;
+    cursor: pointer;
+}
+.historyFilterOptions{
+    top: 120px;
+    right: 200px;
+    background-color: #fff;
+}
+.historyFilterOptions div:hover {
+    background-color: #f0f0f0;
+    color: none;
+}

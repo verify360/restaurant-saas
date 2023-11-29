@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import "../css/addRestaurant.css";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { MdArrowBack } from 'react-icons/md';
 
 const initialState = {
   name: '', city: '', area: '', location: '', contactNumber: '',
@@ -171,6 +172,9 @@ const AddRestaurant = () => {
 
   return (
     <div className="main-content">
+      <Link to={"/owner-home"} className="editIconArrow" title='Back'>
+        <MdArrowBack />
+      </Link>
 
       <form onSubmit={handleFormSubmit}>
         <div className='infos'>

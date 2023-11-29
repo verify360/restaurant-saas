@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import PageLoading from '../componentsOwner/PageLoading';
 import LogoutButton from '../componentsOwner/LogoutButton';
-import { MdDelete } from "react-icons/md";
+import { MdArrowBack, MdDelete } from "react-icons/md";
 import { AiFillHome, AiTwotoneEdit } from "react-icons/ai";
 import "../css/resDetailsOwner.css";
 import { Buffer } from 'buffer';
@@ -57,7 +57,7 @@ const RestaurentDetails = () => {
             case 'Fulfilled':
                 return '#0066cc'; // Blue
             case 'Unattended':
-                return '#cccccc';
+                return '#cccccc'; // Grey
             default:
                 return '#000000'; // Black (default)
         }
@@ -166,6 +166,9 @@ const RestaurentDetails = () => {
                     <Link to="owner-home" className=" icon" title='Back Home'><AiFillHome /></Link>
                 </p>}
             </div>
+            <Link to={"/owner-home"} className="book-back-icon" title='Back'>
+                <MdArrowBack />
+            </Link>
             <div className="headingContainer">
                 <div className="Heading">Restaurant Details
                     <Link to="update-restaurant-details" className="editIcon" title='Edit Restaurant Details'>
@@ -306,9 +309,6 @@ const RestaurentDetails = () => {
                                             backgroundColor: getStatusCircleColor(booking.status),
                                         }}
                                     />
-                                    {/* <div>
-                                        <strong>Status:</strong> {booking.status}
-                                    </div> */}
                                     <div title={`${booking.fullName}`}>
                                         <strong>Customer:</strong> {booking.fullName.slice(0, 15)}
                                     </div>
@@ -318,9 +318,6 @@ const RestaurentDetails = () => {
                                     <div>
                                         <strong>Reserved for:</strong> {booking.entryTime},{booking.bookingDate}
                                     </div>
-                                    {/* <div>
-                                        <strong>Time of Arrival:</strong> 
-                                    </div> */}
                                     <div>
                                         <strong>Party Size:</strong> {booking.numberOfPeople}
                                     </div>
@@ -340,11 +337,18 @@ const RestaurentDetails = () => {
                                         <select className='book-button' onChange={(e) => handleUpdateBooking(booking._id, e.target.value)}>
                                             <option selected>{booking.status}</option>
                                             <option value="Confirmed">Confirmed</option>
+                                        </select>
+                                    </div>
+                                ) : booking.status === 'Confirmed' ? (
+                                    <div type='button' title='Update'>
+                                        <select className='book-button' onChange={(e) => handleUpdateBooking(booking._id, e.target.value)}>
+                                            <option value="Fulfilled">Fulfilled</option>
                                             <option value="Unattended">Unattended</option>
+                                            <option selected>{booking.status}</option>
                                         </select>
                                     </div>
                                 ) : (
-                                    <button className='book-button' type='button' disabled >{booking.status}</button>
+                                    <button className='book-button book-button-disabled' type='button' disabled >{booking.status}</button>
                                 )}
                             </div>
                         ))}

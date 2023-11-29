@@ -4,12 +4,44 @@ import { auth } from '../firebase';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import "../css/history.css";
+import { CiFilter } from 'react-icons/ci';
 
 const History = () => {
 
     const [user] = useAuthState(auth);
 
     const [bookingDetails, setBookingDetails] = useState([]);
+
+    const [showFilterOptions, setShowFilterOptions] = useState(false);
+    const [filter, setFilter] = useState('All');
+
+    const handleFilter = () => {
+        setShowFilterOptions(!showFilterOptions);
+    };
+
+    const handleFilterOptionClick = (option) => {
+        setFilter(option);
+        setShowFilterOptions(false);
+    };
+
+    const filteredReservations = bookingDetails.filter((booking) => {
+        switch (filter.toLowerCase()) {
+            case 'all':
+                return true;
+            case 'pending':
+                return booking.status === 'Pending';
+            case 'confirmed':
+                return booking.status === 'Confirmed';
+            case 'cancelled':
+                return booking.status === 'Cancelled';
+            case 'unattended':
+                return booking.status === 'Unattended';
+            case 'fulfilled':
+                return booking.status === 'Fulfilled';
+            default:
+                return true;
+        }
+    });
 
     useEffect(() => {
         const fetchBookingDetails = async () => {
@@ -73,12 +105,23 @@ const History = () => {
         <>
             <Navbar />
             <div className='history-container'>
+                <span className='history-filter' title='Filter' onClick={handleFilter} ><CiFilter /></span>
+                {showFilterOptions && (
+                    <div className="filterOptions historyFilterOptions" onClick={(e) => handleFilterOptionClick(e.target.innerText)}>
+                        <div>All</div>
+                        <div>Pending</div>
+                        <div>Confirmed</div>
+                        <div>Cancelled</div>
+                        <div>Unattended</div>
+                        <div>Fulfilled</div>
+                    </div>
+                )}
                 <h1>Booking History</h1>
-                {bookingDetails.length === 0 ? (
-                    <p className='history-not-found'>No bookings found.</p>
+                {filteredReservations.length === 0 ? (
+                    <p className='history-not-found'>No {filter === "All" ? " " : filter} Reservations Found.</p>
                 ) : (
                     <div className='history-list'>
-                        {bookingDetails.map((booking) => (
+                        {filteredReservations.map((booking) => (
                             <div key={booking._id} className='history-items'>
                                 <div className='history-item' title={`Reservation ${booking.status}`}>
                                     <span
