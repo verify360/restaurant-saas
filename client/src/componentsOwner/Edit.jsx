@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import '../css/signin.css';
-import { useNavigate } from 'react-router-dom';
 
-export default function Edit({ onClose, data }) {
-
-  const navigate = useNavigate
+export default function Edit({ onClose, data, }) {
 
   const [formData, setFormData] = useState({
     username: data.username,
@@ -23,11 +20,10 @@ export default function Edit({ onClose, data }) {
   };
 
   const handleEdit = async (e) => {
-    console.log("heyyy");
     e.preventDefault();
     const { username, password, email, fullName, phoneNumber } = formData;
     try {
-      const res = await fetch("http://localhost:5000/update-owner-details", {
+      const res = await fetch("/update-owner-details", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +34,7 @@ export default function Edit({ onClose, data }) {
       });
 
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
 
       if (res.status === 422 || !data) {
         window.alert("All Fields are Mandatory.");
@@ -48,7 +44,7 @@ export default function Edit({ onClose, data }) {
         window.alert("Internal server error.");
       } else if (res.status === 200) {
         window.alert("User details updated successfully.");
-        navigate("/owner-home");
+        onClose();
       } else {
         window.alert(res.json);
       }

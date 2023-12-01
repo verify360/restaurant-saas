@@ -1,9 +1,9 @@
 import React from 'react';
 import { Buffer } from 'buffer';
-import { MdDiscount } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import "../css/bookATable.css";
 
-export default function Card({ key, restaurant }) {
+export default function CityCard({ restaurant }) {
 
     const navigate = useNavigate();
     const firstImage = restaurant.images && restaurant.images.length > 0 ? restaurant.images[0] : null;
@@ -11,7 +11,7 @@ export default function Card({ key, restaurant }) {
     return (
         <>
             <div
-                className="restaurant"
+                className="city-card-restaurant"
                 title={restaurant.name}
                 onClick={() => {
                     const cleanedName = restaurant.name.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
@@ -22,7 +22,10 @@ export default function Card({ key, restaurant }) {
                     navigate(url);
                 }}
             >
-                <div className="restaurantImg">
+                <div className="city-card-image">
+                    <div className="city-card-rating">
+                        <p className="city-rating">4.0</p>
+                    </div>
                     {firstImage && (
                         <img
                             src={`data:${firstImage.contentType};base64,${Buffer.from(firstImage.data).toString('base64')}`}
@@ -30,24 +33,13 @@ export default function Card({ key, restaurant }) {
                         />
                     )}
                 </div>
-                <div className="restaurantDescription">
-                    <div className="restaurantDes1">
-                        <h4 className="restaurantName">{`${restaurant.name}`.slice(0, 25)}</h4>
-                        <p className="restaurantLocation">
-                            {`${restaurant.location}, ${restaurant.area}`.slice(0, 30)}
-                        </p>
-                    </div>
-                    <div className="restaurantDes2">
-                        <p className="restaurantRating">4.0</p>
+                <div className="city-card-description">
+                    <div className="city-card-name">{restaurant.name}</div>
+                    <div className="city-card-address">{`${restaurant.location}, ${restaurant.area}`.slice(0, 50)}</div>
+                    <div className="city-card-extras">
+                        ₹{restaurant.averageCostForTwo ? restaurant.averageCostForTwo : "1099"} for 2(approx) | {restaurant.cuisine.join(', ')}
                     </div>
                 </div>
-                {restaurant.offers && restaurant.offers != "" && (
-                    <div className="discount">
-                        <span>
-                            <MdDiscount /> {`${restaurant.offers}`.slice(0, 25)}
-                        </span>
-                    </div>
-                )}
             </div>
         </>
     );

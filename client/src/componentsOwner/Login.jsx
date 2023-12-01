@@ -49,18 +49,18 @@ const Login = () => {
       
   return (
     <>
-      <div class="form-container">
+      <div className="form-container">
         <h2>Restaurant Owner Login</h2>
         <form id="signup-form" onSubmit={(e) => { handleLogin(e)}}>
-            <div class="form-group">
-                <label for="username">Username:</label>
+            <div className="form-group">
+                <label htmlFor="username">Username:</label>
                 <input type="text" id="username" name="username" placeholder='Enter Your Username' required value={owner.username} onChange={handleInputs}/>
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
+            <div className="form-group">
+                <label htmlFor="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder='Enter The Password' required value={owner.password} onChange={handleInputs}/>
             </div>
-            <button type="submit" class="submit-btn button">Login</button>
+            <button type="submit" className="submit-btn button">Login</button>
         </form>
         <br/>
         <p>New here? <Link to="/owner-registration">Register here</Link></p>

@@ -361,7 +361,7 @@ router.delete(
 router.get("/restaurants-slider", async (req, res) => {
   try {
     const restaurants = await Restaurant.find()
-      .limit(8)
+      .limit(50)
       .select(
         "_id name city area location averageCostForTwo cuisine startTime endTime contactNumber website extraDiscount types offers amenities images menu"
       );
@@ -372,6 +372,25 @@ router.get("/restaurants-slider", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+router.get('/restaurants', async (req, res) => {
+  try {
+    const { city } = req.query;
+
+    if (!city) {
+      return res.status(400).json({ error: 'City parameter is missing.' });
+    }
+
+    // Assuming 'Restaurant' is your model name
+    const restaurants = await Restaurant.find({ city });
+
+    res.status(200).json({ restaurants });
+  } catch (error) {
+    console.error('Error fetching restaurants:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 router.get("/:city/:area/:name/:_id", async (req, res) => {
   const { city, area, name, _id } = req.params;

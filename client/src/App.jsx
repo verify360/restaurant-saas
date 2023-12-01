@@ -22,7 +22,7 @@ function App() {
       <Route exact path="/" element={<Home/>}></Route>
       <Route exact path="/login" element={<Signin/>}></Route>
       <Route exact path="/logout" element={<Home/>}></Route>
-      <Route exact path="/book-a-table" element={<BookTable/>}></Route>
+      <Route path="/:city-restaurants" element={<BookTable />} />
       <Route exact path="/blog" element={<Blog/>}></Route>
       <Route exact path="/history" element={<History/>}></Route>
 
@@ -33,7 +33,7 @@ function App() {
       <Route exact path="/restaurant/:restaurantId" element={<RestaurentDetails/>}></Route>
       <Route exact path="/restaurant/:restaurantId/update-restaurant-details" element={<UpdateRestaurant/>}></Route>
 
-      <Route exact path="/:city/:area/:name/:_id" element={<Restaurant/>}></Route>
+      <Route exact path="/:city-restaurants/:area/:name/:_id" element={<Restaurant/>}></Route>
       <Route path="*" element={<ErrorPage />} />
     </Routes>
     </BrowserRouter>

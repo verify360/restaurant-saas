@@ -59,23 +59,23 @@ const Registration = () => {
         <h2>Restaurant Owner Registration</h2>
         <form id="signup-form" method='POST' onSubmit={handleRegistration}>
             <div class="form-group">
-                <label for="username">Username:</label>
+                <label htmlFor="username">Username:</label>
                 <input type="text" id="username" name="username" placeholder='johndoe'  required value={owner.username} onChange={handleInputs}/>
             </div>
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label htmlFor="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder='xxxxxxxxx'  required value={owner.password} onChange={handleInputs}/>
             </div>
             <div class="form-group">
-                <label for="email">Email:</label>
+                <label htmlFor="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder='johndoe@gmail.com'  required value={owner.email} onChange={handleInputs}/>
             </div>
             <div class="form-group">
-                <label for="fullName">Full Name:</label>
+                <label htmlFor="fullName">Full Name:</label>
                 <input type="text" id="fullName" name="fullName" placeholder='John Doe'  required value={owner.fullName} onChange={handleInputs}/>
             </div>
             <div class="form-group">
-                <label for="phoneNumber">Phone Number:</label>
+                <label htmlFor="phoneNumber">Phone Number:</label>
                 <input type="tel" id="phoneNumber" name="phoneNumber" placeholder='+91 96x245x35x'  required value={owner.phoneNumber} onChange={handleInputs}/>
             </div>
             <button type="submit" class="submit-btn button">Register</button>

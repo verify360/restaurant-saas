@@ -78,7 +78,7 @@ const Owner = () => {
     }
   }
 
- 
+
 
   if (userData) {
     return (
@@ -107,8 +107,8 @@ const Owner = () => {
             </div>
           </div>
           <div className='editIcon' title='Edit User Details' onClick={handleEditButton}><AiTwotoneEdit /></div>
-          {showEdit && <Edit data={userData} onClose={() => setShowEdit(false)} />}
         </form>
+        {showEdit && <Edit data={userData} onClose={() => setShowEdit(false)}/>}
         <div className="resContainer">
           <div className="resItems">
             <div className="Heading">My Restaurants</div>
@@ -122,14 +122,14 @@ const Owner = () => {
           ))}
         </div>
         <div className="logout-button-container" title='Log Out'>
-          <LogoutButton userData/>
+          <LogoutButton userData />
         </div>
       </>
     )
   } else {
     return (
       <>
-        <PageLoading link = {"/"}/>
+        <PageLoading link={"/"} />
       </>
     )
   }

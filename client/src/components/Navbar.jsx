@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import logo from "../assets/logo.png";
 import Signin from "./Signin";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 
-function Navbar() {
+function Navbar({city}) {
+
   const links = [
     { name: "Home", link: "/" },
-    { name: "Book a Table", link: "/book-a-table" },
+    { name: "Book a Table", link: `/${city}-restaurants` },
     { name: "Blog", link: "/blog" },
   ];
 

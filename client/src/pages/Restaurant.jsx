@@ -40,7 +40,7 @@ export default function Restaurant() {
 
     return (
         <>
-            <Navbar />
+            <Navbar city={city}/>
             <div className="resMain">
                 <div className="resMainOne">
                     <ResDetails restaurant={restaurant} />
