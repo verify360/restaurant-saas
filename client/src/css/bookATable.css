@@ -9,34 +9,114 @@
     margin-top: 10px;
 }
 
-.city-cuisine-filters {
+.city-cuisine-filters, .city-type-filters, .city-feature-filters {
     width: 200px;
     background-color: #fff;
-    padding: 10px 18px 7px 10px;
-    border-radius: 5px 5px 0px 0px;
+    padding: 13px 18px 13px 12px;
+    border-radius: 7px 7px 0px 0px;
     border-bottom: 2px solid #f3f3f3;
-
+    color: #a0a0a0;
+    font-size: 14px;
+    font-weight: bolder;
 }
 
-.city-cuisine-filters-span {
+.city-cuisine-filters-span,.city-type-filters-span, .city-feature-filters-span {
     margin: 0px 0px 0px 125px;
-    font-size: small;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: bolder;
     cursor: pointer;
+}
+
+.city-type-filters {
+    border-radius: 0px 0px 0px 0px;
+}
+
+.city-type-filters-span {
+    margin: 0px 0px 0px 143.5px;
+}
+
+.city-feature-filters {
+    border-radius: 0px 0px 7px 7px;
+}
+
+.city-feature-filters-span {
+    margin: 0px 0px 0px 125px;
 }
 
 .city-checkboxes {
     margin-top: 15px;
 }
 
+.city-checkboxes > input{
+    margin: 0px 10px 12px 12px;
+}
+
+.city-checkboxes > label{
+    font-weight: lighter;
+    font-size: 12px;
+}
+
 .city-restaurants-heading {
     font-size: 24px;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
+.city-restaurants-heading-sort{
+    display: flex;
+}
+
+.city-restaurants-length{
+    margin-left: 5px;
+    vertical-align: text-bottom;
+    font-size: 12px;
+    color: #4d4d4d;
+    font-weight: 100;
+    vertical-align: middle;
+}
+
+.city-sort-by{
+    margin: 8px 0px 0px 180px;
+    font-size: 16px;
+    color: #484848;
+    font-weight: 200;
+}
+
+.city-restaurants-sort-element{
+    width: 150px;
+    background-color: #fff;
+    margin-left: 10px;
+    padding: 10px 11px 10px 16px;
+    font-size: 14px;
+    font-weight: 100;
+    border-radius: 5px;
+    color: #4d4d4d;
+    cursor: pointer;
+}
+
+.city-restaurants-sort-elements{
+    width: 175px;
+    position: absolute;
+    background-color: #fff;
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 100;
+    color: #4d4d4d;
+    z-index: 999;
+    border: #dcdcdc 1px solid;
+}
+
+.city-sort-elements{
+    padding: 10px 0px 10px 14px;
+    border-bottom: 1px solid #dcdcdc;
+    cursor: pointer;
+}
+
+.city-restaurants-updown{
+    font-size: 20px;
+    float: right;
+}
 .city-restaurant-content {
-    /* border: 1px solid black; */
     margin: 15px 0px 0px 30px;
 }
 
@@ -44,7 +124,6 @@
     display: flex;
     flex-wrap: wrap;
     width: 870px;
-    /* justify-content: space-between; */
 }
 
 .city-card-restaurant {
