@@ -21,17 +21,48 @@ const BookTable = () => {
 
   const [showSort, setShowSort] = useState(false);
 
+  const [showMoreCuisine, setShowMoreCuisine] = useState(false);
+  const [showMoreTypes, setShowMoreTypes] = useState(false);
+  const [showMoreFeature, setShowMoreFeature] = useState(false);
+
   const [sortByPriceLowToHigh, setSortByPriceLowToHigh] = useState(false);
   const [sortByPriceHighToLow, setSortByPriceHighToLow] = useState(false);
   const [sortBy, setSortBy] = useState(null);
 
-  const { city } = useParams();
+  const { city, area, location, cuisine } = useParams();
   const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
+
+  function formatString(area) {
+    const words = area.split('-');
+    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+    const formattedString = capitalizedWords.join(' ');
+
+    return formattedString;
+  }
+
+  console.log(selectedCuisines, selectedTypes, selectedFeatures)
+
+  // const updatedCuisine = formatString(cuisine);
+  // console.log('Updated Cuisine:', updatedCuisine);
+
+  // if (updatedCuisine && !selectedCuisines.includes(updatedCuisine)) {
+  //   console.log('Setting Selected Cuisines:', updatedCuisine);
+  //   setSelectedCuisines(updatedCuisine);
+  // }
+
 
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await fetch(`/restaurants?city=${capitalizedCity}`);
+        const response = await fetch(
+          location
+            ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}&location=${formatString(location)}`
+            : cuisine
+              ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}&cuisine=${formatString(cuisine)}`
+              : area
+                ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}`
+                : `/restaurants?city=${capitalizedCity}`
+        );
         const data = await response.json();
         setRestaurants(data.restaurants || []);
       } catch (error) {
@@ -40,7 +71,7 @@ const BookTable = () => {
     };
 
     fetchRestaurants();
-  }, [capitalizedCity]);
+  }, [capitalizedCity, area, location, cuisine]);
 
   const filterRestaurants = () => {
     let filteredRestaurants = [...restaurants];
@@ -124,33 +155,87 @@ const BookTable = () => {
                 <input type="checkbox" id="north-indian" name="north-indian" onChange={handleCuisineChange} value="North Indian" />
                 <label htmlFor="north-indian"> North Indian</label><br />
 
-
                 <input type="checkbox" id="mexican" name="mexican" onChange={handleCuisineChange} value="Mexican" />
                 <label htmlFor="mexican"> Mexican</label><br />
 
                 <input type="checkbox" id="thai" name="thai" onChange={handleCuisineChange} value="Thai" />
                 <label htmlFor="thai"> Thai</label><br />
 
-                <input type="checkbox" id="chinese" name="chinese" onChange={handleCuisineChange} value="Chinese" />
-                <label htmlFor="chinese"> Chinese</label><br />
+                <input type="checkbox" id="nepali" name="nepali" onChange={handleCuisineChange} value="Nepali" />
+                <label htmlFor="nepali"> Nepali</label><br />
 
-                <input type="checkbox" id="bengali" name="bengali" onChange={handleCuisineChange} value="Bengali" />
-                <label htmlFor="bengali"> Bengali</label><br />
+                <input type="checkbox" id="gujrati" name="gujrati" onChange={handleCuisineChange} value="Gujrati" />
+                <label htmlFor="gujrati"> Gujrati</label><br />
 
-                <input type="checkbox" id="mediterranean" name="mediterranean" onChange={handleCuisineChange} value="Mediterranean" />
-                <label htmlFor="mediterranean"> Mediterranean</label><br />
+                {!showMoreCuisine && (
+                  <p className='city-show-more' onClick={() => setShowMoreCuisine(true)}>
+                    Show more..<span className='city-show-more-icon'><GoChevronDown /></span>
+                  </p>
+                )}
+                {showMoreCuisine &&
+                  <>
+                    <input type="checkbox" id="chinese" name="chinese" onChange={handleCuisineChange} value="Chinese" />
+                    <label htmlFor="chinese"> Chinese</label><br />
 
-                <input type="checkbox" id="korean" name="korean" onChange={handleCuisineChange} value="Korean" />
-                <label htmlFor="korean"> Korean</label><br />
+                    <input type="checkbox" id="bengali" name="bengali" onChange={handleCuisineChange} value="Bengali" />
+                    <label htmlFor="bengali"> Bengali</label><br />
 
-                <input type="checkbox" id="lebanese" name="lebanese" onChange={handleCuisineChange} value="Lebanese" />
-                <label htmlFor="lebanese"> Lebanese</label><br />
+                    <input type="checkbox" id="rajasthani" name="rajasthani" onChange={handleCuisineChange} value="Rajasthani" />
+                    <label htmlFor="rajasthani"> Rajasthani</label><br />
 
-                <input type="checkbox" id="french" name="french" onChange={handleCuisineChange} value="French" />
-                <label htmlFor="french"> French</label><br />
+                    <input type="checkbox" id="kashmiri" name="kashmiri" onChange={handleCuisineChange} value="Kashmiri" />
+                    <label htmlFor="kashmiri"> Kashmiri</label><br />
 
-                <input type="checkbox" id="continental" name="continental" onChange={handleCuisineChange} value="Continental" />
-                <label htmlFor="continental"> Continental</label><br />
+                    <input type="checkbox" id="goan" name="goan" onChange={handleCuisineChange} value="Goan" />
+                    <label htmlFor="goan"> Goan</label><br />
+
+                    <input type="checkbox" id="punjabi" name="punjabi" onChange={handleCuisineChange} value="Punjabi" />
+                    <label htmlFor="punjabi"> Punjabi</label><br />
+
+                    <input type="checkbox" id="hyderabadi" name="hyderabadi" onChange={handleCuisineChange} value="Hyderabadi" />
+                    <label htmlFor="hyderabadi"> Hyderabadi</label><br />
+
+                    <input type="checkbox" id="kerala" name="kerala" onChange={handleCuisineChange} value="Kerala" />
+                    <label htmlFor="kerala"> Kerala</label><br />
+
+                    <input type="checkbox" id="assamese" name="assamese" onChange={handleCuisineChange} value="Assamese" />
+                    <label htmlFor="assamese"> Assamese</label><br />
+
+                    <input type="checkbox" id="odisha" name="odisha" onChange={handleCuisineChange} value="Odisha" />
+                    <label htmlFor="odisha"> Odisha</label><br />
+
+                    <input type="checkbox" id="maharashtrian" name="maharashtrian" onChange={handleCuisineChange} value="Maharashtrian" />
+                    <label htmlFor="maharashtrian"> Maharashtrian</label><br />
+
+                    <input type="checkbox" id="malabari" name="malabari" onChange={handleCuisineChange} value="Malabari" />
+                    <label htmlFor="malabari"> Malabari</label><br />
+
+                    <input type="checkbox" id="mediterranean" name="mediterranean" onChange={handleCuisineChange} value="Mediterranean" />
+                    <label htmlFor="mediterranean"> Mediterranean</label><br />
+
+                    <input type="checkbox" id="korean" name="korean" onChange={handleCuisineChange} value="Korean" />
+                    <label htmlFor="korean"> Korean</label><br />
+
+                    <input type="checkbox" id="lebanese" name="lebanese" onChange={handleCuisineChange} value="Lebanese" />
+                    <label htmlFor="lebanese"> Lebanese</label><br />
+
+                    <input type="checkbox" id="french" name="french" onChange={handleCuisineChange} value="French" />
+                    <label htmlFor="french"> French</label><br />
+
+                    <input type="checkbox" id="mughlai" name="mughlai" onChange={handleCuisineChange} value="Mughlai" />
+                    <label htmlFor="mughlai"> Mughlai</label><br />
+
+                    <input type="checkbox" id="fastfood" name="fastfood" onChange={handleCuisineChange} value="Fast Food" />
+                    <label htmlFor="fastfood"> Fast Food</label><br />
+
+                    <input type="checkbox" id="continental" name="continental" onChange={handleCuisineChange} value="Continental" />
+                    <label htmlFor="continental"> Continental</label><br />
+
+                    <p className='city-show-more' onClick={() => setShowMoreCuisine(false)}>
+                      Show less..<span className='city-show-more-icon'><GoChevronUp /></span>
+                    </p>
+                  </>
+                }
 
               </div>
             </div>
@@ -177,30 +262,60 @@ const BookTable = () => {
                 <input type="checkbox" id="dineoutpay" name="dineoutpay" onChange={handleTypeChange} value="Dineout Pay" />
                 <label htmlFor="dineoutpay"> Dineout Pay</label><br />
 
-                <input type="checkbox" id="fastfood" name="fastfood" onChange={handleTypeChange} value="Fast Food" />
-                <label htmlFor="fastfood"> Fast Food</label><br />
+                <input type="checkbox" id="qsr" name="qsr" onChange={handleTypeChange} value="QSR" />
+                <label htmlFor="qsr"> QSR</label><br />
 
                 <input type="checkbox" id="ethniccuisine" name="ethniccuisine" onChange={handleTypeChange} value="Ethnic Cuisine" />
                 <label htmlFor="ethniccuisine"> Ethnic Cuisine</label><br />
 
-                <input type="checkbox" id="cafeteria" name="cafeteria" onChange={handleTypeChange} value="Cafeteria" />
-                <label htmlFor="cafeteria"> Cafeteria</label><br />
+                <input type="checkbox" id="cafe" name="cafe" onChange={handleTypeChange} value="Cafe" />
+                <label htmlFor="cafe"> Cafe</label><br />
 
-                <input type="checkbox" id="pub" name="pub" onChange={handleTypeChange} value="Pub" />
-                <label htmlFor="pub"> Pub</label><br />
+                <input type="checkbox" id="girfflat50" name="girfflat50" onChange={handleTypeChange} value="GIRF Flat 50" />
+                <label htmlFor="girfflat50"> GIRF Flat 50</label><br />
 
-                <input type="checkbox" id="foodtruck" name="foodtruck" onChange={handleTypeChange} value="Food Truck" />
-                <label htmlFor="foodtruck"> Food Truck</label><br />
+                {!showMoreTypes && (
+                  <p className='city-show-more' onClick={() => setShowMoreTypes(true)}>
+                    Show more..<span className='city-show-more-icon'><GoChevronDown /></span>
+                  </p>
+                )}
+                {showMoreTypes &&
+                  <>
+                    <input type="checkbox" id="pub" name="pub" onChange={handleTypeChange} value="Pub" />
+                    <label htmlFor="pub"> Pub</label><br />
 
-                <input type="checkbox" id="buffet" name="buffet" onChange={handleTypeChange} value="Buffet" />
-                <label htmlFor="buffet"> Buffet</label><br />
+                    <input type="checkbox" id="streetfood" name="streetfood" onChange={handleTypeChange} value="Street Food" />
+                    <label htmlFor="streetfood"> Street Food</label><br />
 
-                <input type="checkbox" id="vegan" name="vegan" onChange={handleTypeChange} value="Vegan" />
-                <label htmlFor="vegan"> Vegan</label><br />
+                    <input type="checkbox" id="familystyle" name="familystyle" onChange={handleTypeChange} value="Family Style" />
+                    <label htmlFor="familystyle"> Family Style</label><br />
 
-                <input type="checkbox" id="5star" name="5star" onChange={handleTypeChange} value="5 Star" />
-                <label htmlFor="5star"> 5 Star</label><br />
+                    <input type="checkbox" id="seafood" name="seafood" onChange={handleTypeChange} value="Seafood" />
+                    <label htmlFor="seafood"> Seafood</label><br />
 
+                    <input type="checkbox" id="bakery" name="bakery" onChange={handleTypeChange} value="Bakery" />
+                    <label htmlFor="bakery"> Bakery</label><br />
+
+                    <input type="checkbox" id="foodtruck" name="foodtruck" onChange={handleTypeChange} value="Food Truck" />
+                    <label htmlFor="foodtruck"> Food Truck</label><br />
+
+                    <input type="checkbox" id="girfbuffetdeals" name="girfbuffetdeals" onChange={handleTypeChange} value="GIRF Buffet Deals" />
+                    <label htmlFor="girfbuffetdeals"> GIRF Buffet Deals</label><br />
+
+                    <input type="checkbox" id="buffet" name="buffet" onChange={handleTypeChange} value="Buffet" />
+                    <label htmlFor="buffet"> Buffet</label><br />
+
+                    <input type="checkbox" id="vegan" name="vegan" onChange={handleTypeChange} value="Vegan" />
+                    <label htmlFor="vegan"> Vegan</label><br />
+
+                    <input type="checkbox" id="5star" name="5star" onChange={handleTypeChange} value="5 Star" />
+                    <label htmlFor="5star"> 5 Star</label><br />
+
+                    <p className='city-show-more' onClick={() => setShowMoreTypes(false)}>
+                      Show less..<span className='city-show-more-icon'><GoChevronUp /></span>
+                    </p>
+                  </>
+                }
               </div>
             </div>
           }
@@ -238,29 +353,42 @@ const BookTable = () => {
                 <input type="checkbox" id="WalletAccepted" name="WalletAccepted" onChange={handleFeatureChange} value="WalletAccepted" />
                 <label htmlFor="WalletAccepted"> Wallet Accepted</label><br />
 
-                <input type="checkbox" id="HomeDelivery" name="HomeDelivery" onChange={handleFeatureChange} value="HomeDelivery" />
-                <label htmlFor="HomeDelivery"> Home Delivery</label><br />
+                {!showMoreFeature && (
+                  <p className='city-show-more' onClick={() => setShowMoreFeature(true)}>
+                    Show more..<span className='city-show-more-icon'><GoChevronDown /></span>
+                  </p>
+                )}
+                {showMoreFeature &&
+                  <>
+                    <input type="checkbox" id="HomeDelivery" name="HomeDelivery" onChange={handleFeatureChange} value="HomeDelivery" />
+                    <label htmlFor="HomeDelivery"> Home Delivery</label><br />
 
-                <input type="checkbox" id="ValetAvailable" name="ValetAvailable" onChange={handleFeatureChange} value="ValetAvailable" />
-                <label htmlFor="ValetAvailable"> Valet Available</label><br />
+                    <input type="checkbox" id="ValetAvailable" name="ValetAvailable" onChange={handleFeatureChange} value="ValetAvailable" />
+                    <label htmlFor="ValetAvailable"> Valet Available</label><br />
 
-                <input type="checkbox" id="RoofTop" name="RoofTop" onChange={handleFeatureChange} value="RoofTop" />
-                <label htmlFor="RoofTop"> Roof Top</label><br />
+                    <input type="checkbox" id="RoofTop" name="RoofTop" onChange={handleFeatureChange} value="RoofTop" />
+                    <label htmlFor="RoofTop"> Roof Top</label><br />
 
-                <input type="checkbox" id="FullBarAvailable" name="FullBarAvailable" onChange={handleFeatureChange} value="FullBarAvailable" />
-                <label htmlFor="FullBarAvailable"> Full Bar Available</label><br />
+                    <input type="checkbox" id="FullBarAvailable" name="FullBarAvailable" onChange={handleFeatureChange} value="FullBarAvailable" />
+                    <label htmlFor="FullBarAvailable"> Full Bar Available</label><br />
 
-                <input type="checkbox" id="Lift" name="Lift" />
-                <label htmlFor="Lift"> Lift</label><br />
+                    <input type="checkbox" id="Lift" name="Lift" />
+                    <label htmlFor="Lift"> Lift</label><br />
 
-                <input type="checkbox" id="SmokingArea" name="SmokingArea" onChange={handleFeatureChange} value="SmokingArea" />
-                <label htmlFor="SmokingArea"> Smoking Area</label><br />
+                    <input type="checkbox" id="SmokingArea" name="SmokingArea" onChange={handleFeatureChange} value="SmokingArea" />
+                    <label htmlFor="SmokingArea"> Smoking Area</label><br />
 
-                <input type="checkbox" id="LivePerformance" name="LivePerformance" onChange={handleFeatureChange} value="LivePerformance" />
-                <label htmlFor="LivePerformance"> Live Performance</label><br />
+                    <input type="checkbox" id="LivePerformance" name="LivePerformance" onChange={handleFeatureChange} value="LivePerformance" />
+                    <label htmlFor="LivePerformance"> Live Performance</label><br />
 
-                <input type="checkbox" id="LiveScreening" name="LiveScreening" onChange={handleFeatureChange} value="LiveScreening" />
-                <label htmlFor="LiveScreening"> Live Screening</label><br />
+                    <input type="checkbox" id="LiveScreening" name="LiveScreening" onChange={handleFeatureChange} value="LiveScreening" />
+                    <label htmlFor="LiveScreening"> Live Screening</label><br />
+
+                    <p className='city-show-more' onClick={() => setShowMoreFeature(false)}>
+                      Show less..<span className='city-show-more-icon'><GoChevronUp /></span>
+                    </p>
+                  </>
+                }
               </div>
             </div>
           }
@@ -270,11 +398,20 @@ const BookTable = () => {
           <div className="resMainUrls">
             <Link className='url' to={"/"}> Taste&Flavor {'>'} </Link>
             <Link className='url' to={`/${city}-restaurants`}> {capitalizedCity} {'>'} </Link>
-            {capitalizedCity} Restaurants
+            {area &&
+              <Link className='url' to={`/${city}-restaurants/${area}`}> {formatString(area)} {'>'} </Link>
+            }
+            {location &&
+              <Link className='url' to={`/${city}-restaurants/${area}/${location}`}> {formatString(location)} {'>'} </Link>
+            }
+            {
+              cuisine ? formatString(cuisine) + ' Cuisine' :
+                (location ? formatString(location) : area ? formatString(area) : capitalizedCity) + ' Restaurants'
+            }
           </div>
           <div className="city-restaurants-heading-sort">
             <div className="city-restaurants-heading">
-              Best Restaurant Near Me in {capitalizedCity}
+              Best {cuisine ? formatString(cuisine) : ""} Restaurants Near Me in {location ? formatString(location) : area ? formatString(area) : capitalizedCity}
               <span className="city-restaurants-length"> ({filterRestaurants().length}) </span>
             </div>
             <span className='city-sort-by'>Sort by</span>

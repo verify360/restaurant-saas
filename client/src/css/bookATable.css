@@ -60,6 +60,7 @@
     font-size: 24px;
     font-weight: 600;
     margin-bottom: 20px;
+    width: 590px;
 }
 
 .city-restaurants-heading-sort{
@@ -76,7 +77,7 @@
 }
 
 .city-sort-by{
-    margin: 8px 0px 0px 180px;
+    margin: 8px 0px 0px 20px;
     font-size: 16px;
     color: #484848;
     font-weight: 200;
@@ -175,4 +176,20 @@
     color: white;
     font-weight: 800;
     font-size: 15px;
+}
+
+.city-show-more-icon{
+    float: right;
+    font-size: 20px;
+}
+
+.city-show-more{
+    cursor: pointer;
+    color: #b8b3b3;
+    font-weight: 100;
+    font-size: 13px;
+}
+
+.city-show-more:hover{
+    color: rgb(89, 89, 165);
 }

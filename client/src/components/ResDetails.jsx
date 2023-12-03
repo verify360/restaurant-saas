@@ -77,7 +77,7 @@ const ResDetails = ({ restaurant }) => {
                             <React.Fragment key={a}>
                                 {index > 0 && ", "}
                                 <Link
-                                    to={`/${restaurant.city.toLowerCase().replace(/\s+/g, '-')}-restaurants/${restaurant.area.toLowerCase().replace(/\s+/g, '-')}/${restaurant.location.toLowerCase().replace(/\s+/g, '-')}/${a.toLowerCase().replace(/\s+/g, '-')}-cuisine`}
+                                    to={`/${restaurant.city.toLowerCase().replace(/\s+/g, '-')}-restaurants/${restaurant.area.toLowerCase().replace(/\s+/g, '-')}/${a.toLowerCase().replace(/\s+/g, '-')}-cuisine`}
                                 >
                                     {a}
                                 </Link>
@@ -137,7 +137,7 @@ const ResDetails = ({ restaurant }) => {
                                     <React.Fragment key={a}>
                                         {index > 0 && ", "}
                                         <Link
-                                            to={`/${restaurant.city.toLowerCase().replace(/\s+/g, '-')}-restaurants/${restaurant.area.toLowerCase().replace(/\s+/g, '-')}/${restaurant.location.toLowerCase().replace(/\s+/g, '-')}/${a.toLowerCase().replace(/\s+/g, '-')}-cuisine`}
+                                            to={`/${restaurant.city.toLowerCase().replace(/\s+/g, '-')}-restaurants/${restaurant.area.toLowerCase().replace(/\s+/g, '-')}/${a.toLowerCase().replace(/\s+/g, '-')}-cuisine`}
                                         >
                                             {a}
                                         </Link>

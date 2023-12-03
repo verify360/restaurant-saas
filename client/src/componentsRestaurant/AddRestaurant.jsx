@@ -20,6 +20,9 @@ const AddRestaurant = () => {
   const [imageFileNames, setImageFileNames] = useState([]);
   const [menuFileNames, setMenuFileNames] = useState([]);
 
+  const [showCuisineExample, setShowCuisineExample] = useState(false);
+  const [showTypesExample, setShowTypesExample] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -223,15 +226,46 @@ const AddRestaurant = () => {
 
             <div className="resItem">
               <label>Cuisine:</label>
-              <input className='resInput' type="text" name="cuisine" placeholder='Separate by commas (e.g., Chinese, Italian, French,etc.)' value={formData.cuisine.join(',')} onChange={(e) => setFormData({ ...formData, cuisine: e.target.value.split(',') })} />
+              <input className='resInput' type="text" name="cuisine" placeholder='Chinese,Italian,French,etc.(no space after commas)' value={formData.cuisine.join(',')} onChange={(e) => setFormData({ ...formData, cuisine: e.target.value.split(',') })} />
+              <span
+                className='resInputSpan'
+                onClick={() => {
+                  setShowCuisineExample(!showCuisineExample);
+                  setShowTypesExample(false);
+                }}>
+                ?
+              </span>
+              {showCuisineExample && (
+                <span className='resInputExample'>
+                  Italian,South Indian,North Indian,Mexican,Thai,Nepali,Gujrati,
+                  Chinese,Bengali,Rajasthani,Kashmiri,
+                  Goan,Punjabi,Hyderabadi,Kerala,
+                  Assamese,Odisha,Maharashtrian,
+                  Malabari,Mediterranean,Korean,
+                  Lebanese,French,Mughlai,Fast Food,Continental,etc.
+                </span>
+              )}
             </div>
+            
             <div className="resItem">
               <label>Types:</label>
-              <input className='resInput' type="text" name="types" placeholder='Separate by commas (e.g., Fine Dining, 5 Star,etc.)' value={formData.types.join(',')} onChange={(e) => setFormData({ ...formData, types: e.target.value.split(',') })} />
+              <input className='resInput' type="text" name="types" placeholder='Fine Dining,5 Star,Dineout Pay,etc.(no space after commas)' value={formData.types.join(',')} onChange={(e) => setFormData({ ...formData, types: e.target.value.split(',') })} />
+              <span className='resInputSpan'
+                onClick={() => {
+                  setShowTypesExample(!showTypesExample)
+                  setShowCuisineExample(false);
+                }}>
+                ?
+              </span>
+              {showTypesExample && (
+                <span className='resInputExample'>
+                  Fine Dining,Casual Dining,Dineout Pay,QSR,Ethnic Cuisine,Cafe,GIRF Flat 50,Pub,Street Food,Family Style,Seafood,Bakery,Food Truck,GIRF Buffet Deals,Buffet,Vegan,5 Star,etc.
+                </span>
+              )}
             </div>
             <div className="resItem">
               <label>Offers:</label>
-              <input className='resInput' type="text" name="offers" placeholder='Separate by commas (e.g., 10% Off, Happy Hour,etc.)' value={formData.offers.join(',')} onChange={(e) => setFormData({ ...formData, offers: e.target.value.split(',') })} />
+              <input className='resInput' type="text" name="offers" placeholder='10% Off,Happy Hour,etc.(no space after commas)' value={formData.offers.join(',')} onChange={(e) => setFormData({ ...formData, offers: e.target.value.split(',') })} />
             </div>
           </div>
         </div>
@@ -251,7 +285,7 @@ const AddRestaurant = () => {
             </div>
             <div className="resItem">
               <label>Extra Discount:</label>
-              <input className='resInput' type="text" name="extraDiscount" placeholder='Separate by commas (e.g., 20% Off on total bill,etc.)' value={formData.extraDiscount.join(',')} onChange={(e) => setFormData({ ...formData, extraDiscount: e.target.value.split(',') })} />
+              <input className='resInput' type="text" name="extraDiscount" placeholder='20% Off on total bill,etc.(no space after commas)' value={formData.extraDiscount.join(',')} onChange={(e) => setFormData({ ...formData, extraDiscount: e.target.value.split(',') })} />
               <small></small>
             </div>
             <div className="resItem">

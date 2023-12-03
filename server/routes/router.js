@@ -373,24 +373,33 @@ router.get("/restaurants-slider", async (req, res) => {
   }
 });
 
-router.get('/restaurants', async (req, res) => {
+router.get("/restaurants", async (req, res) => {
   try {
-    const { city } = req.query;
-
+    const { city, area, location, cuisine } = req.query;
     if (!city) {
-      return res.status(400).json({ error: 'City parameter is missing.' });
+      return res.status(400).json({ error: "City parameter is missing." });
     }
 
-    // Assuming 'Restaurant' is your model name
-    const restaurants = await Restaurant.find({ city });
+    let query = { city };
+    if (area) {
+      query.area = area;
+    }
 
+    if (location) {
+      query.location = location;
+    }
+
+    if (cuisine) {
+      query.cuisine = cuisine;
+    }
+
+    const restaurants = await Restaurant.find(query);
     res.status(200).json({ restaurants });
   } catch (error) {
-    console.error('Error fetching restaurants:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching restaurants:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 router.get("/:city/:area/:name/:_id", async (req, res) => {
   const { city, area, name, _id } = req.params;
@@ -487,76 +496,80 @@ router.post("/book", async (req, res) => {
   }
 });
 
-router.get('/bookings', async (req, res) => {
+router.get("/bookings", async (req, res) => {
   try {
-      const { userEmail } = req.query;
-      // Validate if userEmail is provided
-      if (!userEmail) {
-          return res.status(400).json({ error: 'User not Found.' });
-      }
+    const { userEmail } = req.query;
+    // Validate if userEmail is provided
+    if (!userEmail) {
+      return res.status(400).json({ error: "User not Found." });
+    }
 
-      // Fetch booking details based on user email
-      const bookings = await Booking.find({ userEmail: userEmail.toLowerCase() });
+    // Fetch booking details based on user email
+    const bookings = await Booking.find({ userEmail: userEmail.toLowerCase() });
 
-      res.status(200).json(bookings);
+    res.status(200).json(bookings);
   } catch (error) {
-      console.error('Error fetching booking details:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching booking details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-router.delete('/bookings/:bookingId', async (req, res) => {
+router.delete("/bookings/:bookingId", async (req, res) => {
   try {
-      const { bookingId } = req.params;
-      const updatedBooking = await Booking.findByIdAndUpdate(bookingId, { status: 'Cancelled' }, { new: true });
+    const { bookingId } = req.params;
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      bookingId,
+      { status: "Cancelled" },
+      { new: true }
+    );
 
-      if (!updatedBooking) {
-          return res.status(404).json({ error: 'Booking not found' });
-      }
+    if (!updatedBooking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
 
-      res.status(200).json(updatedBooking);
+    res.status(200).json(updatedBooking);
   } catch (error) {
-      console.error('Error cancelling booking:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error cancelling booking:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-router.get('/reservations', async (req, res) => {
+router.get("/reservations", async (req, res) => {
   try {
-      const { restaurant } = req.query;
-      if (!restaurant) {
-        return res.status(400).json({ error: 'User not Found.' });
-      }
-
-      const reservations = await Booking.find({ restaurant: restaurant});
-      
-      res.status(200).json(reservations);
-    } catch (error) {
-      console.error('Error fetching booking details:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    const { restaurant } = req.query;
+    if (!restaurant) {
+      return res.status(400).json({ error: "User not Found." });
     }
-  });
 
-  router.patch('/reservations/:bookingId', async (req, res) => {
-    try {
-        const { bookingId } = req.params;
-        const { status } = req.body;
-  
-        const updatedBooking = await Booking.findByIdAndUpdate(
-            bookingId,
-            { status },
-            { new: true }
-        );
-  
-        if (!updatedBooking) {
-            return res.status(404).json({ error: 'Booking not found' });
-        }
-  
-        res.status(200).json(updatedBooking);
-    } catch (error) {
-        console.error(`Error updating booking:`, error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    const reservations = await Booking.find({ restaurant: restaurant });
+
+    res.status(200).json(reservations);
+  } catch (error) {
+    console.error("Error fetching booking details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.patch("/reservations/:bookingId", async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const { status } = req.body;
+
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      bookingId,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedBooking) {
+      return res.status(404).json({ error: "Booking not found" });
     }
-  });
+
+    res.status(200).json(updatedBooking);
+  } catch (error) {
+    console.error(`Error updating booking:`, error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 module.exports = router;

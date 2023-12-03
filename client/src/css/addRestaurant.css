@@ -95,3 +95,27 @@
 .editIconArrow :hover {
     color: red;
 }
+
+.resInputSpan{
+    background-color: rgb(172, 167, 167);
+    height: 17px;
+    width: 11px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 15px;
+    display: inline-grid;
+    font-size: 15px;
+}
+
+.resInputExample{
+    position: absolute;
+    background-color: rgb(204, 202, 202);
+    height: max-content;
+    width: 200px;
+    padding: 12px;
+    line-height: 16px;
+    font-size: 12px;
+    color: #504c4c;
+    margin-top: 15px;
+    z-index: 999;
+}
