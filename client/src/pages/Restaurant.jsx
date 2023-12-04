@@ -49,7 +49,7 @@ export default function Restaurant() {
                     {restaurant ? (<Bookings user={user} restaurant={restaurant} />) : ""}
                 </div>
             </div>
-            <Footer />
+            <Footer city={city} area={area}/>
         </>
     );
 }

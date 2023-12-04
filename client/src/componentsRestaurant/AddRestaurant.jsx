@@ -229,9 +229,11 @@ const AddRestaurant = () => {
               <input className='resInput' type="text" name="cuisine" placeholder='Chinese,Italian,French,etc.(no space after commas)' value={formData.cuisine.join(',')} onChange={(e) => setFormData({ ...formData, cuisine: e.target.value.split(',') })} />
               <span
                 className='resInputSpan'
-                onClick={() => {
-                  setShowCuisineExample(!showCuisineExample);
-                  setShowTypesExample(false);
+                onMouseEnter={() => {
+                  setShowCuisineExample(true);
+                }}
+                onMouseLeave={() => {
+                  setShowCuisineExample(false);
                 }}>
                 ?
               </span>
@@ -246,14 +248,16 @@ const AddRestaurant = () => {
                 </span>
               )}
             </div>
-            
+
             <div className="resItem">
               <label>Types:</label>
               <input className='resInput' type="text" name="types" placeholder='Fine Dining,5 Star,Dineout Pay,etc.(no space after commas)' value={formData.types.join(',')} onChange={(e) => setFormData({ ...formData, types: e.target.value.split(',') })} />
               <span className='resInputSpan'
-                onClick={() => {
-                  setShowTypesExample(!showTypesExample)
-                  setShowCuisineExample(false);
+                onMouseEnter={() => {
+                  setShowTypesExample(true);
+                }}
+                onMouseLeave={() => {
+                  setShowTypesExample(false);
                 }}>
                 ?
               </span>

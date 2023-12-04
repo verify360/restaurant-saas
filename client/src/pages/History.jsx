@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import "../css/history.css";
 import { CiFilter } from 'react-icons/ci';
 
@@ -165,7 +164,6 @@ const History = () => {
                     </div>
                 )}
             </div>
-            <Footer />
         </>
     )
 }

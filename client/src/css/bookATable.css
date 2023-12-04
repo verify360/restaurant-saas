@@ -1,6 +1,6 @@
 .city-restaurant {
     padding: 10px 370px 50px 370px;
-    height: 2000px;
+    height: max-content;
     background-color: #f3f3f3;
     display: flex;
 }
@@ -21,26 +21,18 @@
 }
 
 .city-cuisine-filters-span,.city-type-filters-span, .city-feature-filters-span {
-    margin: 0px 0px 0px 125px;
     font-size: 14px;
     font-weight: bolder;
     cursor: pointer;
+    float: right;
 }
 
 .city-type-filters {
     border-radius: 0px 0px 0px 0px;
 }
 
-.city-type-filters-span {
-    margin: 0px 0px 0px 143.5px;
-}
-
 .city-feature-filters {
     border-radius: 0px 0px 7px 7px;
-}
-
-.city-feature-filters-span {
-    margin: 0px 0px 0px 125px;
 }
 
 .city-checkboxes {

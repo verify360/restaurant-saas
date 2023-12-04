@@ -27,9 +27,9 @@ const BookTable = () => {
 
   const [sortByPriceLowToHigh, setSortByPriceLowToHigh] = useState(false);
   const [sortByPriceHighToLow, setSortByPriceHighToLow] = useState(false);
-  const [sortBy, setSortBy] = useState(null);
+  const [sortBy, setSortBy] = useState('rating');
 
-  const { city, area, location, cuisine } = useParams();
+  const { city, area, location, cuisine, amenities } = useParams();
   const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
 
   function formatString(area) {
@@ -40,7 +40,26 @@ const BookTable = () => {
     return formattedString;
   }
 
-  console.log(selectedCuisines, selectedTypes, selectedFeatures)
+  // Convert kebab-case to camelCase
+  const kebabToCamel = (str) => {
+    return str ? str.replace(/-([a-z])/g, (match, group) => group.toUpperCase()) : '';
+  };
+
+  // Convert kebab-case to PascalCase
+  const kebabToPascal = (str) => {
+    const camelCase = kebabToCamel(str);
+    return camelCase ? camelCase.charAt(0).toUpperCase() + camelCase.slice(1) : '';
+  };
+
+  // Convert kebab-case to Title Case
+  const kebabToTitleCase = (str) => {
+    return str
+      ? str
+        .split('-')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+      : '';
+  };
 
   // const updatedCuisine = formatString(cuisine);
   // console.log('Updated Cuisine:', updatedCuisine);
@@ -55,13 +74,20 @@ const BookTable = () => {
     const fetchRestaurants = async () => {
       try {
         const response = await fetch(
-          location
-            ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}&location=${formatString(location)}`
-            : cuisine
-              ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}&cuisine=${formatString(cuisine)}`
-              : area
-                ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}`
-                : `/restaurants?city=${capitalizedCity}`
+          // types
+          //   ? `/restaurants?city=${capitalizedCity}&types=${formatString(types)}`
+          //   :
+             amenities
+              ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}&amenities=${kebabToPascal(amenities)}`
+              : location
+                ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}&location=${formatString(location)}`
+                : cuisine
+                  ? area
+                    ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}&cuisine=${formatString(cuisine)}`
+                    : `/restaurants?city=${capitalizedCity}&cuisine=${formatString(cuisine)}`
+                  : area
+                    ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}`
+                    : `/restaurants?city=${capitalizedCity}`
         );
         const data = await response.json();
         setRestaurants(data.restaurants || []);
@@ -71,7 +97,7 @@ const BookTable = () => {
     };
 
     fetchRestaurants();
-  }, [capitalizedCity, area, location, cuisine]);
+  }, [capitalizedCity, area, location, cuisine, amenities]);
 
   const filterRestaurants = () => {
     let filteredRestaurants = [...restaurants];
@@ -128,6 +154,22 @@ const BookTable = () => {
     );
   };
 
+  const restaurantAreaArrays = restaurants ? restaurants.map((restaurant) => restaurant.area) : [];
+  const uniqueArea = [...new Set(restaurantAreaArrays.flat())];
+
+  function getRandomElements(arr, count) {
+    const shuffled = arr.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  }
+
+  const actualArea = getRandomElements(uniqueArea, 1);
+
+
+  let convertedArea = '';
+
+  if (Array.isArray(actualArea) && actualArea.length > 0) {
+    convertedArea = actualArea[0].toLowerCase().replace(/\s+/g, '-');
+  }
 
   return (
     <>
@@ -405,26 +447,30 @@ const BookTable = () => {
               <Link className='url' to={`/${city}-restaurants/${area}/${location}`}> {formatString(location)} {'>'} </Link>
             }
             {
-              cuisine ? formatString(cuisine) + ' Cuisine' :
-                (location ? formatString(location) : area ? formatString(area) : capitalizedCity) + ' Restaurants'
+              amenities ? kebabToTitleCase(amenities) + " Feature" :
+                cuisine ? formatString(cuisine) + ' Cuisine' :
+                  (location ? formatString(location) : area ? formatString(area) : capitalizedCity) + ' Restaurants'
             }
           </div>
           <div className="city-restaurants-heading-sort">
             <div className="city-restaurants-heading">
-              Best {cuisine ? formatString(cuisine) : ""} Restaurants Near Me in {location ? formatString(location) : area ? formatString(area) : capitalizedCity}
+              Best {amenities ? kebabToTitleCase(amenities) : ' '}
+              {cuisine ? ` ${formatString(cuisine)}` : ' '}
+              {' '}Restaurants Near Me in{' '}
+              {location ? `${formatString(location)}, ${formatString(area)}` : area ? formatString(area) : capitalizedCity}
               <span className="city-restaurants-length"> ({filterRestaurants().length}) </span>
             </div>
             <span className='city-sort-by'>Sort by</span>
             <div className="city-restaurants-sort">
               <div className="city-restaurants-sort-element" onClick={() => setShowSort(!showSort)}>
-                <span>{sortBy === null ? 'Rating' : sortBy === 'lowToHigh' ? 'Price: Low to High' : 'Price: High to Low'}</span>
+                <span>{sortBy === 'rating' ? 'Rating' : sortBy === 'lowToHigh' ? 'Price: Low to High' : 'Price: High to Low'}</span>
                 <span className="city-restaurants-updown">{showSort ? <GoChevronUp /> : <GoChevronDown />}</span>
               </div>
               {showSort &&
                 <div className="city-restaurants-sort-elements">
                   {/* <div className="city-sort-elements">Rating</div>
                   <div className="city-sort-elements">Popularity</div> */}
-                  <div className="city-sort-elements" onClick={() => { setSortBy(null); setShowSort(false); }}>Rating</div>
+                  <div className="city-sort-elements" onClick={() => { setSortBy('rating'); setShowSort(false); }}>Rating</div>
                   <div className="city-sort-elements" onClick={() => { setSortByPriceLowToHigh(true); setSortByPriceHighToLow(false); setShowSort(false); setSortBy('lowToHigh'); }}>Price: Low to High</div>
                   <div className="city-sort-elements" onClick={() => { setSortByPriceLowToHigh(false); setSortByPriceHighToLow(true); setShowSort(false); setSortBy('highToLow'); }}>Price: High to Low</div>
                 </div>
@@ -438,7 +484,7 @@ const BookTable = () => {
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer city={city} area={convertedArea} />
     </>
   );
 }

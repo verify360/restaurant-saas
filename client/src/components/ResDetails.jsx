@@ -199,7 +199,7 @@ const ResDetails = ({ restaurant }) => {
                                                 {amenityIcons[a]}
                                             </div>
                                             <Link
-                                                to={`/${restaurant.city.toLowerCase().replace(/\s+/g, '-')}-restaurants/${restaurant.area.toLowerCase().replace(/\s+/g, '-')}/${restaurant.location.toLowerCase().replace(/\s+/g, '-')}/${a.toLowerCase().replace(/\s+/g, '-')}`}
+                                                to={`/${restaurant.city.toLowerCase().replace(/\s+/g, '-')}-restaurants/${restaurant.area.toLowerCase().replace(/\s+/g, '-')}/${a.replace(/[A-Z]/g, (match) => '-' + match.toLowerCase()).replace(/^-/, '')}-feature`}
                                             >
                                                 {a === "AC" ? "Air Conditioned" :
                                                     a === "OutdoorSeating" ? "Outdoor Seating" :

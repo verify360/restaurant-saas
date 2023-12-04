@@ -9,7 +9,7 @@
 
 .resMain {
     padding: 10px 370px 50px 370px;
-    height: 2000px;
+    height: max-content;
     background-color: #f3f3f3;
     display: flex;
 }

@@ -375,10 +375,11 @@ router.get("/restaurants-slider", async (req, res) => {
 
 router.get("/restaurants", async (req, res) => {
   try {
-    const { city, area, location, cuisine } = req.query;
+    const { city, area, location, cuisine, amenities } = req.query;
     if (!city) {
       return res.status(400).json({ error: "City parameter is missing." });
     }
+    console.log(types);
 
     let query = { city };
     if (area) {
@@ -391,6 +392,10 @@ router.get("/restaurants", async (req, res) => {
 
     if (cuisine) {
       query.cuisine = cuisine;
+    }
+
+    if (amenities) {
+      query.amenities = amenities;
     }
 
     const restaurants = await Restaurant.find(query);
