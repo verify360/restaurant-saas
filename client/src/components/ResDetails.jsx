@@ -154,7 +154,15 @@ const ResDetails = ({ restaurant }) => {
                                 {restaurant.types.map((a, index) => (
                                     <React.Fragment key={a}>
                                         {index > 0 && ", "}
-                                        {a}
+                                        {
+                                            a === "Qsr"
+                                                ? "QSR"
+                                                : a === "Girf Flat 50"
+                                                    ? "GIRF Flat 50"
+                                                    : a === "Girf Buffet Deals"
+                                                        ? "GIRF Buffet Deals"
+                                                        : a
+                                        }
                                     </React.Fragment>
                                 ))}
                             </div>

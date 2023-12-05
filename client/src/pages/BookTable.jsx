@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import "../css/bookATable.css";
 import Footer from '../components/Footer';
 import CityCard from '../components/CityCard';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
 
@@ -29,7 +29,7 @@ const BookTable = () => {
   const [sortByPriceHighToLow, setSortByPriceHighToLow] = useState(false);
   const [sortBy, setSortBy] = useState('rating');
 
-  const { city, area, location, cuisine, amenities } = useParams();
+  const { city, area, location, cuisine, types, amenities } = useParams();
   const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
 
   function formatString(area) {
@@ -61,6 +61,18 @@ const BookTable = () => {
       : '';
   };
 
+  //Convert the types to desired format
+  function convertToOriginalFormat(cleanedString) {
+    if (cleanedString) {
+      const words = cleanedString.split('-');
+      const originalFormat = words
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+
+      return originalFormat;
+    }
+  }
+
   // const updatedCuisine = formatString(cuisine);
   // console.log('Updated Cuisine:', updatedCuisine);
 
@@ -74,10 +86,9 @@ const BookTable = () => {
     const fetchRestaurants = async () => {
       try {
         const response = await fetch(
-          // types
-          //   ? `/restaurants?city=${capitalizedCity}&types=${formatString(types)}`
-          //   :
-             amenities
+          types
+            ? `/restaurants?city=${capitalizedCity}&types=${convertToOriginalFormat(types)}`
+            : amenities
               ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}&amenities=${kebabToPascal(amenities)}`
               : location
                 ? `/restaurants?city=${capitalizedCity}&area=${formatString(area)}&location=${formatString(location)}`
@@ -97,7 +108,7 @@ const BookTable = () => {
     };
 
     fetchRestaurants();
-  }, [capitalizedCity, area, location, cuisine, amenities]);
+  }, [capitalizedCity, area, location, cuisine,types, amenities]);
 
   const filterRestaurants = () => {
     let filteredRestaurants = [...restaurants];
@@ -301,10 +312,10 @@ const BookTable = () => {
                 <input type="checkbox" id="casualdining" name="casualdining" onChange={handleTypeChange} value="Casual Dining" />
                 <label htmlFor="casualdining"> Casual Dining</label><br />
 
-                <input type="checkbox" id="dineoutpay" name="dineoutpay" onChange={handleTypeChange} value="Dineout Pay" />
-                <label htmlFor="dineoutpay"> Dineout Pay</label><br />
+                <input type="checkbox" id="pizza" name="pizza" onChange={handleTypeChange} value="Pizza" />
+                <label htmlFor="pizza"> Pizza</label><br />
 
-                <input type="checkbox" id="qsr" name="qsr" onChange={handleTypeChange} value="QSR" />
+                <input type="checkbox" id="qsr" name="qsr" onChange={handleTypeChange} value="Qsr" />
                 <label htmlFor="qsr"> QSR</label><br />
 
                 <input type="checkbox" id="ethniccuisine" name="ethniccuisine" onChange={handleTypeChange} value="Ethnic Cuisine" />
@@ -313,7 +324,7 @@ const BookTable = () => {
                 <input type="checkbox" id="cafe" name="cafe" onChange={handleTypeChange} value="Cafe" />
                 <label htmlFor="cafe"> Cafe</label><br />
 
-                <input type="checkbox" id="girfflat50" name="girfflat50" onChange={handleTypeChange} value="GIRF Flat 50" />
+                <input type="checkbox" id="girfflat50" name="girfflat50" onChange={handleTypeChange} value="Girf Flat 50" />
                 <label htmlFor="girfflat50"> GIRF Flat 50</label><br />
 
                 {!showMoreTypes && (
@@ -341,7 +352,7 @@ const BookTable = () => {
                     <input type="checkbox" id="foodtruck" name="foodtruck" onChange={handleTypeChange} value="Food Truck" />
                     <label htmlFor="foodtruck"> Food Truck</label><br />
 
-                    <input type="checkbox" id="girfbuffetdeals" name="girfbuffetdeals" onChange={handleTypeChange} value="GIRF Buffet Deals" />
+                    <input type="checkbox" id="girfbuffetdeals" name="girfbuffetdeals" onChange={handleTypeChange} value="Girf Buffet Deals" />
                     <label htmlFor="girfbuffetdeals"> GIRF Buffet Deals</label><br />
 
                     <input type="checkbox" id="buffet" name="buffet" onChange={handleTypeChange} value="Buffet" />
@@ -438,24 +449,54 @@ const BookTable = () => {
         </div>
         <div className="city-restaurant-content">
           <div className="resMainUrls">
-            <Link className='url' to={"/"}> Taste&Flavor {'>'} </Link>
-            <Link className='url' to={`/${city}-restaurants`}> {capitalizedCity} {'>'} </Link>
+            <a className='url' href={"/"}> Taste&Flavor {'>'} </a>
+            <a className='url' href={`/${city}-restaurants`}> {capitalizedCity} {'>'} </a>
             {area &&
-              <Link className='url' to={`/${city}-restaurants/${area}`}> {formatString(area)} {'>'} </Link>
+              <a className='url' href={`/${city}-restaurants/${area}`}> {formatString(area)} {'>'} </a>
             }
             {location &&
-              <Link className='url' to={`/${city}-restaurants/${area}/${location}`}> {formatString(location)} {'>'} </Link>
+              <a className='url' href={`/${city}-restaurants/${area}/${location}`}> {formatString(location)} {'>'} </a>
             }
             {
               amenities ? kebabToTitleCase(amenities) + " Feature" :
                 cuisine ? formatString(cuisine) + ' Cuisine' :
                   (location ? formatString(location) : area ? formatString(area) : capitalizedCity) + ' Restaurants'
             }
+            {
+              types
+                ? (() => {
+                  let originalFormat = convertToOriginalFormat(types);
+
+                  return originalFormat === "Qsr"
+                    ? " > QSR Restaurants"
+                    : originalFormat === "Girf Flat 50"
+                      ? " > GIRF Flat 50 Restaurants"
+                      : originalFormat === "Girf Buffet Deals"
+                        ? " > GIRF Buffet Deals Restaurants"
+                        : `${" > "} ${originalFormat} Restaurants`;
+                })()
+                : " "
+            }
           </div>
           <div className="city-restaurants-heading-sort">
             <div className="city-restaurants-heading">
               Best {amenities ? kebabToTitleCase(amenities) : ' '}
               {cuisine ? ` ${formatString(cuisine)}` : ' '}
+              {
+                types
+                  ? (() => {
+                    let originalFormat = convertToOriginalFormat(types);
+
+                    return originalFormat === "Qsr"
+                      ? "QSR"
+                      : originalFormat === "Girf Flat 50"
+                        ? "GIRF Flat 50"
+                        : originalFormat === "Girf Buffet Deals"
+                          ? "GIRF Buffet Deals"
+                          : originalFormat;
+                  })()
+                  : " "
+              }
               {' '}Restaurants Near Me in{' '}
               {location ? `${formatString(location)}, ${formatString(area)}` : area ? formatString(area) : capitalizedCity}
               <span className="city-restaurants-length"> ({filterRestaurants().length}) </span>

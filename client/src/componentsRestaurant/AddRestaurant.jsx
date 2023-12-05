@@ -251,7 +251,7 @@ const AddRestaurant = () => {
 
             <div className="resItem">
               <label>Types:</label>
-              <input className='resInput' type="text" name="types" placeholder='Fine Dining,5 Star,Dineout Pay,etc.(no space after commas)' value={formData.types.join(',')} onChange={(e) => setFormData({ ...formData, types: e.target.value.split(',') })} />
+              <input className='resInput' type="text" name="types" placeholder='Fine Dining,5 Star,Street Food,etc.(no space after commas)' value={formData.types.join(',')} onChange={(e) => setFormData({ ...formData, types: e.target.value.split(',') })} />
               <span className='resInputSpan'
                 onMouseEnter={() => {
                   setShowTypesExample(true);
@@ -263,7 +263,7 @@ const AddRestaurant = () => {
               </span>
               {showTypesExample && (
                 <span className='resInputExample'>
-                  Fine Dining,Casual Dining,Dineout Pay,QSR,Ethnic Cuisine,Cafe,GIRF Flat 50,Pub,Street Food,Family Style,Seafood,Bakery,Food Truck,GIRF Buffet Deals,Buffet,Vegan,5 Star,etc.
+                  Fine Dining,Casual Dining,Qsr,Ethnic Cuisine,Cafe,Pizza,Girf Flat 50,Pub,Street Food,Family Style,Seafood,Bakery,Food Truck,Girf Buffet Deals,Buffet,Vegan,5 Star,etc.
                 </span>
               )}
             </div>

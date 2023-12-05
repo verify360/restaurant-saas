@@ -24,7 +24,7 @@ function App() {
       <Route exact path="/logout" element={<Home/>}></Route>
       <Route path="/:city-restaurants" element={<BookTable />} />
       <Route path="/:city-restaurants/:cuisine-cuisine" element={<BookTable />} />
-      {/* <Route path="/:city-restaurants/:types-facilities" element={<BookTable />} /> */}
+      <Route path="/:city-restaurants/:types-facilities" element={<BookTable />} />
       <Route path="/:city-restaurants/:area" element={<BookTable />} /> 
       <Route path="/:city-restaurants/:area/:cuisine-cuisine" element={<BookTable />} /> 
       <Route path="/:city-restaurants/:area/:amenities-feature" element={<BookTable />} /> 

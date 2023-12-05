@@ -1,7 +1,6 @@
 import React from 'react'
 import logo from "../assets/logo.png"
 import Cities from './Cities';
-import { Link } from 'react-router-dom';
 
 export default function Footer({ city }) {
 
@@ -89,45 +88,45 @@ export default function Footer({ city }) {
   const getFacilityItems = (selectedCity) => {
     switch (selectedCity) {
       case 'delhi':
-        return ['Fine Dining', 'Casual Dining', 'Dineout Pay', 'Street Food', '5 Star'];
+        return ['Fine Dining', 'Casual Dining', 'Pizza', 'Street Food', '5 Star'];
       case 'mumbai':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'Seafood', 'Buffet'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'Seafood', 'Buffet'];
       case 'bangalore':
         return ['Ethnic Cuisine', 'Cafe', 'GIRF Flat 50', 'Street Food', '5 Star'];
       case 'kolkata':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'GIRF Flat 50', 'Buffet'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'GIRF Flat 50', 'Buffet'];
       case 'chennai':
-        return ['Fine Dining', 'Casual Dining', 'Dineout Pay', 'QSR', 'Bakery'];
+        return ['Fine Dining', 'Casual Dining', 'Pizza', 'QSR', 'Bakery'];
       case 'hyderabad':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'Pub', 'Buffet'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'Pub', 'Buffet'];
       case 'pune':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'Family Style', 'Vegan'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'Family Style', 'Vegan'];
       case 'ahmedabad':
-        return ['Fine Dining', 'Casual Dining', 'Dineout Pay', 'QSR', 'Street Food'];
+        return ['Fine Dining', 'Casual Dining', 'Pizza', 'QSR', 'Street Food'];
       case 'jaipur':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'Buffet', 'Vegan'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'Buffet', 'Vegan'];
       case 'lucknow':
-        return ['Fine Dining', 'Casual Dining', 'Dineout Pay', 'Street Food', 'GIRF Buffet Deals'];
+        return ['Fine Dining', 'Casual Dining', 'Pizza', 'Street Food', 'GIRF Buffet Deals'];
       case 'chandigarh':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'Ethnic Cuisine', 'Street Food'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'Ethnic Cuisine', 'Street Food'];
       case 'bhopal':
-        return ['Fine Dining', 'Casual Dining', 'Dineout Pay', 'QSR', 'GIRF Buffet Deals'];
+        return ['Fine Dining', 'Casual Dining', 'Pizza', 'QSR', 'GIRF Buffet Deals'];
       case 'indore':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'Street Food', 'Vegan'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'Street Food', 'Vegan'];
       case 'nagpur':
-        return ['Fine Dining', 'Casual Dining', 'Dineout Pay', 'QSR', 'Buffet'];
+        return ['Fine Dining', 'Casual Dining', 'Pizza', 'QSR', 'Buffet'];
       case 'patna':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'GIRF Buffet Deals', 'Vegan'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'GIRF Buffet Deals', 'Vegan'];
       case 'kanpur':
-        return ['Fine Dining', 'Casual Dining', 'Dineout Pay', 'Street Food', 'Vegan'];
+        return ['Fine Dining', 'Casual Dining', 'Pizza', 'Street Food', 'Vegan'];
       case 'agra':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'Street Food', 'GIRF Buffet Deals'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'Street Food', 'GIRF Buffet Deals'];
       case 'varanasi':
-        return ['Fine Dining', 'Casual Dining', 'Dineout Pay', 'QSR', 'Vegan'];
+        return ['Fine Dining', 'Casual Dining', 'Pizza', 'QSR', 'Vegan'];
       case 'coimbatore':
-        return ['Casual Dining', 'Dineout Pay', 'QSR', 'Street Food', 'Bakery'];
+        return ['Casual Dining', 'Pizza', 'QSR', 'Street Food', 'Bakery'];
       case 'visakhapatnam':
-        return ['Fine Dining', 'Casual Dining', 'Dineout Pay', 'QSR', 'Buffet'];
+        return ['Fine Dining', 'Casual Dining', 'Pizza', 'QSR', 'Buffet'];
       default:
         return [];
     }
@@ -360,7 +359,7 @@ export default function Footer({ city }) {
 
                   return (
                     <li key={index}>
-                      <Link to={url}>{item}</Link>
+                      <a href={url}>{item}</a>
                     </li>
                   );
                 })}
@@ -382,7 +381,7 @@ export default function Footer({ city }) {
 
                     return (
                       <li key={index}>
-                        <Link to={url}>{item}</Link>
+                        <a href={url}>{item}</a>
                       </li>
                     );
                   })
@@ -392,7 +391,7 @@ export default function Footer({ city }) {
               </ul>
             </div>
           ))}
-          {/* {midSectionsFeature.map((section, index) => (
+          {midSectionsFeature.map((section, index) => (
             <div className="dynamicMid">
               <h4 className="subHeading">{section.title}</h4>
               <ul className="dynamicMidComponent">
@@ -400,14 +399,15 @@ export default function Footer({ city }) {
                   section.items.map((item, index) => {
                     const cleanedItem = item
                       .toLowerCase()
-                      .replace(/[^a-zA-Z]/g, '-')
-                      .replace(/--+/g, '-');
+                      .replace(/[^a-zA-Z0-9]/g, '-') 
+                      .replace(/--+/g, '-') 
+                      .replace(/^-+|-+$/g, '');
 
                     const url = `http://localhost:3000/${city}-restaurants/${cleanedItem}-facilities`;
 
                     return (
                       <li key={index}>
-                        <Link to={url}>{item}</Link>
+                        <a href={url}>{item}</a>
                       </li>
                     );
                   })
@@ -416,7 +416,7 @@ export default function Footer({ city }) {
                 )}
               </ul>
             </div>
-          ))} */}
+          ))}
           {midSectionsLocations.map((section, index) => (
             <div className="dynamicMid">
               <h4 className="subHeading">{section.title}</h4>
@@ -436,7 +436,7 @@ export default function Footer({ city }) {
 
                     return (
                       <li key={index}>
-                        <Link to={url}>{location.name}</Link>
+                        <a href={url}>{location.name}</a>
                       </li>
                     );
                   })
