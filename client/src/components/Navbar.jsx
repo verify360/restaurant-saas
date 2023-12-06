@@ -1,12 +1,40 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import logo from "../assets/logo.png";
 import Signin from "./Signin";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 
-function Navbar({city}) {
+const cities = [
+  { cityName: "Delhi" },
+  { cityName: "Mumbai" },
+  { cityName: "Bangalore" },
+  { cityName: "Kolkata" },
+  { cityName: "Chennai" },
+  { cityName: "Hyderabad" },
+  { cityName: "Pune" },
+  { cityName: "Ahmedabad" },
+  { cityName: "Jaipur" },
+  { cityName: "Lucknow" },
+  { cityName: "Chandigarh" },
+  { cityName: "Bhopal" },
+  { cityName: "Indore" },
+  { cityName: "Nagpur" },
+  { cityName: "Patna" },
+  { cityName: "Kanpur" },
+  { cityName: "Agra" },
+  { cityName: "Varanasi" },
+  { cityName: "Coimbatore" },
+  { cityName: "Visakhapatnam" },
+];
+
+function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showLogin, setShowLogin] = useState(false);
+  const [filteredCities, setFilteredCities] = useState([]);
+
+  const [user] = useAuthState(auth);
 
   const links = [
     { name: "Home", link: "/" },
@@ -14,14 +42,17 @@ function Navbar({city}) {
     { name: "Blog", link: "/blog" },
   ];
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const options = ["Shovabazar, Kolkata", "Other"];
-  const filteredOptions = options.filter(option =>
-    option.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleCitySearch = (searchTerm) => {
+    const filtered = cities.filter(city => city.cityName.toLowerCase().includes(searchTerm.toLowerCase()));
+    setFilteredCities(filtered);
+  };
 
-  const [showLogin, setShowLogin] = useState(false);
-  const [user] = useAuthState(auth);
+  const handleCitySelect = (selectedCity) => {
+    setSearchTerm("");
+    setFilteredCities([]);
+    onSelectCity(selectedCity);
+    onCityChangeRedirect(selectedCity);
+  };
 
   const handleLoginButtonClick = () => {
     if (user) {
@@ -29,6 +60,10 @@ function Navbar({city}) {
     } else {
       setShowLogin(true);
     }
+  };
+
+  const capitalizeWords = (str) => {
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   return (
@@ -43,18 +78,24 @@ function Navbar({city}) {
           </span>
           <input
             type="text"
-            placeholder="Search location..."
+            placeholder={city ? capitalizeWords(city) : "Search City.."}
             value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              handleCitySearch(e.target.value);
+            }}
+            onFocus={() => searchTerm === '' && setFilteredCities(cities)}
             className="searchInput"
           />
-          <select name="location" id="location" className="locationSelect">
-            {filteredOptions.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+          {filteredCities && (
+            <ul className="citySuggestions">
+              {filteredCities.map((city) => (
+                <li key={city.cityName} onClick={() => handleCitySelect(city.cityName)}>
+                  {city.cityName}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <div className="flex-item">
           <ul className="flex links">

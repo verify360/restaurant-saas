@@ -4,7 +4,7 @@
   font-family: "Metropolis", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-.mainColor,h2 {
+.mainColor, h2 {
   color: #FF5757 !important;
 }
 
@@ -30,6 +30,7 @@
   color: #FF5757;
   font-weight: 700;
 }
+
 .Heading::after {
   content: "";
   display: block;
@@ -38,12 +39,12 @@
   border-bottom: 3px solid #FF5757;
 }
 
-.button ,.loginButton{
+.button, .loginButton {
   background-color: #FF5757 !important;
   cursor: pointer;
 }
 
-.button:hover ,.loginButton:hover{
+.button:hover, .loginButton:hover {
   background-color: #fc0404 !important;
 }
 
@@ -72,7 +73,7 @@ header {
   margin: auto;
 }
 
-.logo img{
+.logo img {
   height: 55px;
   width: 261px;
 }
@@ -118,15 +119,43 @@ header {
   border-radius: 4px;
   color: #666;
 }
-.searchInput{
+
+.searchInput {
   border: none;
   border-radius: 4px;
   color: #666;
   height: 28px;
+  margin-left: 30px;
 }
 
 .locationIcon {
   font-size: 20px;
+  margin: 0px 10px 0px 2px;
+  position: absolute;
+  color: #3d3a3a;
+}
+
+.citySuggestions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  max-height: 200px; 
+  overflow-y: auto; 
+  margin-left: 11px;
+}
+
+.citySuggestions li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.citySuggestions li:hover {
+  background-color: #dcd8d8;
+  color: rgb(62, 62, 62);
 }
 
 .searchBanner {
@@ -313,7 +342,7 @@ header {
   left: 10px !important;
 }
 
-.slick-next{
+.slick-next {
   right: 18px !important;
 }
 
@@ -338,7 +367,7 @@ header {
   padding: 45px 370px 50px 370px;
 }
 
-.dynamicMid{
+.dynamicMid {
   width: 233px;
 }
 
@@ -367,15 +396,16 @@ header {
   padding: 0.8rem 0 0 0;
 }
 
-.footer a:hover{
+.footer a:hover {
   color: black;
 }
 
-.footerBottom{
+.footerBottom {
   padding: 45px 370px 50px 370px;
   flex-flow: column;
 }
-.footerBottom p{
+
+.footerBottom p {
   color: #666;
   font-size: 14px;
   line-height: 32px;

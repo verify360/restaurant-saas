@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from "../components/Navbar";
 import ResDetails from "../components/ResDetails";
 import Footer from "../components/Footer";
@@ -12,6 +12,8 @@ export default function Restaurant() {
     const { city, area, name, _id } = useParams();
     const [restaurant, setRestaurant] = useState(null);
     const [user] = useAuthState(auth);
+    const navigate = useNavigate();
+    const [selectedCity, setSelectedCity] = useState(city);
 
     useEffect(() => {
         const fetchRestaurantDetails = async () => {
@@ -40,7 +42,13 @@ export default function Restaurant() {
 
     return (
         <>
-            <Navbar city={city}/>
+            <Navbar
+                city={selectedCity.toLowerCase()}
+                onSelectCity={setSelectedCity}
+                onCityChangeRedirect={(selectedCity) => {
+                    navigate(`/${selectedCity.toLowerCase()}`);
+                }}
+            />
             <div className="resMain">
                 <div className="resMainOne">
                     <ResDetails restaurant={restaurant} />
@@ -49,7 +57,7 @@ export default function Restaurant() {
                     {restaurant ? (<Bookings user={user} restaurant={restaurant} />) : ""}
                 </div>
             </div>
-            <Footer city={city} area={area}/>
+            <Footer city={city} area={area} />
         </>
     );
 }

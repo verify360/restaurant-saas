@@ -3,35 +3,39 @@ import Navbar from '../components/Navbar';
 import "../css/bookATable.css";
 import Footer from '../components/Footer';
 import CityCard from '../components/CityCard';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
 
 const BookTable = () => {
-
+  
   const [restaurants, setRestaurants] = useState([]);
-
+  
   const [selectedCuisines, setSelectedCuisines] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
-
+  
   const [showCuisineFilters, setShowCuisineFilters] = useState(true);
   const [showTypeFilters, setShowTypeFilters] = useState(true);
   const [showFeatureFilters, setShowFeatureFilters] = useState(false);
-
+  
   const [showSort, setShowSort] = useState(false);
-
+  
   const [showMoreCuisine, setShowMoreCuisine] = useState(false);
   const [showMoreTypes, setShowMoreTypes] = useState(false);
   const [showMoreFeature, setShowMoreFeature] = useState(false);
-
+  
   const [sortByPriceLowToHigh, setSortByPriceLowToHigh] = useState(false);
   const [sortByPriceHighToLow, setSortByPriceHighToLow] = useState(false);
   const [sortBy, setSortBy] = useState('rating');
-
+  
   const { city, area, location, cuisine, types, amenities } = useParams();
+
   const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
 
+  const navigate = useNavigate();
+  const [selectedCity, setSelectedCity] = useState(city);
+  
   function formatString(area) {
     const words = area.split('-');
     const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
@@ -108,7 +112,7 @@ const BookTable = () => {
     };
 
     fetchRestaurants();
-  }, [capitalizedCity, area, location, cuisine,types, amenities]);
+  }, [capitalizedCity, area, location, cuisine, types, amenities]);
 
   const filterRestaurants = () => {
     let filteredRestaurants = [...restaurants];
@@ -175,7 +179,6 @@ const BookTable = () => {
 
   const actualArea = getRandomElements(uniqueArea, 1);
 
-
   let convertedArea = '';
 
   if (Array.isArray(actualArea) && actualArea.length > 0) {
@@ -184,7 +187,13 @@ const BookTable = () => {
 
   return (
     <>
-      <Navbar city={city} />
+      <Navbar
+        city={selectedCity.toLowerCase()}
+        onSelectCity={setSelectedCity}
+        onCityChangeRedirect={(selectedCity) => {
+          navigate(`/${selectedCity.toLowerCase()}`);
+        }}
+      />
       <div className="city-restaurant">
         <div className="city-filters">
           {!showCuisineFilters &&

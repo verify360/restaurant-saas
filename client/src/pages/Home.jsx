@@ -4,11 +4,20 @@ import Banner from '../components/Banner';
 import Offers from '../components/Offers';
 import Carousel from '../components/Carousel';
 import Footer from '../components/Footer';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Home() {
+    const { city } = useParams();
     const [restaurants, setRestaurants] = useState([]);
 
-    const selectedCity = "Kolkata";
+    const capitalizeWords = (str) => {
+        return str.replace(/\b\w/g, (char) => char.toUpperCase());
+    };
+
+    const [selectedCity, setSelectedCity] = useState(city ? capitalizeWords(city) : "Kolkata");
+
+    const navigate = useNavigate();
+
     const filteredRestaurants = restaurants.filter((restaurant) => restaurant.city === selectedCity);
 
     useEffect(() => {
@@ -56,7 +65,7 @@ function Home() {
 
     return (
         <>
-            <Navbar city={selectedCity.toLowerCase()} />
+            <Navbar city={selectedCity.toLowerCase()} onSelectCity={setSelectedCity} onCityChangeRedirect={(selectedCity) => { navigate('/'); }} />
             <Banner />
             <Offers />
             <Carousel city={selectedCity.toLowerCase()} restaurants={filteredRestaurants} />
