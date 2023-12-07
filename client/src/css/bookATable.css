@@ -20,7 +20,7 @@
     font-weight: bolder;
 }
 
-.city-cuisine-filters-span,.city-type-filters-span, .city-feature-filters-span {
+.city-cuisine-filters-span, .city-type-filters-span, .city-feature-filters-span {
     font-size: 14px;
     font-weight: bolder;
     cursor: pointer;
@@ -39,11 +39,11 @@
     margin-top: 15px;
 }
 
-.city-checkboxes > input{
+.city-checkboxes>input {
     margin: 0px 10px 12px 12px;
 }
 
-.city-checkboxes > label{
+.city-checkboxes>label {
     font-weight: lighter;
     font-size: 12px;
 }
@@ -55,11 +55,11 @@
     width: 590px;
 }
 
-.city-restaurants-heading-sort{
+.city-restaurants-heading-sort {
     display: flex;
 }
 
-.city-restaurants-length{
+.city-restaurants-length {
     margin-left: 5px;
     vertical-align: text-bottom;
     font-size: 12px;
@@ -68,14 +68,14 @@
     vertical-align: middle;
 }
 
-.city-sort-by{
+.city-sort-by {
     margin: 8px 0px 0px 20px;
     font-size: 16px;
     color: #484848;
     font-weight: 200;
 }
 
-.city-restaurants-sort-element{
+.city-restaurants-sort-element {
     width: 150px;
     background-color: #fff;
     margin-left: 10px;
@@ -87,7 +87,7 @@
     cursor: pointer;
 }
 
-.city-restaurants-sort-elements{
+.city-restaurants-sort-elements {
     width: 175px;
     position: absolute;
     background-color: #fff;
@@ -99,16 +99,17 @@
     border: #dcdcdc 1px solid;
 }
 
-.city-sort-elements{
+.city-sort-elements {
     padding: 10px 0px 10px 14px;
     border-bottom: 1px solid #dcdcdc;
     cursor: pointer;
 }
 
-.city-restaurants-updown{
+.city-restaurants-updown {
     font-size: 20px;
     float: right;
 }
+
 .city-restaurant-content {
     margin: 15px 0px 0px 30px;
 }
@@ -170,18 +171,44 @@
     font-size: 15px;
 }
 
-.city-show-more-icon{
+.city-show-more-icon {
     float: right;
     font-size: 20px;
 }
 
-.city-show-more{
+.city-show-more {
     cursor: pointer;
     color: #b8b3b3;
     font-weight: 100;
     font-size: 13px;
 }
 
-.city-show-more:hover{
+.city-show-more:hover {
     color: rgb(89, 89, 165);
+}
+
+.pagination-container {
+    display: flex;
+    width: max-content;
+    margin-top: 30px;
+}
+
+.pagination-container li {
+    list-style: none;
+}
+
+.pagination-item a {
+    color: black;
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination-item:not(.active) a:hover {
+    background-color: #ddd;
 }

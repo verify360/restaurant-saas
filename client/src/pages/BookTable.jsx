@@ -8,34 +8,39 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
 
 const BookTable = () => {
-  
+
   const [restaurants, setRestaurants] = useState([]);
-  
+
   const [selectedCuisines, setSelectedCuisines] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
-  
+
   const [showCuisineFilters, setShowCuisineFilters] = useState(true);
   const [showTypeFilters, setShowTypeFilters] = useState(true);
   const [showFeatureFilters, setShowFeatureFilters] = useState(false);
-  
+
   const [showSort, setShowSort] = useState(false);
-  
+
   const [showMoreCuisine, setShowMoreCuisine] = useState(false);
   const [showMoreTypes, setShowMoreTypes] = useState(false);
   const [showMoreFeature, setShowMoreFeature] = useState(false);
-  
+
   const [sortByPriceLowToHigh, setSortByPriceLowToHigh] = useState(false);
   const [sortByPriceHighToLow, setSortByPriceHighToLow] = useState(false);
   const [sortBy, setSortBy] = useState('rating');
-  
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 4;
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+
   const { city, area, location, cuisine, types, amenities } = useParams();
 
   const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
 
   const navigate = useNavigate();
   const [selectedCity, setSelectedCity] = useState(city);
-  
+
   function formatString(area) {
     const words = area.split('-');
     const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
@@ -148,6 +153,10 @@ const BookTable = () => {
     return filteredRestaurants;
   };
 
+  const records = filterRestaurants().slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(filterRestaurants().length / recordsPerPage);
+  const numbers = [...Array(nPage + 1).keys()].slice(1);
+
   const handleCuisineChange = (e) => {
     const value = e.target.value;
     setSelectedCuisines((prev) =>
@@ -217,11 +226,11 @@ const BookTable = () => {
                 <input type="checkbox" id="north-indian" name="north-indian" onChange={handleCuisineChange} value="North Indian" />
                 <label htmlFor="north-indian"> North Indian</label><br />
 
-                <input type="checkbox" id="mexican" name="mexican" onChange={handleCuisineChange} value="Mexican" />
-                <label htmlFor="mexican"> Mexican</label><br />
+                <input type="checkbox" id="biriyani" name="biriyani" onChange={handleCuisineChange} value="Biriyani" />
+                <label htmlFor="biriyani"> Biriyani</label><br />
 
-                <input type="checkbox" id="thai" name="thai" onChange={handleCuisineChange} value="Thai" />
-                <label htmlFor="thai"> Thai</label><br />
+                <input type="checkbox" id="chinese" name="chinese" onChange={handleCuisineChange} value="Chinese" />
+                <label htmlFor="chinese"> Chinese</label><br />
 
                 <input type="checkbox" id="nepali" name="nepali" onChange={handleCuisineChange} value="Nepali" />
                 <label htmlFor="nepali"> Nepali</label><br />
@@ -236,8 +245,14 @@ const BookTable = () => {
                 )}
                 {showMoreCuisine &&
                   <>
-                    <input type="checkbox" id="chinese" name="chinese" onChange={handleCuisineChange} value="Chinese" />
-                    <label htmlFor="chinese"> Chinese</label><br />
+                    <input type="checkbox" id="asian" name="asian" onChange={handleCuisineChange} value="Asian" />
+                    <label htmlFor="asian"> Asian</label><br />
+
+                    <input type="checkbox" id="thai" name="thai" onChange={handleCuisineChange} value="Thai" />
+                    <label htmlFor="thai"> Thai</label><br />
+
+                    <input type="checkbox" id="mexican" name="mexican" onChange={handleCuisineChange} value="Mexican" />
+                    <label htmlFor="mexican"> Mexican</label><br />
 
                     <input type="checkbox" id="bengali" name="bengali" onChange={handleCuisineChange} value="Bengali" />
                     <label htmlFor="bengali"> Bengali</label><br />
@@ -275,11 +290,20 @@ const BookTable = () => {
                     <input type="checkbox" id="mediterranean" name="mediterranean" onChange={handleCuisineChange} value="Mediterranean" />
                     <label htmlFor="mediterranean"> Mediterranean</label><br />
 
+                    <input type="checkbox" id="american" name="american" onChange={handleCuisineChange} value="American" />
+                    <label htmlFor="american"> American</label><br />
+
+                    <input type="checkbox" id="arabian" name="arabian" onChange={handleCuisineChange} value="Arabian" />
+                    <label htmlFor="arabian"> Arabian</label><br />
+
                     <input type="checkbox" id="korean" name="korean" onChange={handleCuisineChange} value="Korean" />
                     <label htmlFor="korean"> Korean</label><br />
 
                     <input type="checkbox" id="lebanese" name="lebanese" onChange={handleCuisineChange} value="Lebanese" />
                     <label htmlFor="lebanese"> Lebanese</label><br />
+
+                    <input type="checkbox" id="sushi" name="sushi" onChange={handleCuisineChange} value="Sushi" />
+                    <label htmlFor="sushi"> Sushi</label><br />
 
                     <input type="checkbox" id="french" name="french" onChange={handleCuisineChange} value="French" />
                     <label htmlFor="french"> French</label><br />
@@ -357,6 +381,9 @@ const BookTable = () => {
 
                     <input type="checkbox" id="bakery" name="bakery" onChange={handleTypeChange} value="Bakery" />
                     <label htmlFor="bakery"> Bakery</label><br />
+
+                    <input type="checkbox" id="nightlife" name="nightlife" onChange={handleTypeChange} value="Nightlife" />
+                    <label htmlFor="nightlife"> Nightlife</label><br />
 
                     <input type="checkbox" id="foodtruck" name="foodtruck" onChange={handleTypeChange} value="Food Truck" />
                     <label htmlFor="foodtruck"> Food Truck</label><br />
@@ -508,7 +535,7 @@ const BookTable = () => {
               }
               {' '}Restaurants Near Me in{' '}
               {location ? `${formatString(location)}, ${formatString(area)}` : area ? formatString(area) : capitalizedCity}
-              <span className="city-restaurants-length"> ({filterRestaurants().length}) </span>
+              <span className="city-restaurants-length"> ({records.length}) </span>
             </div>
             <span className='city-sort-by'>Sort by</span>
             <div className="city-restaurants-sort">
@@ -528,15 +555,50 @@ const BookTable = () => {
             </div>
           </div>
           <div className="city-restaurants">
-            {filterRestaurants().map((restaurant) => (
+            {records.map((restaurant) => (
               <CityCard key={restaurant._id} restaurant={restaurant} />
             ))}
           </div>
+          {records.length < filterRestaurants().length ? 
+            (<div className='pagination-container'>
+              <li className='pagination-item'>
+                <a href="#" onClick={prevPage}>Prev</a>
+              </li>
+              {
+                numbers.map((n, i) => (
+                  <li key={i} className={`pagination-item ${currentPage === n ? 'active' : ''}`}>
+                    <a href="#" onClick={() => changeCurrentPage(n)} >{n}</a>
+                  </li>
+                ))
+              }
+              <li className='pagination-item'>
+                <a href="#" onClick={nextPage}>Next</a>
+              </li>
+            </div>)
+            : ""
+          }
         </div>
       </div>
       <Footer city={city} area={convertedArea} />
     </>
   );
+
+  function prevPage() {
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
+
+  function changeCurrentPage(n) {
+    setCurrentPage(n);
+  }
+
+  function nextPage() {
+    if (currentPage !== nPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
 }
 
 export default BookTable;

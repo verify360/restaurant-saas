@@ -173,7 +173,7 @@ export default function Footer({ city }) {
       case 'chennai':
         return [
           { name: 'Anna Nagar', area: 'North Chennai' },
-          { name: 'T. Nagar', area: 'Central Chennai' },
+          { name: 'Thyagaraya Nagar', area: 'Central Chennai' },
           { name: 'Adyar', area: 'South Chennai' },
           { name: 'Velachery', area: 'South Chennai' },
           { name: 'Guindy', area: 'South Chennai' },
