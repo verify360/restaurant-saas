@@ -4,10 +4,15 @@ import { auth } from '../firebase';
 import Navbar from '../components/Navbar';
 import "../css/history.css";
 import { CiFilter } from 'react-icons/ci';
+import { useCity } from '../CityContext';
+import { useNavigate } from 'react-router-dom';
 
 const History = () => {
 
     const [user] = useAuthState(auth);
+
+    const navigate = useNavigate();
+    const { selectedCity, setSelectedCity } = useCity();
 
     const [bookingDetails, setBookingDetails] = useState([]);
 
@@ -102,7 +107,11 @@ const History = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar city={selectedCity.toLowerCase()}
+                onSelectCity={setSelectedCity}
+                onCityChangeRedirect={(selectedCity) => {
+                    navigate(`/${selectedCity.toLowerCase()}`);
+                }} />
             <div className='history-container'>
                 <span className='history-filter' title='Filter' onClick={handleFilter} ><CiFilter /></span>
                 {showFilterOptions && (

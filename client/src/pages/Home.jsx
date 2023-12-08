@@ -5,6 +5,7 @@ import Offers from '../components/Offers';
 import Carousel from '../components/Carousel';
 import Footer from '../components/Footer';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useCity } from '../CityContext';
 
 function Home() {
     const { city } = useParams();
@@ -14,11 +15,15 @@ function Home() {
         return str.replace(/\b\w/g, (char) => char.toUpperCase());
     };
 
-    const [selectedCity, setSelectedCity] = useState(city ? capitalizeWords(city) : "Kolkata");
-
+    const { selectedCity, setSelectedCity } = useCity();
     const navigate = useNavigate();
 
     const filteredRestaurants = restaurants.filter((restaurant) => restaurant.city === selectedCity);
+
+    useEffect(() => {
+        const updatedCity = city ? capitalizeWords(city) : "Kolkata";
+        setSelectedCity(updatedCity);
+    }, [city, setSelectedCity]);
 
     useEffect(() => {
         const fetchRestaurants = async () => {
