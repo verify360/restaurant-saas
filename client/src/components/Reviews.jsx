@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/reviews.css';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaRegStar, FaUserCircle } from 'react-icons/fa';
 
 const Reviews = () => {
     const starRatings = [
@@ -38,8 +38,15 @@ const Reviews = () => {
                         ))}
                     </div>
                 </div>
-                <div className="rating">
-                    dfkn
+                <div className="rating-input">
+                    <div className="rating-stars">
+                        <div className="rating-star"><FaRegStar /></div>
+                        <div className="rating-star"><FaRegStar /></div>
+                        <div className="rating-star"><FaRegStar /></div>
+                        <div className="rating-star"><FaRegStar /></div>
+                        <div className="rating-star"><FaRegStar /></div>
+                    </div>
+                    <div className="rating-items">Rate This Place</div>
                 </div>
             </div>
             <div className="reviews-container">
