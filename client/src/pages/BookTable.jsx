@@ -39,7 +39,7 @@ const BookTable = () => {
   const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
 
   const navigate = useNavigate();
-  const [selectedCity, setSelectedCity] = useState(city);
+  const [selectedCity, setSelectedCity] = useState(capitalizedCity);
 
   function formatString(area) {
     const words = area.split('-');

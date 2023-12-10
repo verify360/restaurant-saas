@@ -5,29 +5,7 @@ import logo from "../assets/logo.png";
 import Signin from "./Signin";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
-
-const cities = [
-  { cityName: "Delhi" },
-  { cityName: "Mumbai" },
-  { cityName: "Bangalore" },
-  { cityName: "Kolkata" },
-  { cityName: "Chennai" },
-  { cityName: "Hyderabad" },
-  { cityName: "Pune" },
-  { cityName: "Ahmedabad" },
-  { cityName: "Jaipur" },
-  { cityName: "Lucknow" },
-  { cityName: "Chandigarh" },
-  { cityName: "Bhopal" },
-  { cityName: "Indore" },
-  { cityName: "Nagpur" },
-  { cityName: "Patna" },
-  { cityName: "Kanpur" },
-  { cityName: "Agra" },
-  { cityName: "Varanasi" },
-  { cityName: "Coimbatore" },
-  { cityName: "Visakhapatnam" },
-];
+import cities from "../allCities";
 
 function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
   const [searchTerm, setSearchTerm] = useState("");

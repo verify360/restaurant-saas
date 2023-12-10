@@ -6,10 +6,12 @@ import Carousel from '../components/Carousel';
 import Footer from '../components/Footer';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCity } from '../CityContext';
+import SelectLocation from '../components/SelectLocation';
 
 function Home() {
     const { city } = useParams();
     const [restaurants, setRestaurants] = useState([]);
+    const [showLocationSelect, setShowLocationSelect] = useState(false);
 
     const capitalizeWords = (str) => {
         return str.replace(/\b\w/g, (char) => char.toUpperCase());
@@ -21,9 +23,15 @@ function Home() {
     const filteredRestaurants = restaurants.filter((restaurant) => restaurant.city === selectedCity);
 
     useEffect(() => {
-        const updatedCity = city ? capitalizeWords(city) : "Kolkata";
+        if (!selectedCity) {
+            setShowLocationSelect(true);
+        }
+    }, [selectedCity]);
+
+    useEffect(() => {
+        const updatedCity = city ? capitalizeWords(city) : selectedCity;
         setSelectedCity(updatedCity);
-    }, [city, setSelectedCity]);
+    }, [city, setSelectedCity, selectedCity]);
 
     useEffect(() => {
         const fetchRestaurants = async () => {
@@ -38,6 +46,12 @@ function Home() {
 
         fetchRestaurants();
     }, []);
+
+    const handleCitySelect = (selectedCity) => {
+        setSelectedCity(selectedCity);
+        setShowLocationSelect(false); // Set showLocationSelect to false after city is selected
+        navigate('/');
+    };
 
     // const restaurantAreaArrays = filteredRestaurants ? filteredRestaurants.map((restaurant) => restaurant.area) : [];
     // const uniqueArea = [...new Set(restaurantAreaArrays.flat())];
@@ -75,6 +89,7 @@ function Home() {
             <Offers />
             <Carousel city={selectedCity.toLowerCase()} restaurants={filteredRestaurants} />
             <Footer city={selectedCity.toLowerCase()} />
+            {showLocationSelect && <SelectLocation onSelectCity={handleCitySelect} />}
         </>
     );
 }

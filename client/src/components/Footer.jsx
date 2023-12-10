@@ -1,32 +1,10 @@
 import React from 'react'
 import logo from "../assets/logo.png"
 import Cities from './Cities';
+import cities from "../allCities";
 
 export default function Footer({ city }) {
-
-  const cities = [
-    { cityName: "Delhi" },
-    { cityName: "Mumbai" },
-    { cityName: "Bangalore" },
-    { cityName: "Kolkata" },
-    { cityName: "Chennai" },
-    { cityName: "Hyderabad" },
-    { cityName: "Pune" },
-    { cityName: "Ahmedabad" },
-    { cityName: "Jaipur" },
-    { cityName: "Lucknow" },
-    { cityName: "Chandigarh" },
-    { cityName: "Bhopal" },
-    { cityName: "Indore" },
-    { cityName: "Nagpur" },
-    { cityName: "Patna" },
-    { cityName: "Kanpur" },
-    { cityName: "Agra" },
-    { cityName: "Varanasi" },
-    { cityName: "Coimbatore" },
-    { cityName: "Visakhapatnam" },
-  ];
-
+  
   const midSections = [
     {
       title: 'Discover',
