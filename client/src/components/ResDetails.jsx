@@ -14,7 +14,7 @@ import { MdAcUnit, MdCurrencyRupee, MdDeliveryDining, MdOutdoorGrill, MdOutlineD
 import Reviews from './Reviews';
 import { Link as ScrollLink, Element } from 'react-scroll';
 
-const ResDetails = ({ restaurant }) => {
+const ResDetails = ({ restaurant, user }) => {
     if (!restaurant) {
         return <div>Loading...Please Wait</div>;
     }
@@ -232,7 +232,7 @@ const ResDetails = ({ restaurant }) => {
                 </Element>
                 <Element name="reviews" className="resMainReviews">
                     <h1>Ratings & Reviews</h1>
-                    <Reviews />
+                    <Reviews user={user} restaurant={restaurant}/>
                 </Element>
                 <Element name="help" className="resMainHelp">
                     <h1>We're always here to help</h1>

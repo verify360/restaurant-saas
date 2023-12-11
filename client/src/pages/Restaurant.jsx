@@ -51,7 +51,7 @@ export default function Restaurant() {
             />
             <div className="resMain">
                 <div className="resMainOne">
-                    <ResDetails restaurant={restaurant} />
+                    <ResDetails user={user} restaurant={restaurant} />
                 </div>
                 <div className="resMainTwo">
                     {restaurant ? (<Bookings user={user} restaurant={restaurant} />) : ""}

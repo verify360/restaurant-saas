@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../css/reviews.css';
-import { FaRegStar, FaUserCircle } from 'react-icons/fa';
+import { FaRegStar, FaStar, FaUserCircle } from 'react-icons/fa';
+import Signin from './Signin';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const Reviews = () => {
+const Reviews = ({ user, restaurant }) => {
+
+    console.log(restaurant);
+
+    const navigate = useNavigate();
+
+    const resDetails = useParams();
+
+    const [rate, setRate] = useState(0);
+    const [fullName, setFullName] = useState('');
+    const [comment, setComment] = useState('');
+
+    const [showRate, setShowRate] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
+
     const starRatings = [
         { rating: 5, count: 384 },
         { rating: 4, count: 450 },
@@ -14,6 +30,55 @@ const Reviews = () => {
     const calculateWidth = (count) => {
         const total = starRatings.reduce((acc, star) => acc + star.count, 0);
         return (count / total) * 100 + '%';
+    };
+
+    const handleStarClick = (star) => {
+        if (!user) {
+            setShowLogin(true);
+        } else {
+            setRate(star);
+            setShowRate(true);
+        }
+    };
+
+    const handleSubmitReview = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:5000/add-review?restaurantId=${resDetails._id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userEmail: user.email,
+                    creationTime: user.metadata.creationTime,
+                    lastSignInTime: user.metadata.lastSignInTime,
+                    fullName,
+                    rating: rate,
+                    comment,
+                }),
+            });
+
+            if (response.status === 201) {
+                window.alert('Review Added successfully');
+                setRate(0);
+                setShowRate(false);
+                navigate(window.location.pathname);
+            } else if (response.status === 200) {
+                window.alert('Review Updated successfully');
+                setRate(0);
+                setShowRate(false);
+                navigate(window.location.pathname);
+            } else if (response.status === 402) {
+                window.alert('Some Attributes may Missing.');
+            } else if (response.status === 404) {
+                window.alert('Restaurant not Found.');
+            } else {
+                window.alert('Failed to submit review');
+            }
+        } catch (error) {
+            console.error('Error submitting review:', error);
+        }
     };
 
     return (
@@ -40,18 +105,44 @@ const Reviews = () => {
                 </div>
                 <div className="rating-input">
                     <div className="rating-stars">
-                        <div className="rating-star"><FaRegStar /></div>
-                        <div className="rating-star"><FaRegStar /></div>
-                        <div className="rating-star"><FaRegStar /></div>
-                        <div className="rating-star"><FaRegStar /></div>
-                        <div className="rating-star"><FaRegStar /></div>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <div
+                                key={star}
+                                className="rating-star"
+                                onClick={() => handleStarClick(star)} >
+                                {rate >= star ? (
+                                    <FaStar style={{ color: '#5ba727' }} />
+                                ) : (
+                                    <FaRegStar />
+                                )}
+                            </div>
+                        ))}
                     </div>
                     <div className="rating-items">Rate This Place</div>
                 </div>
             </div>
+            {showRate && (
+                <form action="" onSubmit={handleSubmitReview}>
+                    <div className="reviews-container">
+                        <div className="profile-logo">
+                            <FaUserCircle className='profile-logo-main' />
+                        </div>
+                        <div className="profile-info">
+                            <input type="text" placeholder='Full Name' value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+                            <h4>{rate} &#9733;</h4>
+                            <textarea name="" id="" cols="40" rows="3" placeholder='Comment' value={comment} onChange={(e) => setComment(e.target.value)} required></textarea>
+                        </div>
+                        <div className="profile-logo">
+                            <button type='submit'>Rate</button>
+                            <button onClick={() => { setRate(0); setShowRate(false); }}>Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            )}
+            {showLogin && <Signin onClose={() => setShowLogin(false)} />}
             <div className="reviews-container">
                 <div className="profile-logo">
-                    <FaUserCircle className='profile-logo-main'/>
+                    <FaUserCircle className='profile-logo-main' />
                 </div>
                 <div className="profile-info">
                     <h3>Prachi Jain</h3>
@@ -61,7 +152,7 @@ const Reviews = () => {
             </div>
             <div className="reviews-container">
                 <div className="profile-logo">
-                    <FaUserCircle className='profile-logo-main'/>
+                    <FaUserCircle className='profile-logo-main' />
                 </div>
                 <div className="profile-info">
                     <h3>Shailesh Mishra</h3>

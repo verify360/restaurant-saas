@@ -412,7 +412,7 @@ router.get("/restaurants", async (req, res) => {
 router.get("/:city/:area/:name/:_id", async (req, res) => {
   const { city, area, name, _id } = req.params;
   try {
-    const restaurant = await Restaurant.findById(_id).select("-owner -reviews");
+    const restaurant = await Restaurant.findById(_id).select("-owner");
 
     if (!restaurant) {
       return res.status(404).json({ error: "Restaurant not found" });
@@ -491,6 +491,11 @@ router.post("/book", async (req, res) => {
       });
 
       await newUser.save();
+      existingUser = newUser;
+    } else {
+      existingUser.fullName = fullName;
+      existingUser.phoneNumber = phoneNumber;
+      await existingUser.save();
     }
 
     const updatedUser = await User.findOne({ userEmail });
@@ -577,6 +582,79 @@ router.patch("/reservations/:bookingId", async (req, res) => {
   } catch (error) {
     console.error(`Error updating booking:`, error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post('/add-review', async (req, res) => {
+  try {
+    const { userEmail, fullName, rating, comment, creationTime, lastSignInTime, } = req.body;
+    
+    if (!userEmail || !fullName || !comment) {
+      res.status(402).json({ error: "Attributes Missing." });
+      return;
+    }
+
+    let user = await User.findOne({ userEmail });
+
+    if (!user) {
+      user = new User({
+        userEmail,
+        fullName,
+        creationTime,
+        lastSignInTime
+      });
+      await user.save();
+    } else {
+      if (fullName) {
+        user.fullName = fullName;
+        await user.save();
+      }
+    }
+
+    const restaurantId = req.query.restaurantId;
+    const restaurant = await Restaurant.findById(restaurantId);
+
+    if (!restaurant) {
+      return res.status(404).json({ error: 'Restaurant not found' });
+    }
+
+    const existingReview = await Review.findOne({
+      userEmail,
+      restaurant: restaurantId,
+    });
+
+    if (existingReview) {
+      // If a review exists, update it
+      existingReview.rating = rating;
+      existingReview.fullName = fullName;
+      existingReview.comment = comment;
+      await existingReview.save();
+      res.status(200).json({ message: 'Review updated successfully' });
+    } else {
+      // If no review exists, create a new one
+      const newReview = new Review({
+        userEmail,
+        fullName,
+        restaurant: restaurantId,
+        rating,
+        comment,
+      });
+
+      // Save the new review
+      await newReview.save();
+
+      // Add the review to the user's reviews array
+      user.reviews.push(newReview);
+      await user.save();
+
+      // Add the review to the restaurant's reviews array
+      restaurant.reviews.push(newReview);
+      await restaurant.save();
+      res.status(201).json({ message: 'Review submitted successfully' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
