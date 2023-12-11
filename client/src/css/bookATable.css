@@ -212,3 +212,9 @@
 .pagination-item:not(.active) a:hover {
     background-color: #ddd;
 }
+
+.city-no-restaurant{
+    font-size: 50px;
+    color: #ff5757;
+    margin: 140px 0px 0px 240px;
+}

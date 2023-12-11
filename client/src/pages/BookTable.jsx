@@ -10,6 +10,7 @@ import { GoChevronDown, GoChevronUp } from "react-icons/go";
 const BookTable = () => {
 
   const [restaurants, setRestaurants] = useState([]);
+  const [showNoRestaurant, setShowNoRestaurant] = useState(false);
 
   const [selectedCuisines, setSelectedCuisines] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
@@ -193,6 +194,14 @@ const BookTable = () => {
   if (Array.isArray(actualArea) && actualArea.length > 0) {
     convertedArea = actualArea[0].toLowerCase().replace(/\s+/g, '-');
   }
+
+  useEffect(() => {
+    if (records.length === 0) {
+      setShowNoRestaurant(true);
+    } else {
+      setShowNoRestaurant(false);
+    }
+  }, [records]);
 
   return (
     <>
@@ -555,11 +564,15 @@ const BookTable = () => {
             </div>
           </div>
           <div className="city-restaurants">
-            {records.map((restaurant) => (
-              <CityCard key={restaurant._id} restaurant={restaurant} />
-            ))}
+            {showNoRestaurant ? (
+              <h1 className='city-no-restaurant'>No Food Found!</h1>
+            ) : (
+              records.map((restaurant) => (
+                <CityCard key={restaurant._id} restaurant={restaurant} />
+              ))
+            )}
           </div>
-          {records.length < filterRestaurants().length ? 
+          {records.length < filterRestaurants().length ?
             (<div className='pagination-container'>
               <li className='pagination-item'>
                 <a href="#" onClick={prevPage}>Prev</a>
