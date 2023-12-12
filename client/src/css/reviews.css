@@ -157,11 +157,56 @@
     cursor: pointer;
 }
 
-.rating-star:hover{
+.rating-star:hover {
     border: 2px solid #2b98f7;
 }
 
-.rating-items{
+.rating-items {
     font-size: 17px;
     font-weight: bolder;
+}
+
+.profile-info>input {
+    border: 1px solid #b3b1b1;
+    padding: 5px;
+    border-radius: 2px;
+    margin-bottom: 5px;
+}
+
+.profile-info>textarea {
+    border: 1px solid #b3b1b1;
+    padding: 5px;
+    border-radius: 2px;
+    margin-top: 2px;
+}
+
+.profile-logo-cancel {
+    height: 30px;
+    width: 40px;
+    margin: -7px 0px 0px 210px;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.profile-logo-cancel:hover{
+    border-radius: 50%;
+    background-color: #ddd;
+}
+
+.profile-logo-submit {
+    margin: 95px 0px 0px 30px;
+    cursor: pointer;
+    padding: 5px 15px 5px 15px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bolder;
+    font-size: 15px;
+    background-color: #FF5757 !important;
+}
+
+.reviews-container-input {
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, .15);
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../css/reviews.css';
 import { FaRegStar, FaStar, FaUserCircle } from 'react-icons/fa';
+import { RxCross2 } from "react-icons/rx";
 import Signin from './Signin';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -123,19 +124,19 @@ const Reviews = ({ user, restaurant }) => {
             </div>
             {showRate && (
                 <form action="" onSubmit={handleSubmitReview}>
-                    <div className="reviews-container">
+                    <div className="reviews-container reviews-container-input">
                         <div className="profile-logo">
                             <FaUserCircle className='profile-logo-main' />
                         </div>
                         <div className="profile-info">
+                            <h4><span>Rated: </span>{rate} &#9733;</h4>
                             <input type="text" placeholder='Full Name' value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-                            <h4>{rate} &#9733;</h4>
                             <textarea name="" id="" cols="40" rows="3" placeholder='Comment' value={comment} onChange={(e) => setComment(e.target.value)} required></textarea>
                         </div>
                         <div className="profile-logo">
-                            <button type='submit'>Rate</button>
-                            <button onClick={() => { setRate(0); setShowRate(false); }}>Cancel</button>
+                            <button className='profile-logo-submit' type='submit'>Rate</button>
                         </div>
+                        <RxCross2 className='profile-logo-cancel' onClick={() => { setRate(0); setShowRate(false); }} />
                     </div>
                 </form>
             )}
