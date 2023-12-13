@@ -664,4 +664,22 @@ router.post('/add-review', async (req, res) => {
   }
 });
 
+router.get("/reviews", async (req, res) => {
+  try {
+    const { restaurantId } = req.query;
+    // Validate if restaurantId is provided
+    if (!restaurantId) {
+      return res.status(400).json({ error: "Restaurant not Found." });
+    }
+
+    // Fetch review details based on restaurantId
+    const reviews = await Review.find({ restaurant: restaurantId });
+
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error("Error fetching booking details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = router;
