@@ -16,6 +16,9 @@ const Reviews = ({ user, restaurant }) => {
     const [rate, setRate] = useState(0);
     const [fullName, setFullName] = useState('');
     const [comment, setComment] = useState('');
+    const [liked, setLiked] = useState('');
+    const [disLiked, setDisLiked] = useState('');
+    const [canBeImproved, setCanBeImproved] = useState('');
 
     const [showRate, setShowRate] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
@@ -57,6 +60,9 @@ const Reviews = ({ user, restaurant }) => {
                     fullName,
                     rating: rate,
                     comment,
+                    liked,
+                    disLiked,
+                    canBeImproved
                 }),
             });
 
@@ -130,11 +136,27 @@ const Reviews = ({ user, restaurant }) => {
                         </div>
                         <div className="profile-info">
                             <h4><span>Rated: </span>{rate} &#9733;</h4>
-                            <input type="text" placeholder='Full Name' value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-                            <textarea name="" id="" cols="40" rows="3" placeholder='Comment' value={comment} onChange={(e) => setComment(e.target.value)} required></textarea>
-                        </div>
-                        <div className="profile-logo">
+
+                            <label htmlFor="fullName">Full Name*:</label><br/>
+                            <input type="text" id="fullName" placeholder="John Doe" value={fullName} onChange={(e) => setFullName(e.target.value)} required /><br/>
+
+                            <label htmlFor="comment">Review*:</label><br/>
+                            <textarea id="comment" cols="42" rows="3" placeholder="Comment" value={comment} onChange={(e) => setComment(e.target.value)} required></textarea><br/>
+
+                            <label htmlFor="liked">Please tell us, what did you like about this restaurant?</label><br/>
+                            <input type="text" id="liked" placeholder="Food, Customer Service, Music, etc." value={liked} onChange={(e) => setLiked(e.target.value)} /><br/>
+
+                            <label htmlFor="disLiked">Please tell us, what did you not like about this restaurant?</label><br/>
+                            <input type="text" id="disLiked" placeholder="Food, Customer Service, Music, etc." value={disLiked} onChange={(e) => setDisLiked(e.target.value)} /><br/>
+
+                            <label htmlFor="canBeImproved">Please tell us, what can be improved?</label><br/>
+                            <input type="text" id="canBeImproved" placeholder="Food, Customer Service, Music, Ambience, etc." value={canBeImproved} onChange={(e) => setCanBeImproved(e.target.value)} /><br/>
+
                             <button className='profile-logo-submit' type='submit'>Rate</button>
+                        </div>
+
+                        <div className="profile-logo">
+                            
                         </div>
                         <RxCross2 className='profile-logo-cancel' onClick={() => { setRate(0); setShowRate(false); }} />
                     </div>

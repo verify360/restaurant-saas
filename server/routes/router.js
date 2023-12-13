@@ -587,7 +587,7 @@ router.patch("/reservations/:bookingId", async (req, res) => {
 
 router.post('/add-review', async (req, res) => {
   try {
-    const { userEmail, fullName, rating, comment, creationTime, lastSignInTime, } = req.body;
+    const { userEmail, fullName, rating, comment, liked, disLiked, canBeImproved, creationTime, lastSignInTime, } = req.body;
     
     if (!userEmail || !fullName || !comment) {
       res.status(402).json({ error: "Attributes Missing." });
@@ -628,6 +628,9 @@ router.post('/add-review', async (req, res) => {
       existingReview.rating = rating;
       existingReview.fullName = fullName;
       existingReview.comment = comment;
+      existingReview.liked = liked;
+      existingReview.disLiked = disLiked;
+      existingReview.canBeImproved = canBeImproved;
       await existingReview.save();
       res.status(200).json({ message: 'Review updated successfully' });
     } else {
@@ -638,6 +641,9 @@ router.post('/add-review', async (req, res) => {
         restaurant: restaurantId,
         rating,
         comment,
+        liked,
+        disLiked,
+        canBeImproved
       });
 
       // Save the new review
