@@ -401,7 +401,7 @@ router.get("/restaurants", async (req, res) => {
       query.amenities = amenities;
     }
 
-    const restaurants = await Restaurant.find(query);
+    const restaurants = await Restaurant.find(query).select("-owner");
     res.status(200).json({ restaurants });
   } catch (error) {
     console.error("Error fetching restaurants:", error);
@@ -589,7 +589,7 @@ router.post('/add-review', async (req, res) => {
   try {
     const { userEmail, fullName, rating, comment, liked, disLiked, canBeImproved, creationTime, lastSignInTime, } = req.body;
     
-    if (!userEmail || !fullName || !comment) {
+    if (!userEmail || !fullName || !rating) {
       res.status(402).json({ error: "Attributes Missing." });
       return;
     }

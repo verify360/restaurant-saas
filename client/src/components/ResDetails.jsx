@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SimpleImageSlider from "react-simple-image-slider";
 import { Buffer } from 'buffer';
 import "../css/restaurant.css";
@@ -15,9 +15,17 @@ import Reviews from './Reviews';
 import { Link as ScrollLink, Element } from 'react-scroll';
 
 const ResDetails = ({ restaurant, user }) => {
+    const [averageRating, setAverageRating] = useState(0);
+    const [totalReviews, setTotalReviews] = useState(0);
+
     if (!restaurant) {
         return <div>Loading...Please Wait</div>;
     }
+
+    const handleReviewsData = (averageRating, totalReviews) => {
+        setAverageRating(averageRating);
+        setTotalReviews(totalReviews);
+    };
 
     const images = restaurant.images.map((image) => ({
         url: `data:${image.contentType};base64,${Buffer.from(image.data).toString('base64')}`,
@@ -56,6 +64,22 @@ const ResDetails = ({ restaurant, user }) => {
         )
     ));
 
+    const getRatingColor = (rating) => {
+        if (rating >= 0 && rating <= 1.4) {
+            return '#e74c3c';
+        } else if (rating >= 1.5 && rating <= 2.4) {
+            return '#e67e22';
+        } else if (rating >= 2.5 && rating <= 3.4) {
+            return '#f39c12';
+        } else if (rating >= 3.5 && rating <= 4.4) {
+            return '#b3ca42';
+        } else if (rating >= 4.5 && rating <= 5) {
+            return '#27ae60';
+        } else {
+            return '#000';
+        }
+    };
+
     return (
         <>
             <div className="resMainUrls">
@@ -91,10 +115,17 @@ const ResDetails = ({ restaurant, user }) => {
                     </div>
                     <div className="resMainInfos">Time: Opens at {restaurant.startTime}</div>
                 </div>
-                <div className="resMainRating">
-                    <div className="textRating">4.0</div>
-                    <div className="numberRating">34 reviews</div>
-                </div>
+                {averageRating != 0 && (
+                    <div className="resMainRating">
+                        <div className="textRating" style={{ background: getRatingColor(averageRating) }}>{averageRating.toFixed(1)}</div>
+                        {totalReviews ? (
+                            <ScrollLink to="reviews" className="numberRating" smooth={true} duration={500}>
+                                {totalReviews} reviews
+                            </ScrollLink>
+                        ) : ""
+                        }
+                    </div>
+                )}
             </div>
             <div className="resMainSchema">
                 <ScrollLink to="overview" className="resMainSchemas" smooth={true} duration={500}>
@@ -232,7 +263,7 @@ const ResDetails = ({ restaurant, user }) => {
                 </Element>
                 <Element name="reviews" className="resMainReviews">
                     <h1>Ratings & Reviews</h1>
-                    <Reviews user={user} restaurant={restaurant}/>
+                    <Reviews user={user} restaurant={restaurant} onReviewsData={handleReviewsData} />
                 </Element>
                 <Element name="help" className="resMainHelp">
                     <h1>We're always here to help</h1>

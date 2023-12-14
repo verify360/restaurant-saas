@@ -3,7 +3,7 @@ import '../css/reviews.css';
 import { FaRegStar, FaStar, FaUserCircle } from 'react-icons/fa';
 import Signin from './Signin';
 
-const Reviews = ({ user, restaurant }) => {
+const Reviews = ({ user, restaurant, onReviewsData }) => {
 
     const [reviewDetails, setReviewDetails] = useState([])
 
@@ -34,6 +34,15 @@ const Reviews = ({ user, restaurant }) => {
                 if (res.ok) {
                     const data = await res.json();
                     setReviewDetails(data);
+
+                    const averageRating = data.length > 0
+                        ? data.reduce((sum, review) => sum + review.rating, 0) / data.length
+                        : 0;
+
+                    const totalReviews = data.filter(review => review.comment).length;
+
+                    // Call the callback function with the calculated values
+                    onReviewsData(averageRating, totalReviews);
                 } else {
                     console.error('Failed to fetch booking details');
                 }
@@ -45,8 +54,7 @@ const Reviews = ({ user, restaurant }) => {
         if (restaurant) {
             fetchReviewsDetails();
         }
-    }, [restaurant]);
-
+    }, [restaurant, onReviewsData]);
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
@@ -107,13 +115,13 @@ const Reviews = ({ user, restaurant }) => {
     const getStarColor = (rating) => {
         switch (rating) {
             case 1:
-                return '#e74c3c'; 
+                return '#e74c3c';
             case 2:
-                return '#e67e22'; 
+                return '#e67e22';
             case 3:
                 return '#f39c12';
             case 4:
-                return '#2ecc71';
+                return '#b3ca42';
             case 5:
                 return '#27ae60';
             default:
@@ -141,22 +149,29 @@ const Reviews = ({ user, restaurant }) => {
         <>
             <div className="rating-container">
                 <div className="rating-stat">
-                    <div className="stats">
-                        <p className="average-rating">{averageRating.toFixed(1)}  &#9733;</p>
-                        <p className="num-ratings">{totalRatings} Ratings</p>
-                        <p className="num-reviews">{totalReviews} Reviews</p>
-                    </div>
+                    {averageRating != 0 && (
+                        <div className="stats">
+                            <p className="average-rating">{averageRating.toFixed(1)}  &#9733;</p>
+                            <p className="num-ratings">{totalRatings} Ratings</p>
+                            <p className="num-reviews">{totalReviews ? totalReviews : "No"} Reviews</p>
+                        </div>
+                    )}
                     <div className="star-visualization">
-                        {[5, 4, 3, 2, 1].map((rating) => (
-                            <div className="star-bar" key={rating}>
-                                <span className="star-stat"> {rating}</span>
-                                <span className="star"> &#9733;</span>
-                                <div className="fill">
-                                    <div className="bar" style={{ width: calculateWidth(rating) }}></div>
+                        {[5, 4, 3, 2, 1].map((rating) => {
+                            const count = getRatingCount(rating);
+                            const total = reviewDetails.length;
+
+                            return (
+                                <div className="star-bar" key={rating}>
+                                    <span className="star-stat"> {rating}</span>
+                                    <span className="star"> &#9733;</span>
+                                    <div className="fill">
+                                        <div className="bar" style={{ width: total > 0 ? calculateWidth(rating) : 0 }}></div>
+                                    </div>
+                                    <span className="count">{count}</span>
                                 </div>
-                                <span className="count">{getRatingCount(rating)}</span>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
                 <div className="rating-input">

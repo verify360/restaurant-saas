@@ -12,6 +12,8 @@
     border-right: 1px solid #ddd;
     padding: 20px;
     margin: 10px;
+    width: 330px;
+    justify-content: center;
 }
 
 .star-bar {
@@ -87,7 +89,7 @@
 }
 
 .star-bar:nth-child(2) .bar {
-    background-color: #2ecc71;
+    background-color: #b3ca42;
 }
 
 .star-bar:nth-child(1) .bar {
