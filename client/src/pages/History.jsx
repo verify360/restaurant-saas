@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import "../css/history.css";
 import { CiFilter } from 'react-icons/ci';
 import { useCity } from '../CityContext';
+import logo from "../assets/logo.png"
 import { useNavigate } from 'react-router-dom';
 
 const History = () => {
@@ -15,9 +16,59 @@ const History = () => {
     const { selectedCity, setSelectedCity } = useCity();
 
     const [bookingDetails, setBookingDetails] = useState([]);
+    const [reviewDetails, setReviewDetails] = useState([])
+    const [restaurantNames, setRestaurantNames] = useState([]);
 
     const [showFilterOptions, setShowFilterOptions] = useState(false);
     const [filter, setFilter] = useState('All');
+
+    useEffect(() => {
+        const fetchReviewsDetails = async () => {
+            try {
+                const res = await fetch(`/reviews?userEmail=${user.email}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setReviewDetails(data);
+
+                } else {
+                    console.error('Failed to fetch review details');
+                }
+            } catch (error) {
+                console.error('Error fetching review details:', error);
+            }
+        };
+
+        if (user) {
+            fetchReviewsDetails();
+        }
+    }, [user]);
+
+    useEffect(() => {
+        const fetchRestaurants = async () => {
+            try {
+                const promises = reviewDetails.map(async (review) => {
+                    const response = await fetch(`/restaurants-names?_id=${review.restaurant}`);
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        return data.restaurants.name;
+                    } else {
+                        console.error('Failed to fetch restaurant details');
+                        return null;
+                    }
+                });
+
+                // Wait for all promises to resolve
+                const names = await Promise.all(promises.filter(Boolean));
+                setRestaurantNames(names);
+            } catch (error) {
+                console.error('Error fetching restaurant details:', error);
+            }
+        };
+
+        if (reviewDetails.length > 0) {
+            fetchRestaurants();
+        }
+    }, [reviewDetails]);
 
     const handleFilter = () => {
         setShowFilterOptions(!showFilterOptions);
@@ -172,6 +223,69 @@ const History = () => {
                         ))}
                     </div>
                 )}
+            </div>
+            <hr />
+            <div className='history-container'>
+                <h1>My Reviews</h1>
+                {reviewDetails.length === 0 ? (
+                    <p className='history-not-found'>No Reviews Found.</p>
+                ) : (
+                    <div className='history-list'>
+                        {reviewDetails.map((rate, index) => (
+                            <div className='history-items'>
+                                <div className='history-item' >
+                                    <span>{index + 1}.</span>
+                                    <div>
+                                        <strong>Restaurant Name:</strong> {restaurantNames[index]}
+                                    </div>
+                                    <div>
+                                        <strong>Rated:</strong> {rate.rating}
+                                    </div>
+                                    <div>
+                                        {rate.liked ? (
+                                            <strong>Liked:</strong>
+                                        ) : rate.disLiked ? (
+                                            <strong>Disliked:</strong>
+                                        ) : rate.canBeImproved ? (
+                                            <strong>Suggested for Betterment :</strong>
+                                        ) : (
+                                            ""
+                                        )}
+                                        {rate.liked || rate.disLiked || rate.canBeImproved ? ` ${rate.liked || rate.disLiked || rate.canBeImproved}` : ""}
+                                    </div>
+
+                                    <div title={`${rate.comment}`}>
+                                        <strong>Reviews:</strong> {rate.comment ? rate.comment.slice(0, 30) : 'N/A'}
+                                    </div>
+                                    <div>
+                                        <strong>Dated:</strong> {new Date(rate.createdAt).toLocaleDateString('en-US', {
+                                            month: 'short',
+                                            day: 'numeric',
+                                            year: 'numeric',
+                                        })}
+                                    </div>
+                                </div>
+                                {rate.status === 'Pending' || rate.status === 'Confirmed' ? (
+                                    <button className='history-button' type='button' onClick={() => handleCancelBooking(rate._id)} title='Cancel Reservation'>Cancel</button>
+                                ) : (
+                                    <button className='history-button' type='button' disabled >Cancel</button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+            <div className="footerBottom flex">
+                <div className="mainColor flex-item logo">
+                    <img src={logo} alt="" />
+                </div>
+                <div className="flex-item">
+                    <p>Every Bite Speaks Taste, Flavorful Journey</p>
+                </div>
+                <div className="flex-item">Write to us at: <strong>tasteandflavor@gmail.com</strong></div>
+                <div className="flex-item">
+                    <p>© 2023 - Taste&Flavor All Rights Reserved</p>
+                </div>
             </div>
         </>
     )

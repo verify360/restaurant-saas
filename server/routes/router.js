@@ -409,6 +409,18 @@ router.get("/restaurants", async (req, res) => {
   }
 });
 
+router.get("/restaurants-names", async (req, res) => {
+  try {
+    const { _id } = req.query;
+  
+    const restaurants = await Restaurant.findById(_id).select("-owner");
+    res.status(200).json({ restaurants });
+  } catch (error) {
+    console.error("Error fetching restaurants:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.get("/:city/:area/:name/:_id", async (req, res) => {
   const { city, area, name, _id } = req.params;
   try {
@@ -585,10 +597,20 @@ router.patch("/reservations/:bookingId", async (req, res) => {
   }
 });
 
-router.post('/add-review', async (req, res) => {
+router.post("/add-review", async (req, res) => {
   try {
-    const { userEmail, fullName, rating, comment, liked, disLiked, canBeImproved, creationTime, lastSignInTime, } = req.body;
-    
+    const {
+      userEmail,
+      fullName,
+      rating,
+      comment,
+      liked,
+      disLiked,
+      canBeImproved,
+      creationTime,
+      lastSignInTime,
+    } = req.body;
+
     if (!userEmail || !fullName || !rating) {
       res.status(402).json({ error: "Attributes Missing." });
       return;
@@ -601,7 +623,7 @@ router.post('/add-review', async (req, res) => {
         userEmail,
         fullName,
         creationTime,
-        lastSignInTime
+        lastSignInTime,
       });
       await user.save();
     } else {
@@ -615,7 +637,7 @@ router.post('/add-review', async (req, res) => {
     const restaurant = await Restaurant.findById(restaurantId);
 
     if (!restaurant) {
-      return res.status(404).json({ error: 'Restaurant not found' });
+      return res.status(404).json({ error: "Restaurant not found" });
     }
 
     const existingReview = await Review.findOne({
@@ -632,7 +654,7 @@ router.post('/add-review', async (req, res) => {
       existingReview.disLiked = disLiked;
       existingReview.canBeImproved = canBeImproved;
       await existingReview.save();
-      res.status(200).json({ message: 'Review updated successfully' });
+      res.status(200).json({ message: "Review updated successfully" });
     } else {
       // If no review exists, create a new one
       const newReview = new Review({
@@ -643,7 +665,7 @@ router.post('/add-review', async (req, res) => {
         comment,
         liked,
         disLiked,
-        canBeImproved
+        canBeImproved,
       });
 
       // Save the new review
@@ -656,28 +678,31 @@ router.post('/add-review', async (req, res) => {
       // Add the review to the restaurant's reviews array
       restaurant.reviews.push(newReview);
       await restaurant.save();
-      res.status(201).json({ message: 'Review submitted successfully' });
+      res.status(201).json({ message: "Review submitted successfully" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
 router.get("/reviews", async (req, res) => {
   try {
-    const { restaurantId } = req.query;
-    // Validate if restaurantId is provided
-    if (!restaurantId) {
-      return res.status(400).json({ error: "Restaurant not Found." });
+    const { restaurantId, userEmail } = req.query;
+
+    // Validate if either restaurantId or userEmail is provided
+    if (!restaurantId && !userEmail) {
+      return res.status(400).json({ error: "Restaurant or User not Found." });
     }
 
-    // Fetch review details based on restaurantId
-    const reviews = await Review.find({ restaurant: restaurantId });
+    // Fetch review details based on restaurantId or userEmail
+    const reviews = await Review.find({
+      $or: [{ restaurant: restaurantId }, { userEmail: userEmail }],
+    });
 
     res.status(200).json(reviews);
   } catch (error) {
-    console.error("Error fetching booking details:", error);
+    console.error("Error fetching review details:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

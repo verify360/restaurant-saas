@@ -44,10 +44,10 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
                     // Call the callback function with the calculated values
                     onReviewsData(averageRating, totalReviews);
                 } else {
-                    console.error('Failed to fetch booking details');
+                    console.error('Failed to fetch review details');
                 }
             } catch (error) {
-                console.error('Error fetching booking details:', error);
+                console.error('Error fetching review details:', error);
             }
         };
 
