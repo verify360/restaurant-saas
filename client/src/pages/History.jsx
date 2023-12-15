@@ -4,6 +4,8 @@ import { auth } from '../firebase';
 import Navbar from '../components/Navbar';
 import "../css/history.css";
 import { CiFilter } from 'react-icons/ci';
+import { RiImageAddLine } from "react-icons/ri";
+import { RxCross2 } from "react-icons/rx";
 import { useCity } from '../CityContext';
 import logo from "../assets/logo.png"
 import { useNavigate } from 'react-router-dom';
@@ -17,10 +19,33 @@ const History = () => {
 
     const [bookingDetails, setBookingDetails] = useState([]);
     const [reviewDetails, setReviewDetails] = useState([])
+    const [userDetails, setUserDetails] = useState("")
     const [restaurantNames, setRestaurantNames] = useState([]);
 
     const [showFilterOptions, setShowFilterOptions] = useState(false);
+    const [showImageInput, setShowImageInput] = useState(false);
     const [filter, setFilter] = useState('All');
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const res = await fetch(`/user-info?userEmail=${user.email}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setUserDetails(data);
+
+                } else {
+                    console.error('Failed to fetch user details');
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+        };
+
+        if (user) {
+            fetchUserDetails();
+        }
+    }, [user]);
 
     useEffect(() => {
         const fetchReviewsDetails = async () => {
@@ -163,117 +188,143 @@ const History = () => {
                 onCityChangeRedirect={(selectedCity) => {
                     navigate(`/${selectedCity.toLowerCase()}`);
                 }} />
-            <div className='history-container'>
-                <span className='history-filter' title='Filter' onClick={handleFilter} ><CiFilter /></span>
-                {showFilterOptions && (
-                    <div className="filterOptions historyFilterOptions" onClick={(e) => handleFilterOptionClick(e.target.innerText)}>
-                        <div>All</div>
-                        <div>Pending</div>
-                        <div>Confirmed</div>
-                        <div>Cancelled</div>
-                        <div>Unattended</div>
-                        <div>Fulfilled</div>
-                    </div>
-                )}
-                <h1>Booking History</h1>
-                {filteredReservations.length === 0 ? (
-                    <p className='history-not-found'>No {filter === "All" ? " " : filter} Reservations Found.</p>
-                ) : (
-                    <div className='history-list'>
-                        {filteredReservations.map((booking) => (
-                            <div key={booking._id} className='history-items'>
-                                <div className='history-item' title={`Reservation ${booking.status}`}>
-                                    <span
-                                        style={{
-                                            backgroundColor: getStatusCircleColor(booking.status),
-                                        }}
-                                    />
-                                    <div>
-                                        <strong>Status:</strong> {booking.status}
-                                    </div>
-                                    <div>
-                                        <strong>Reserved on:</strong> {booking.bookingDate}
-                                    </div>
-                                    <div>
-                                        <strong>Time of Arrival:</strong> {booking.entryTime}
-                                    </div>
-                                    <div title={`${booking.restaurantName}`}>
-                                        <strong>Restaurant:</strong> {booking.restaurantName.slice(0, 15)}
-                                    </div>
-                                    <div>
-                                        <strong>Party Size:</strong> {booking.numberOfPeople}
-                                    </div>
-                                    <div title={`${booking.specialRequest}`}>
-                                        <strong>Special Requests:</strong> {booking.specialRequest ? booking.specialRequest.slice(0, 10) : 'N/A'}
-                                    </div>
-                                    <div>
-                                        <strong>Booked At:</strong> {new Date(booking.createdAt).toLocaleDateString('en-US', {
-                                            month: 'short',
-                                            day: 'numeric',
-                                            year: 'numeric',
-                                        })}
+            <div className="profile-container">
+                <div className="profile-main-cont">
+                    {userDetails ? (
+                        <>
+                            <div className="profile-image">
+                                <RiImageAddLine className="profile-image-icon" onClick={() => setShowImageInput(true)} title='Add Photo' />
+                            </div>
+                            {showImageInput && (
+                                <div className='overlay'>
+                                    <div className="profile-image-input">
+                                        <div>
+                                            <label>Images:</label>
+                                            <input className='resFile' type="file" name="images" accept="image/*"/>
+                                        </div>
+                                        <RxCross2 className="profile-image-cross" onClick={() => setShowImageInput(false)} />
                                     </div>
                                 </div>
-                                {booking.status === 'Pending' || booking.status === 'Confirmed' ? (
-                                    <button className='history-button' type='button' onClick={() => handleCancelBooking(booking._id)} title='Cancel Reservation'>Cancel</button>
-                                ) : (
-                                    <button className='history-button' type='button' disabled >Cancel</button>
-                                )}
+                            )}
+                            <div className="profile-info">
+                                <div>Username/Email: {userDetails[0].userEmail}</div>
+                                <div>Profile Name: {userDetails[0].fullName}</div>
+                                <div>Contact Number: {userDetails[0].phoneNumber}</div>
                             </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-            <hr />
-            <div className='history-container'>
-                <h1>My Reviews</h1>
-                {reviewDetails.length === 0 ? (
-                    <p className='history-not-found'>No Reviews Found.</p>
-                ) : (
-                    <div className='history-list'>
-                        {reviewDetails.map((rate, index) => (
-                            <div className='history-items'>
-                                <div className='history-item' >
-                                    <span>{index + 1}.</span>
-                                    <div>
-                                        <strong>Restaurant Name:</strong> {restaurantNames[index]}
+                        </>
+                    ) : ""}
+                </div>
+                <div className='history-container profile-container-bb'>
+                    <span className='history-filter' title='Filter' onClick={handleFilter} ><CiFilter /></span>
+                    {showFilterOptions && (
+                        <div className="filterOptions historyFilterOptions" onClick={(e) => handleFilterOptionClick(e.target.innerText)}>
+                            <div>All</div>
+                            <div>Pending</div>
+                            <div>Confirmed</div>
+                            <div>Cancelled</div>
+                            <div>Unattended</div>
+                            <div>Fulfilled</div>
+                        </div>
+                    )}
+                    <h1>Booking History</h1>
+                    {filteredReservations.length === 0 ? (
+                        <p className='history-not-found'>No {filter === "All" ? " " : filter} Reservations Found.</p>
+                    ) : (
+                        <div className='history-list'>
+                            {filteredReservations.map((booking) => (
+                                <div key={booking._id} className='history-items'>
+                                    <div className='history-item' title={`Reservation ${booking.status}`}>
+                                        <span
+                                            style={{
+                                                backgroundColor: getStatusCircleColor(booking.status),
+                                            }}
+                                        />
+                                        <div>
+                                            <strong>Status:</strong> {booking.status}
+                                        </div>
+                                        <div>
+                                            <strong>Reserved on:</strong> {booking.bookingDate}
+                                        </div>
+                                        <div>
+                                            <strong>Time of Arrival:</strong> {booking.entryTime}
+                                        </div>
+                                        <div title={`${booking.restaurantName}`}>
+                                            <strong>Restaurant:</strong> {booking.restaurantName.slice(0, 15)}
+                                        </div>
+                                        <div>
+                                            <strong>Party Size:</strong> {booking.numberOfPeople}
+                                        </div>
+                                        <div title={`${booking.specialRequest}`}>
+                                            <strong>Special Requests:</strong> {booking.specialRequest ? booking.specialRequest.slice(0, 10) : 'N/A'}
+                                        </div>
+                                        <div>
+                                            <strong>Booked At:</strong> {new Date(booking.createdAt).toLocaleDateString('en-US', {
+                                                month: 'short',
+                                                day: 'numeric',
+                                                year: 'numeric',
+                                            })}
+                                        </div>
                                     </div>
-                                    <div>
-                                        <strong>Rated:</strong> {rate.rating}
-                                    </div>
-                                    <div>
-                                        {rate.liked ? (
-                                            <strong>Liked:</strong>
-                                        ) : rate.disLiked ? (
-                                            <strong>Disliked:</strong>
-                                        ) : rate.canBeImproved ? (
-                                            <strong>Suggested for Betterment :</strong>
-                                        ) : (
-                                            ""
-                                        )}
-                                        {rate.liked || rate.disLiked || rate.canBeImproved ? ` ${rate.liked || rate.disLiked || rate.canBeImproved}` : ""}
-                                    </div>
+                                    {booking.status === 'Pending' || booking.status === 'Confirmed' ? (
+                                        <button className='history-button' type='button' onClick={() => handleCancelBooking(booking._id)} title='Cancel Reservation'>Cancel</button>
+                                    ) : (
+                                        <button className='history-button' type='button' disabled >Cancel</button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                <div className='history-container'>
+                    <h1>My Reviews</h1>
+                    {reviewDetails.length === 0 ? (
+                        <p className='history-not-found'>No Reviews Found.</p>
+                    ) : (
+                        <div className='history-list'>
+                            {reviewDetails.map((rate, index) => (
+                                <div className='history-items'>
+                                    <div className='history-item' >
+                                        <span>{index + 1}.</span>
+                                        <div>
+                                            <strong>Restaurant Name:</strong> {restaurantNames[index]}
+                                        </div>
+                                        <div>
+                                            <strong>Rated:</strong> {rate.rating}
+                                        </div>
+                                        <div>
+                                            {rate.liked ? (
+                                                <strong>Liked:</strong>
+                                            ) : rate.disLiked ? (
+                                                <strong>Disliked:</strong>
+                                            ) : rate.canBeImproved ? (
+                                                <strong>Suggested for Betterment :</strong>
+                                            ) : (
+                                                ""
+                                            )}
+                                            {rate.liked || rate.disLiked || rate.canBeImproved ? ` ${rate.liked || rate.disLiked || rate.canBeImproved}` : ""}
+                                        </div>
 
-                                    <div title={`${rate.comment}`}>
-                                        <strong>Reviews:</strong> {rate.comment ? rate.comment.slice(0, 30) : 'N/A'}
+                                        <div title={`${rate.comment}`}>
+                                            <strong>Reviews:</strong> {rate.comment ? rate.comment.slice(0, 30) : 'N/A'}
+                                        </div>
+                                        <div>
+                                            <strong>Dated:</strong> {new Date(rate.createdAt).toLocaleDateString('en-US', {
+                                                month: 'short',
+                                                day: 'numeric',
+                                                year: 'numeric',
+                                            })}
+                                        </div>
                                     </div>
-                                    <div>
-                                        <strong>Dated:</strong> {new Date(rate.createdAt).toLocaleDateString('en-US', {
-                                            month: 'short',
-                                            day: 'numeric',
-                                            year: 'numeric',
-                                        })}
-                                    </div>
+                                    {rate.status === 'Pending' || rate.status === 'Confirmed' ? (
+                                        <button className='history-button' type='button' onClick={() => handleCancelBooking(rate._id)} title='Cancel Reservation'>Cancel</button>
+                                    ) : (
+                                        <button className='history-button' type='button' disabled >Cancel</button>
+                                    )}
                                 </div>
-                                {rate.status === 'Pending' || rate.status === 'Confirmed' ? (
-                                    <button className='history-button' type='button' onClick={() => handleCancelBooking(rate._id)} title='Cancel Reservation'>Cancel</button>
-                                ) : (
-                                    <button className='history-button' type='button' disabled >Cancel</button>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                )}
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
             <div className="footerBottom flex">
                 <div className="mainColor flex-item logo">

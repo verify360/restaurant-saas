@@ -1,9 +1,17 @@
+.profile-container {
+    background-color: #f3f3f3;
+    min-height: 670px;
+}
+
 .history-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 340px;
-    background-color: #f3f3f3;
+    padding-bottom: 20px;
+}
+
+.profile-container-bb {
+    border-bottom: solid 2px #e6e1e1;
 }
 
 .history-container h1 {
@@ -57,19 +65,61 @@
     width: 65px;
     margin: 10px 0px 0px 17px;
 }
-.history-filter{
+
+.history-filter {
     position: absolute;
     right: 300px;
-    top: 90px;
+    top: 250px;
     font-size: 30px;
     cursor: pointer;
 }
-.historyFilterOptions{
-    top: 120px;
-    right: 200px;
+
+.historyFilterOptions {
+    top: 275px;
+    right: 190px;
     background-color: #fff;
 }
+
 .historyFilterOptions div:hover {
     background-color: #f0f0f0;
     color: none;
+}
+
+.profile-main-cont{
+    display: flex;
+    padding-top: 20px;
+    margin-left: 200px;
+}
+
+.profile-image{
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    background-color: #c7c0c0;
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    color: #959393;
+}
+
+.profile-image-icon{
+    margin-top: 58px;
+    cursor: pointer;
+}
+
+.profile-info{
+    padding: 40px 0 0 50px;
+}
+
+.profile-image-input{
+    background-color: #f0f0f0;
+    padding: 10px;
+    display: flex;
+    height: 100px;
+    width: 300px;
+}
+
+.profile-image-cross{
+    font-size: 20px;
+    cursor: pointer;
 }

@@ -707,4 +707,23 @@ router.get("/reviews", async (req, res) => {
   }
 });
 
+router.get("/user-info", async (req, res) => {
+  try {
+    const { userEmail } = req.query;
+
+    // Validate
+    if (!userEmail) {
+      return res.status(400).json({ error: "User not Found." });
+    }
+
+    // Fetch user details based on userEmail
+    const user = await User.find({ userEmail: userEmail });
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = router;
