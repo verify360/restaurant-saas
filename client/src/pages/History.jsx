@@ -271,7 +271,7 @@ const History = () => {
                         <p className='history-not-found'>No {filter === "All" ? " " : filter} Reservations Found.</p>
                     ) : (
                         <div className='history-list'>
-                            {filteredReservations.map((booking) => (
+                            {[...filteredReservations].reverse().map((booking) => (
                                 <div key={booking._id} className='history-items'>
                                     <div className='history-item' title={`Reservation ${booking.status}`}>
                                         <span
@@ -321,47 +321,48 @@ const History = () => {
                         <p className='history-not-found'>No Reviews Found.</p>
                     ) : (
                         <div className='history-list'>
-                            {reviewDetails.map((rate, index) => (
-                                <div className='history-items'>
-                                    <div className='history-item' >
-                                        <span>{index + 1}.</span>
-                                        <div>
-                                            <strong>Restaurant Name:</strong> {restaurantNames[index]}
-                                        </div>
-                                        <div>
-                                            <strong>Rated:</strong> {rate.rating}
-                                        </div>
-                                        <div>
-                                            {rate.liked ? (
-                                                <strong>Liked:</strong>
-                                            ) : rate.disLiked ? (
-                                                <strong>Disliked:</strong>
-                                            ) : rate.canBeImproved ? (
-                                                <strong>Suggested for Betterment :</strong>
-                                            ) : (
-                                                ""
-                                            )}
-                                            {rate.liked || rate.disLiked || rate.canBeImproved ? ` ${rate.liked || rate.disLiked || rate.canBeImproved}` : ""}
-                                        </div>
+                            {
+                                [...reviewDetails].reverse().map((rate, index) => (
+                                    <div className='history-items' key={index}>
+                                        <div className='history-item'>
+                                            <span>{reviewDetails.length - index}.</span>
+                                            <div>
+                                                <strong>Restaurant Name:</strong> {restaurantNames[restaurantNames.length - 1 - index]}
+                                            </div>
+                                            <div>
+                                                <strong>Rated:</strong> {rate.rating}
+                                            </div>
+                                            <div>
+                                                {rate.liked ? (
+                                                    <strong>Liked:</strong>
+                                                ) : rate.disLiked ? (
+                                                    <strong>Disliked:</strong>
+                                                ) : rate.canBeImproved ? (
+                                                    <strong>Suggested for Betterment :</strong>
+                                                ) : (
+                                                    ""
+                                                )}
+                                                {rate.liked || rate.disLiked || rate.canBeImproved ? ` ${rate.liked || rate.disLiked || rate.canBeImproved}` : ""}
+                                            </div>
 
-                                        <div title={`${rate.comment}`}>
-                                            <strong>Reviews:</strong> {rate.comment ? rate.comment.slice(0, 30) : 'N/A'}
+                                            <div title={`${rate.comment}`}>
+                                                <strong>Reviews:</strong> {rate.comment ? rate.comment.slice(0, 30) : 'N/A'}
+                                            </div>
+                                            <div>
+                                                <strong>Posted on:</strong> {new Date(rate.createdAt).toLocaleDateString('en-US', {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                    year: 'numeric',
+                                                })}
+                                            </div>
                                         </div>
-                                        <div>
-                                            <strong>Dated:</strong> {new Date(rate.createdAt).toLocaleDateString('en-US', {
-                                                month: 'short',
-                                                day: 'numeric',
-                                                year: 'numeric',
-                                            })}
-                                        </div>
+                                        {rate.status === 'Pending' || rate.status === 'Confirmed' ? (
+                                            <button className='history-button' type='button' onClick={() => handleCancelBooking(rate._id)} title='Cancel Reservation'>Edit</button>
+                                        ) : (
+                                            <button className='history-button' type='button' disabled >Edit</button>
+                                        )}
                                     </div>
-                                    {rate.status === 'Pending' || rate.status === 'Confirmed' ? (
-                                        <button className='history-button' type='button' onClick={() => handleCancelBooking(rate._id)} title='Cancel Reservation'>Cancel</button>
-                                    ) : (
-                                        <button className='history-button' type='button' disabled >Cancel</button>
-                                    )}
-                                </div>
-                            ))}
+                                ))}
                         </div>
                     )}
                 </div>

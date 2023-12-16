@@ -319,14 +319,14 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
             )}
             {showLogin && <Signin onClose={() => setShowLogin(false)} />}
             {reviewDetails ? (
-                reviewDetails.map((r, index) => (
-                    <div className="reviews-container">
+                [...reviewDetails].reverse().map((r, index) => (
+                    <div className="reviews-container" key={index}>
                         <div className="profile-logo">
-                            {userImage[index] && userImage[index].data ? (
+                            {userImage[userImage.length - 1 - index] && userImage[userImage.length - 1 - index].data ? (
                                 <img
                                     className="reviews-container-profile-image"
-                                    src={`data:${userImage[index].contentType};base64,${Buffer.from(userImage[index].data).toString('base64')}`}
-                                    alt={`${userImage[index].contentType}`}
+                                    src={`data:${userImage[userImage.length - 1 - index].contentType};base64,${Buffer.from(userImage[userImage.length - 1 - index].data).toString('base64')}`}
+                                    alt={`${userImage[userImage.length - 1 - index].contentType}`}
                                 />
                             ) : (
                                 <FaUserCircle className='profile-logo-main' />
@@ -334,11 +334,18 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
                         </div>
                         <div className="profile-info">
                             <h3>{r.fullName}</h3>
-                            <h4 style={{ color: getStarColor(r.rating) }}>{r.rating} &#9733;</h4>
+                            <h4 style={{ color: getStarColor(r.rating) }}>
+                                {r.rating} &#9733;
+                            </h4>
                             <h5>
                                 {r.liked ? `Liked: ${r.liked}` : r.disLiked ? `Disliked: ${r.disLiked}` : r.canBeImproved ? `Could be better: ${r.canBeImproved}` : ""}
                             </h5>
                             <p>{r.comment}</p>
+                            <span className='reviews-posted-on'>Posted on {new Date(r.createdAt).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                            })}</span>
                         </div>
                     </div>
                 ))
