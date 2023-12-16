@@ -412,7 +412,7 @@ router.get("/restaurants", async (req, res) => {
 router.get("/restaurants-names", async (req, res) => {
   try {
     const { _id } = req.query;
-  
+
     const restaurants = await Restaurant.findById(_id).select("-owner");
     res.status(200).json({ restaurants });
   } catch (error) {
@@ -722,6 +722,24 @@ router.get("/user-info", async (req, res) => {
     res.status(200).json(user);
   } catch (error) {
     console.error("Error fetching user details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/upload-image", upload.single("image"), async (req, res) => {
+  try {
+    const {userEmail} = req.query;
+    const user = await User.findOne({ userEmail: userEmail });
+
+    // Update user's image data
+    user.image.data = req.file.buffer;
+    user.image.contentType = req.file.mimetype;
+
+    await user.save();
+
+    res.status(200).json({ message: "Image uploaded successfully" });
+  } catch (error) {
+    console.error("Error uploading image:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

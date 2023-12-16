@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { Buffer } from 'buffer';
 import { auth } from '../firebase';
 import Navbar from '../components/Navbar';
 import "../css/history.css";
@@ -25,6 +26,12 @@ const History = () => {
     const [showFilterOptions, setShowFilterOptions] = useState(false);
     const [showImageInput, setShowImageInput] = useState(false);
     const [filter, setFilter] = useState('All');
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/');
+        }
+    });
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -181,6 +188,31 @@ const History = () => {
         }
     };
 
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+
+        // Create a FormData object to send the file
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const res = await fetch(`/upload-image?userEmail=${user.email}`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (res.ok) {
+                window.alert('Image uploaded successfully');
+                window.location.reload();
+            } else {
+                window.alert('Failed to upload image');
+            }
+        } catch (error) {
+            window.alert('Error uploading image:', error);
+        }
+    };
+
+
     return (
         <>
             <Navbar city={selectedCity.toLowerCase()}
@@ -193,20 +225,28 @@ const History = () => {
                     {userDetails ? (
                         <>
                             <div className="profile-image">
-                                <RiImageAddLine className="profile-image-icon" onClick={() => setShowImageInput(true)} title='Add Photo' />
+                                {userDetails[0].image && userDetails[0].image != "" ? (
+                                    <img className="profile-image"
+                                        src={`data:${userDetails[0].image.contentType};base64,${Buffer.from(userDetails[0].image.data).toString('base64')}`}
+                                        alt={`${userDetails[0].fullName}`}
+                                    />
+                                ) : (
+                                    <RiImageAddLine className="profile-image-icon" onClick={() => setShowImageInput(true)} title='Add Photo' />
+                                )
+                                }
                             </div>
                             {showImageInput && (
                                 <div className='overlay'>
                                     <div className="profile-image-input">
                                         <div>
-                                            <label>Images:</label>
-                                            <input className='resFile' type="file" name="images" accept="image/*"/>
+                                            <label>Upload Profile Image:</label><br /><br />
+                                            <input type="file" name="images" accept="image/*" onChange={handleImageChange} />
                                         </div>
                                         <RxCross2 className="profile-image-cross" onClick={() => setShowImageInput(false)} />
                                     </div>
                                 </div>
                             )}
-                            <div className="profile-info">
+                            <div className="profile-information">
                                 <div>Username/Email: {userDetails[0].userEmail}</div>
                                 <div>Profile Name: {userDetails[0].fullName}</div>
                                 <div>Contact Number: {userDetails[0].phoneNumber}</div>

@@ -86,7 +86,7 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
             })}
             {user && (
               <li key="History">
-                <Link to="/history">History</Link>
+                <Link to="/history">Profile</Link>
               </li>
             )}
           </ul>

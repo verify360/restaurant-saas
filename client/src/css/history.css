@@ -107,7 +107,7 @@
     cursor: pointer;
 }
 
-.profile-info{
+.profile-information{
     padding: 40px 0 0 50px;
 }
 
@@ -115,6 +115,7 @@
     background-color: #f0f0f0;
     padding: 10px;
     display: flex;
+    justify-content: space-between;
     height: 100px;
     width: 300px;
 }
