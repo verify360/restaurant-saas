@@ -42,7 +42,6 @@
     width: max-content;
     color: white;
     padding: 12px;
-    background-color: #5ba727;
     font-size: 22px;
     border-radius: 5px;
 }
@@ -111,6 +110,12 @@
 .profile-logo {
     height: max-content;
     margin-right: 15px;
+}
+
+.reviews-container-profile-image{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
 }
 
 .profile-info {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../css/reviews.css';
 import { FaRegStar, FaStar, FaUserCircle } from 'react-icons/fa';
+import { Buffer } from 'buffer';
 import Signin from './Signin';
 
 const Reviews = ({ user, restaurant, onReviewsData }) => {
@@ -17,6 +18,7 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
 
     const [showRate, setShowRate] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
+    const [userImage, setUserImage] = useState([]);
 
     const handleStarClick = (star) => {
         if (!user) {
@@ -26,6 +28,8 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
             setShowRate(true);
         }
     };
+
+    console.log(userImage);
 
     useEffect(() => {
         const fetchReviewsDetails = async () => {
@@ -55,6 +59,33 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
             fetchReviewsDetails();
         }
     }, [restaurant, onReviewsData]);
+
+    useEffect(() => {
+        const fetchUserImage = async () => {
+            try {
+                const promises = reviewDetails.map(async (review) => {
+                    const response = await fetch(`/user-image?userEmail=${review.userEmail}`);
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        return data.user.image;
+                    } else {
+                        console.error('Failed to fetch user image');
+                        return null;
+                    }
+                });
+
+                // Wait for all promises to resolve
+                const images = await Promise.all(promises.filter(Boolean));
+                setUserImage(images);
+            } catch (error) {
+                console.error('Error fetching user image:', error);
+            }
+        };
+
+        if (reviewDetails.length > 0) {
+            fetchUserImage();
+        }
+    }, [reviewDetails]);
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
@@ -151,7 +182,7 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
                 <div className="rating-stat">
                     {averageRating != 0 && (
                         <div className="stats">
-                            <p className="average-rating">{averageRating.toFixed(1)}  &#9733;</p>
+                            <p className="average-rating" style={{ background: getStarColor(averageRating) }}>{averageRating.toFixed(1)}  &#9733;</p>
                             <p className="num-ratings">{totalRatings} Ratings</p>
                             <p className="num-reviews">{totalReviews ? totalReviews : "No"} Reviews</p>
                         </div>
@@ -288,10 +319,18 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
             )}
             {showLogin && <Signin onClose={() => setShowLogin(false)} />}
             {reviewDetails ? (
-                reviewDetails.map((r) => (
+                reviewDetails.map((r, index) => (
                     <div className="reviews-container">
                         <div className="profile-logo">
-                            <FaUserCircle className='profile-logo-main' />
+                            {userImage[index] && userImage[index].data ? (
+                                <img
+                                    className="reviews-container-profile-image"
+                                    src={`data:${userImage[index].contentType};base64,${Buffer.from(userImage[index].data).toString('base64')}`}
+                                    alt={`${userImage[index].contentType}`}
+                                />
+                            ) : (
+                                <FaUserCircle className='profile-logo-main' />
+                            )}
                         </div>
                         <div className="profile-info">
                             <h3>{r.fullName}</h3>

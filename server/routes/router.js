@@ -421,6 +421,20 @@ router.get("/restaurants-names", async (req, res) => {
   }
 });
 
+router.get("/user-image", async (req, res) => {
+  try {
+    const { userEmail } = req.query;
+
+    const user = await User.findOne({ userEmail: userEmail }).select(
+      "-phoneNumber -bookings -creationTime -lastSignInTime -reviews -userEmail -_id"
+    );
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error("Error fetching restaurants:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.get("/:city/:area/:name/:_id", async (req, res) => {
   const { city, area, name, _id } = req.params;
   try {
@@ -728,7 +742,7 @@ router.get("/user-info", async (req, res) => {
 
 router.post("/upload-image", upload.single("image"), async (req, res) => {
   try {
-    const {userEmail} = req.query;
+    const { userEmail } = req.query;
     const user = await User.findOne({ userEmail: userEmail });
 
     // Update user's image data
