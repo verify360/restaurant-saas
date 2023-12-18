@@ -154,7 +154,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
             case 4:
                 return '#b3ca42';
             case 5:
-                return '#27ae60';
+                return '#79b63a';
             default:
                 return '#000';
         }
@@ -170,7 +170,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
         } else if (rating >= 3.5 && rating <= 4.4) {
             return '#b3ca42';
         } else if (rating >= 4.5 && rating <= 5) {
-            return '#27ae60';
+            return '#79b63a';
         } else {
             return '#000';
         }
