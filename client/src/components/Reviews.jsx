@@ -3,20 +3,22 @@ import '../css/reviews.css';
 import { FaRegStar, FaStar, FaUserCircle } from 'react-icons/fa';
 import { Buffer } from 'buffer';
 import Signin from './Signin';
+import { useNavigate } from 'react-router-dom';
 
-const Reviews = ({ user, restaurant, onReviewsData }) => {
+const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD }) => {
 
+    const navigate = useNavigate();
     const [reviewDetails, setReviewDetails] = useState([])
 
-    const [rate, setRate] = useState(0);
-    const [fullName, setFullName] = useState('');
-    const [comment, setComment] = useState('');
+    const [rate, setRate] = useState(ratingD ? ratingD : 0);
+    const [fullName, setFullName] = useState(fullNameD ? fullNameD : '');
+    const [comment, setComment] = useState(commentD ? commentD : '');
 
     const [selectedDisliked, setSelectedDisliked] = useState([]);
     const [selectedCanBeImproved, setSelectedCanBeImproved] = useState([]);
     const [selectedLiked, setSelectedLiked] = useState([]);
 
-    const [showRate, setShowRate] = useState(false);
+    const [showRate, setShowRate] = useState(ratingD ? true : false);
     const [showLogin, setShowLogin] = useState(false);
     const [userImage, setUserImage] = useState([]);
 
@@ -28,8 +30,6 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
             setShowRate(true);
         }
     };
-
-    console.log(userImage);
 
     useEffect(() => {
         const fetchReviewsDetails = async () => {
@@ -113,7 +113,7 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
                 window.location.reload();
             } else if (response.status === 200) {
                 window.alert('Review Updated successfully');
-                window.location.reload();
+                navigate("/history");
             } else if (response.status === 402) {
                 window.alert('Some Attributes may Missing.');
             } else if (response.status === 404) {
@@ -156,7 +156,23 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
             case 5:
                 return '#27ae60';
             default:
-                return '#000'; // default color if rating is not in the expected range
+                return '#000';
+        }
+    };
+
+    const getRatingColor = (rating) => {
+        if (rating >= 0 && rating <= 1.4) {
+            return '#e74c3c';
+        } else if (rating >= 1.5 && rating <= 2.4) {
+            return '#e67e22';
+        } else if (rating >= 2.5 && rating <= 3.4) {
+            return '#f39c12';
+        } else if (rating >= 3.5 && rating <= 4.4) {
+            return '#b3ca42';
+        } else if (rating >= 4.5 && rating <= 5) {
+            return '#27ae60';
+        } else {
+            return '#000';
         }
     };
 
@@ -182,7 +198,7 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
                 <div className="rating-stat">
                     {averageRating != 0 && (
                         <div className="stats">
-                            <p className="average-rating" style={{ background: getStarColor(averageRating) }}>{averageRating.toFixed(1)}  &#9733;</p>
+                            <p className="average-rating" style={{ background: getRatingColor(averageRating) }}>{averageRating.toFixed(1)}  &#9733;</p>
                             <p className="num-ratings">{totalRatings} Ratings</p>
                             <p className="num-reviews">{totalReviews ? totalReviews : "No"} Reviews</p>
                         </div>
@@ -252,7 +268,6 @@ const Reviews = ({ user, restaurant, onReviewsData }) => {
                                 </div>
                             </div>
                             <div className="reviews-input-container-item-2">
-                                {/* Update JSX for rendering list items */}
                                 {rate >= 1 && rate <= 2 && (
                                     <>
                                         <div className="reviews-input-container-head">What went wrong?</div>

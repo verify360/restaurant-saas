@@ -22,6 +22,8 @@ const History = () => {
     const [reviewDetails, setReviewDetails] = useState([])
     const [userDetails, setUserDetails] = useState("")
     const [restaurantNames, setRestaurantNames] = useState([]);
+    const [restaurantCity, setRestaurantCity] = useState([]);
+    const [restaurantArea, setRestaurantArea] = useState([]);
 
     const [showFilterOptions, setShowFilterOptions] = useState(false);
     const [showImageInput, setShowImageInput] = useState(false);
@@ -82,7 +84,11 @@ const History = () => {
                     const response = await fetch(`/restaurants-names?_id=${review.restaurant}`);
                     if (response.status === 200) {
                         const data = await response.json();
-                        return data.restaurants.name;
+                        return {
+                            name: data.restaurants.name,
+                            city: data.restaurants.city,
+                            area: data.restaurants.area
+                        };
                     } else {
                         console.error('Failed to fetch restaurant details');
                         return null;
@@ -90,8 +96,17 @@ const History = () => {
                 });
 
                 // Wait for all promises to resolve
-                const names = await Promise.all(promises.filter(Boolean));
+                const restaurantDetails = await Promise.all(promises.filter(Boolean));
+
+                // Extract names, cities, and areas separately
+                const names = restaurantDetails.map(details => details.name);
+                const cities = restaurantDetails.map(details => details.city);
+                const areas = restaurantDetails.map(details => details.area);
+
+                // Update the state with the extracted data
                 setRestaurantNames(names);
+                setRestaurantCity(cities);
+                setRestaurantArea(areas);
             } catch (error) {
                 console.error('Error fetching restaurant details:', error);
             }
@@ -101,6 +116,7 @@ const History = () => {
             fetchRestaurants();
         }
     }, [reviewDetails]);
+
 
     const handleFilter = () => {
         setShowFilterOptions(!showFilterOptions);
@@ -212,6 +228,15 @@ const History = () => {
         }
     };
 
+    const handleEditClick = async (index, rating, resId, fullName, comment) => {
+        const cleanedName = restaurantNames[restaurantNames.length - 1 - index].replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
+        const cleanedCity = restaurantCity[restaurantCity.length - 1 - index].replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
+        const cleanedArea = restaurantArea[restaurantArea.length - 1 - index].replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
+    
+        const url = `/${cleanedCity}-restaurants/${cleanedArea}/${cleanedName}/${resId}?ratingD=${encodeURIComponent(rating)}&fullNameD=${encodeURIComponent(fullName)}&commentD=${encodeURIComponent(comment)}`;
+    
+        navigate(url);
+    };
 
     return (
         <>
@@ -356,17 +381,26 @@ const History = () => {
                                                 })}
                                             </div>
                                         </div>
-                                        {rate.status === 'Pending' || rate.status === 'Confirmed' ? (
-                                            <button className='history-button' type='button' onClick={() => handleCancelBooking(rate._id)} title='Cancel Reservation'>Edit</button>
-                                        ) : (
-                                            <button className='history-button' type='button' disabled >Edit</button>
-                                        )}
+                                        {restaurantCity[restaurantCity.length - 1 - index] &&
+                                            restaurantArea[restaurantArea.length - 1 - index] &&
+                                            restaurantNames[restaurantNames.length - 1 - index] &&
+                                            rate.restaurant &&
+                                            (
+                                                <button
+                                                    className='history-button'
+                                                    title='Edit Response'
+                                                    onClick={() => handleEditClick(index, rate.rating, rate.restaurant, rate.fullName, rate.comment )}
+                                                >
+                                                    Edit
+                                                </button>
+                                            )
+                                        }
                                     </div>
                                 ))}
                         </div>
                     )}
                 </div>
-            </div>
+            </div >
             <div className="footerBottom flex">
                 <div className="mainColor flex-item logo">
                     <img src={logo} alt="" />

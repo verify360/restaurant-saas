@@ -14,7 +14,7 @@ import { MdAcUnit, MdCurrencyRupee, MdDeliveryDining, MdOutdoorGrill, MdOutlineD
 import Reviews from './Reviews';
 import { Link as ScrollLink, Element } from 'react-scroll';
 
-const ResDetails = ({ restaurant, user }) => {
+const ResDetails = ({ restaurant, user, ratingD, fullNameD, commentD }) => {
     const [averageRating, setAverageRating] = useState(0);
     const [totalReviews, setTotalReviews] = useState(0);
 
@@ -263,7 +263,7 @@ const ResDetails = ({ restaurant, user }) => {
                 </Element>
                 <Element name="reviews" className="resMainReviews">
                     <h1>Ratings & Reviews</h1>
-                    <Reviews user={user} restaurant={restaurant} onReviewsData={handleReviewsData} />
+                    <Reviews user={user} restaurant={restaurant} onReviewsData={handleReviewsData} ratingD={ratingD} fullNameD={fullNameD} commentD={commentD} />
                 </Element>
                 <Element name="help" className="resMainHelp">
                     <h1>We're always here to help</h1>

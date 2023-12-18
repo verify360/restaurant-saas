@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Navbar from "../components/Navbar";
 import ResDetails from "../components/ResDetails";
 import Footer from "../components/Footer";
@@ -14,6 +14,13 @@ export default function Restaurant() {
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
     const [selectedCity, setSelectedCity] = useState(city);
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+
+    const ratingD = queryParams.get('ratingD');
+    const fullNameD = queryParams.get('fullNameD');
+    const commentD = queryParams.get('commentD');
 
     useEffect(() => {
         const fetchRestaurantDetails = async () => {
@@ -51,7 +58,7 @@ export default function Restaurant() {
             />
             <div className="resMain">
                 <div className="resMainOne">
-                    <ResDetails user={user} restaurant={restaurant} />
+                    <ResDetails user={user} restaurant={restaurant} ratingD={ratingD} fullNameD={fullNameD} commentD={commentD} />
                 </div>
                 <div className="resMainTwo">
                     {restaurant ? (<Bookings user={user} restaurant={restaurant} />) : ""}
