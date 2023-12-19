@@ -92,7 +92,7 @@
 }
 
 .star-bar:nth-child(1) .bar {
-    background-color: #27ae60;
+    background-color: #79b63a;
 }
 
 .reviews-container {
@@ -311,4 +311,15 @@
     color: #a0a0a0;
     font-size: 12px;
     font-weight: 100;
+}
+
+.see-more-reviews{
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    color: #006edc;
+}
+
+.see-more-reviews > span{
+    float: inline-end;
 }

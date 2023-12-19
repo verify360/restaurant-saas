@@ -232,9 +232,9 @@ const History = () => {
         const cleanedName = restaurantNames[restaurantNames.length - 1 - index].replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
         const cleanedCity = restaurantCity[restaurantCity.length - 1 - index].replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
         const cleanedArea = restaurantArea[restaurantArea.length - 1 - index].replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
-    
+
         const url = `/${cleanedCity}-restaurants/${cleanedArea}/${cleanedName}/${resId}?ratingD=${encodeURIComponent(rating)}&fullNameD=${encodeURIComponent(fullName)}&commentD=${encodeURIComponent(comment)}`;
-    
+
         navigate(url);
     };
 
@@ -250,10 +250,10 @@ const History = () => {
                     {userDetails ? (
                         <>
                             <div className="profile-image">
-                                {userDetails[0].image && userDetails[0].image != "" ? (
+                                {userDetails.image && userDetails.image !== undefined ? (
                                     <img className="profile-image"
-                                        src={`data:${userDetails[0].image.contentType};base64,${Buffer.from(userDetails[0].image.data).toString('base64')}`}
-                                        alt={`${userDetails[0].fullName}`}
+                                        src={`data:${userDetails.image.contentType};base64,${Buffer.from(userDetails.image.data).toString('base64')}`}
+                                        alt={`${userDetails.fullName}`}
                                     />
                                 ) : (
                                     <RiImageAddLine className="profile-image-icon" onClick={() => setShowImageInput(true)} title='Add Photo' />
@@ -272,9 +272,11 @@ const History = () => {
                                 </div>
                             )}
                             <div className="profile-information">
-                                <div>Username/Email: {userDetails[0].userEmail}</div>
-                                <div>Profile Name: {userDetails[0].fullName}</div>
-                                <div>Contact Number: {userDetails[0].phoneNumber}</div>
+                                <div>Username/Email: {userDetails.userEmail}</div>
+                                <div>Profile Name: {userDetails.fullName}</div>
+                                {userDetails.phoneNumber && (
+                                    <div>Contact Number: {userDetails.phoneNumber}</div>
+                                )}
                             </div>
                         </>
                     ) : ""}
@@ -389,7 +391,7 @@ const History = () => {
                                                 <button
                                                     className='history-button'
                                                     title='Edit Response'
-                                                    onClick={() => handleEditClick(index, rate.rating, rate.restaurant, rate.fullName, rate.comment )}
+                                                    onClick={() => handleEditClick(index, rate.rating, rate.restaurant, rate.fullName, rate.comment)}
                                                 >
                                                     Edit
                                                 </button>

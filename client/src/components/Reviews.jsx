@@ -22,6 +22,11 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
     const [showLogin, setShowLogin] = useState(false);
     const [userImage, setUserImage] = useState([]);
 
+    const [displayedReviews, setDisplayedReviews] = useState(3);
+    const handleSeeMoreClick = () => {
+        setDisplayedReviews(displayedReviews + 2);
+    };
+
     const handleStarClick = (star) => {
         if (!user) {
             setShowLogin(true);
@@ -334,7 +339,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
             )}
             {showLogin && <Signin onClose={() => setShowLogin(false)} />}
             {reviewDetails ? (
-                [...reviewDetails].reverse().map((r, index) => (
+                [...reviewDetails].reverse().slice(0, displayedReviews).map((r, index) => (
                     <div className="reviews-container" key={index}>
                         <div className="profile-logo">
                             {userImage[userImage.length - 1 - index] && userImage[userImage.length - 1 - index].data ? (
@@ -364,8 +369,13 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
                         </div>
                     </div>
                 ))
-            ) : ""}
-
+            ) : ""
+            }
+            {reviewDetails && displayedReviews < reviewDetails.length && (
+                <div className="see-more-reviews" onClick={handleSeeMoreClick}>
+                    see more({reviewDetails.length - displayedReviews})
+                </div>
+            )}
         </>
     );
 };

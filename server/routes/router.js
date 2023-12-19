@@ -731,7 +731,7 @@ router.get("/user-info", async (req, res) => {
     }
 
     // Fetch user details based on userEmail
-    const user = await User.find({ userEmail: userEmail });
+    const user = await User.findOne({ userEmail: userEmail });
 
     res.status(200).json(user);
   } catch (error) {
