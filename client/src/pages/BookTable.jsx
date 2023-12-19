@@ -20,12 +20,13 @@ const BookTable = () => {
   const [showTypeFilters, setShowTypeFilters] = useState(true);
   const [showFeatureFilters, setShowFeatureFilters] = useState(false);
 
-  const [showSort, setShowSort] = useState(false);
-
   const [showMoreCuisine, setShowMoreCuisine] = useState(false);
   const [showMoreTypes, setShowMoreTypes] = useState(false);
   const [showMoreFeature, setShowMoreFeature] = useState(false);
 
+  const [averageRatings, setAverageRatings] = useState([]);
+
+  const [showSort, setShowSort] = useState(false);
   const [sortByPriceLowToHigh, setSortByPriceLowToHigh] = useState(false);
   const [sortByPriceHighToLow, setSortByPriceHighToLow] = useState(false);
   const [sortBy, setSortBy] = useState('rating');
@@ -112,6 +113,20 @@ const BookTable = () => {
         );
         const data = await response.json();
         setRestaurants(data.restaurants || []);
+
+        // Calculate and store average ratings for each restaurant
+        const ratingsArray = await Promise.all(data.restaurants.map(async (restaurant) => {
+          const response = await fetch(`/reviews?restaurantId=${restaurant._id}`);
+          const reviewsData = await response.json();
+          const totalRatings = reviewsData.length;
+          const ratingSum = totalRatings > 0 ? reviewsData.reduce((sum, review) => sum + review.rating, 0) : 0;
+          const avgRating = totalRatings > 0 ? ratingSum / totalRatings : 0;
+
+          return avgRating.toFixed(1);
+        }));
+
+        setAverageRatings(ratingsArray);
+
       } catch (error) {
         console.error(error);
       }
@@ -119,6 +134,8 @@ const BookTable = () => {
 
     fetchRestaurants();
   }, [capitalizedCity, area, location, cuisine, types, amenities]);
+
+  console.log(averageRatings);
 
   const filterRestaurants = () => {
     let filteredRestaurants = [...restaurants];
@@ -149,6 +166,11 @@ const BookTable = () => {
       filteredRestaurants = filteredRestaurants.sort((a, b) => a.averageCostForTwo - b.averageCostForTwo);
     } else if (sortByPriceHighToLow) {
       filteredRestaurants = filteredRestaurants.sort((a, b) => b.averageCostForTwo - a.averageCostForTwo);
+    }
+
+    // Apply sorting by average rating if selected
+    if (sortBy === 'rating') {
+      filteredRestaurants.sort((a, b) => averageRatings[restaurants.indexOf(b)] - averageRatings[restaurants.indexOf(a)]);
     }
 
     return filteredRestaurants;
@@ -556,9 +578,9 @@ const BookTable = () => {
                 <div className="city-restaurants-sort-elements">
                   {/* <div className="city-sort-elements">Rating</div>
                   <div className="city-sort-elements">Popularity</div> */}
-                  <div className="city-sort-elements" onClick={() => { setSortBy('rating'); setShowSort(false); }}>Rating</div>
-                  <div className="city-sort-elements" onClick={() => { setSortByPriceLowToHigh(true); setSortByPriceHighToLow(false); setShowSort(false); setSortBy('lowToHigh'); }}>Price: Low to High</div>
-                  <div className="city-sort-elements" onClick={() => { setSortByPriceLowToHigh(false); setSortByPriceHighToLow(true); setShowSort(false); setSortBy('highToLow'); }}>Price: High to Low</div>
+                  <div className="city-sort-elements" onClick={() => { setSortBy('rating'); setShowSort(false); setSortByPriceLowToHigh(false); setSortByPriceHighToLow(false); }}>Rating</div>
+                  <div className="city-sort-elements" onClick={() => { setSortBy('lowToHigh'); setShowSort(false); setSortByPriceLowToHigh(true); setSortByPriceHighToLow(false); }}>Price: Low to High</div>
+                  <div className="city-sort-elements" onClick={() => { setSortBy('highToLow'); setShowSort(false); setSortByPriceLowToHigh(false); setSortByPriceHighToLow(true); }}>Price: High to Low</div>
                 </div>
               }
             </div>
