@@ -4,6 +4,7 @@ import { Buffer } from 'buffer';
 import "../css/restaurant.css";
 import { Link } from 'react-router-dom';
 import { FaCloudSun, FaKitchenSet } from "react-icons/fa6";
+import { RxCross2 } from "react-icons/rx";
 import { TbSmoking, TbToolsKitchen2 } from "react-icons/tb";
 import { IoCallSharp, IoCarSport, IoWineSharp } from "react-icons/io5";
 import { IoIosWifi, IoMdCard } from "react-icons/io";
@@ -17,6 +18,15 @@ import { Link as ScrollLink, Element } from 'react-scroll';
 const ResDetails = ({ restaurant, user, ratingD, fullNameD, commentD }) => {
     const [averageRating, setAverageRating] = useState(0);
     const [totalReviews, setTotalReviews] = useState(0);
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleImageClick = (index) => {
+        setSelectedImage(restaurant.menu[index]);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedImage(null);
+    };
 
     if (!restaurant) {
         return <div>Loading...Please Wait</div>;
@@ -147,13 +157,29 @@ const ResDetails = ({ restaurant, user, ratingD, fullNameD, commentD }) => {
             <Element name="overview" className="resMainOverview">
                 <Element name="menu" className="resMainMenu">
                     <h1>Menu</h1>
-                    {restaurant.menu && restaurant.menu != "" && restaurant.menu.map((menuImage, index) => (
+                    {restaurant.menu && restaurant.menu !== "" && restaurant.menu.map((menuImage, index) => (
                         <img
                             key={index}
                             src={`data:${menuImage.contentType};base64,${Buffer.from(menuImage.data).toString('base64')}`}
                             alt={`Menu Image ${index + 1}`}
+                            onClick={() => handleImageClick(index)}
+                            style={{ cursor: 'pointer' }}
                         />
                     ))}
+
+                    {selectedImage && (
+                        <div className="overview-image-modal">
+                            <div className="overview-image-modal-content">
+                                <img
+                                    src={`data:${selectedImage.contentType};base64,${Buffer.from(selectedImage.data).toString('base64')}`}
+                                    alt="Selected Menu Image"
+                                    className="overview-image-modal-image"
+                                />
+                                <span className="overview-image-modal-close" onClick={handleCloseModal} title='Close'><RxCross2 /></span>
+                            </div>
+                        </div>
+                    )}
+
                 </Element>
                 <Element name="about" className="resMainAbout">
                     <h1>About</h1>
