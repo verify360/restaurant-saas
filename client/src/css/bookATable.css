@@ -271,3 +271,9 @@
 .book-table-filter-modal-actual-content > input{
     margin-right: 10px;
 }
+
+.book-table-filter-modal-footer{
+    cursor: pointer;
+    padding: 0 0 10px 10px;
+    font-weight: 200;
+}

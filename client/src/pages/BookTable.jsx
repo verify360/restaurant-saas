@@ -220,6 +220,17 @@ const BookTable = () => {
     }
   }, [records]);
 
+  const handleClearClick = (parameter) => {
+    // Clear all selected features
+    if (parameter === "features") {
+      setSelectedFeatures([]);
+    }else if(parameter === "types"){
+      setSelectedTypes([]);
+    }else{
+      setSelectedCuisines([]);
+    }
+  };
+
   return (
     <>
       <Navbar
@@ -244,7 +255,7 @@ const BookTable = () => {
               <div className="city-checkboxes">
                 {cuisineOptions.slice(0, 7).map((cuisine) => (
                   <>
-                    <input type="checkbox" id={cuisine.value} name={cuisine.value} onChange={handleCuisineChange} value={cuisine.label} />
+                    <input type="checkbox" id={cuisine.value} name={cuisine.value} onChange={handleCuisineChange} checked={selectedCuisines.includes(cuisine.label)} value={cuisine.label} />
                     <label htmlFor={cuisine.value}>{cuisine.label}</label><br />
                   </>
                 ))}
@@ -265,10 +276,13 @@ const BookTable = () => {
                       <div className='book-table-filter-modal-content'>
                         {cuisineOptions.map((cuisine) => (
                           <div key={cuisine.value} className='book-table-filter-modal-actual-content'>
-                            <input type="checkbox" id={cuisine.value} name={cuisine.value} onChange={handleCuisineChange} value={cuisine.label} />
+                            <input type="checkbox" id={cuisine.value} name={cuisine.value} onChange={handleCuisineChange} checked={selectedCuisines.includes(cuisine.label)} value={cuisine.label} />
                             <label htmlFor={cuisine.value}>{cuisine.label}</label>
                           </div>
                         ))}
+                      </div>
+                      <div onClick={() => handleClearClick("cuisines")} className='book-table-filter-modal-footer'>
+                        Clear
                       </div>
                     </div>
                   </div>
@@ -290,7 +304,7 @@ const BookTable = () => {
               <div className="city-checkboxes">
                 {typesOptions.slice(0, 7).map((types) => (
                   <>
-                    <input type="checkbox" id={types.value} name={types.value} onChange={handleTypeChange} value={types.label} />
+                    <input type="checkbox" id={types.value} name={types.value} onChange={handleTypeChange} checked={selectedTypes.includes(types.label)} value={types.label} />
                     <label htmlFor={types.value}>
                       {
                         types.label === 'Qsr' ? 'QSR' :
@@ -317,7 +331,7 @@ const BookTable = () => {
                       <div className='book-table-filter-modal-content'>
                         {typesOptions.map((types) => (
                           <div key={types.value} className='book-table-filter-modal-actual-content'>
-                            <input type="checkbox" id={types.value} name={types.value} onChange={handleTypeChange} value={types.label} />
+                            <input type="checkbox" id={types.value} name={types.value} onChange={handleTypeChange} checked={selectedTypes.includes(types.label)} value={types.label} />
                             <label htmlFor={types.value}>
                               {
                                 types.label === 'Qsr' ? 'QSR' :
@@ -327,6 +341,9 @@ const BookTable = () => {
                             </label>
                           </div>
                         ))}
+                      </div>
+                      <div onClick={() => handleClearClick("types")} className='book-table-filter-modal-footer'>
+                        Clear
                       </div>
                     </div>
                   </div>
@@ -348,7 +365,7 @@ const BookTable = () => {
               <div className="city-checkboxes">
                 {featureOptions.slice(0, 7).map((feature) => (
                   <>
-                    <input type="checkbox" id={feature.value} name={feature.value} onChange={handleFeatureChange} value={feature.value} />
+                    <input type="checkbox" id={feature.value} name={feature.value} onChange={handleFeatureChange} checked={selectedFeatures.includes(feature.value)} value={feature.value} />
                     <label htmlFor={feature.value}>{feature.label}</label><br />
                   </>
                 ))}
@@ -369,10 +386,13 @@ const BookTable = () => {
                       <div className='book-table-filter-modal-content'>
                         {featureOptions.map((feature) => (
                           <div key={feature.value} className='book-table-filter-modal-actual-content'>
-                            <input type="checkbox" id={feature.value} name={feature.value} onChange={handleFeatureChange} value={feature.value} />
+                            <input type="checkbox" id={feature.value} name={feature.value} onChange={handleFeatureChange} checked={selectedFeatures.includes(feature.value)} value={feature.value} />
                             <label htmlFor={feature.value}>{feature.label}</label>
                           </div>
                         ))}
+                      </div>
+                      <div onClick={() => handleClearClick("features")} className='book-table-filter-modal-footer'>
+                        Clear
                       </div>
                     </div>
                   </div>
