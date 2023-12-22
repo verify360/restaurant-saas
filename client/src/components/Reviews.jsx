@@ -24,7 +24,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
 
     const [displayedReviews, setDisplayedReviews] = useState(3);
     const handleSeeMoreClick = () => {
-        setDisplayedReviews(displayedReviews + 2);
+        setDisplayedReviews(displayedReviews + 1);
     };
 
     const handleStarClick = (star) => {

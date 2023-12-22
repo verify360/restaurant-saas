@@ -270,6 +270,7 @@
 
 .book-table-filter-modal-actual-content > input{
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .book-table-filter-modal-footer{

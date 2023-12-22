@@ -31,9 +31,7 @@ const BookTable = () => {
   const [averageRatings, setAverageRatings] = useState([]);
 
   const [showSort, setShowSort] = useState(false);
-  const [sortByPriceLowToHigh, setSortByPriceLowToHigh] = useState(false);
-  const [sortByPriceHighToLow, setSortByPriceHighToLow] = useState(false);
-  const [sortBy, setSortBy] = useState('rating');
+  const [sortBy, setSortBy] = useState('popularity');
 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 4;
@@ -130,8 +128,14 @@ const BookTable = () => {
     fetchRestaurants();
   }, [capitalizedCity, area, location, cuisine, types, amenities]);
 
-  console.log(averageRatings);
+  const sortOptions = [
+    { label: 'Rating', value: 'rating' },
+    { label: 'Popularity', value: 'popularity' },
+    { label: 'Price: Low to High', value: 'lowToHigh' },
+    { label: 'Price: High to Low', value: 'highToLow' },
+  ];
 
+  //Applying filter/sorting on fetched restaurants
   const filterRestaurants = () => {
     let filteredRestaurants = [...restaurants];
 
@@ -156,16 +160,15 @@ const BookTable = () => {
       );
     }
 
-    // Apply price sorting if selected
-    if (sortByPriceLowToHigh) {
+    // Apply sorting if selected
+    if (sortBy === 'lowToHigh') {
       filteredRestaurants = filteredRestaurants.sort((a, b) => a.averageCostForTwo - b.averageCostForTwo);
-    } else if (sortByPriceHighToLow) {
+    } else if (sortBy === 'highToLow') {
       filteredRestaurants = filteredRestaurants.sort((a, b) => b.averageCostForTwo - a.averageCostForTwo);
-    }
-
-    // Apply sorting by average rating if selected
-    if (sortBy === 'rating') {
+    } else if (sortBy === 'rating') {
       filteredRestaurants.sort((a, b) => averageRatings[restaurants.indexOf(b)] - averageRatings[restaurants.indexOf(a)]);
+    } else {
+      filteredRestaurants = filteredRestaurants.sort((a, b) => b.reviews.length - a.reviews.length);
     }
 
     return filteredRestaurants;
@@ -224,9 +227,9 @@ const BookTable = () => {
     // Clear all selected features
     if (parameter === "features") {
       setSelectedFeatures([]);
-    }else if(parameter === "types"){
+    } else if (parameter === "types") {
       setSelectedTypes([]);
-    }else{
+    } else {
       setSelectedCuisines([]);
     }
   };
@@ -275,13 +278,13 @@ const BookTable = () => {
                       </div>
                       <div className='book-table-filter-modal-content'>
                         {cuisineOptions.map((cuisine) => (
-                          <div key={cuisine.value} className='book-table-filter-modal-actual-content'>
+                          <div key={cuisine.value} title={`${cuisine.label} Cuisines`} className='book-table-filter-modal-actual-content'>
                             <input type="checkbox" id={cuisine.value} name={cuisine.value} onChange={handleCuisineChange} checked={selectedCuisines.includes(cuisine.label)} value={cuisine.label} />
                             <label htmlFor={cuisine.value}>{cuisine.label}</label>
                           </div>
                         ))}
                       </div>
-                      <div onClick={() => handleClearClick("cuisines")} className='book-table-filter-modal-footer'>
+                      <div onClick={() => handleClearClick("cuisines")} title='Clear' className='book-table-filter-modal-footer'>
                         Clear
                       </div>
                     </div>
@@ -330,7 +333,11 @@ const BookTable = () => {
                       </div>
                       <div className='book-table-filter-modal-content'>
                         {typesOptions.map((types) => (
-                          <div key={types.value} className='book-table-filter-modal-actual-content'>
+                          <div key={types.value} title={`${types.label === 'Qsr' ? 'QSR' :
+                            types.label === 'Girf Buffet Deals' ? 'GIRF Buffet Deals' :
+                              types.label === 'Girf Flat 50' ? 'GIRF Flat 50' : types.label
+                            } Restaurants`}
+                            className='book-table-filter-modal-actual-content'>
                             <input type="checkbox" id={types.value} name={types.value} onChange={handleTypeChange} checked={selectedTypes.includes(types.label)} value={types.label} />
                             <label htmlFor={types.value}>
                               {
@@ -342,7 +349,7 @@ const BookTable = () => {
                           </div>
                         ))}
                       </div>
-                      <div onClick={() => handleClearClick("types")} className='book-table-filter-modal-footer'>
+                      <div onClick={() => handleClearClick("types")} title='Clear' className='book-table-filter-modal-footer'>
                         Clear
                       </div>
                     </div>
@@ -385,13 +392,13 @@ const BookTable = () => {
                       </div>
                       <div className='book-table-filter-modal-content'>
                         {featureOptions.map((feature) => (
-                          <div key={feature.value} className='book-table-filter-modal-actual-content'>
+                          <div key={feature.value} title={`${feature.label} Feature`} className='book-table-filter-modal-actual-content'>
                             <input type="checkbox" id={feature.value} name={feature.value} onChange={handleFeatureChange} checked={selectedFeatures.includes(feature.value)} value={feature.value} />
                             <label htmlFor={feature.value}>{feature.label}</label>
                           </div>
                         ))}
                       </div>
-                      <div onClick={() => handleClearClick("features")} className='book-table-filter-modal-footer'>
+                      <div onClick={() => handleClearClick("features")} title='Clear' className='book-table-filter-modal-footer'>
                         Clear
                       </div>
                     </div>
@@ -459,16 +466,20 @@ const BookTable = () => {
             <span className='city-sort-by'>Sort by</span>
             <div className="city-restaurants-sort">
               <div className="city-restaurants-sort-element" onClick={() => setShowSort(!showSort)}>
-                <span>{sortBy === 'rating' ? 'Rating' : sortBy === 'lowToHigh' ? 'Price: Low to High' : 'Price: High to Low'}</span>
+                <span>{sortBy === 'popularity' ? 'Popularity' : sortBy === 'rating' ? 'Rating' : sortBy === 'lowToHigh' ? 'Price: Low to High' : 'Price: High to Low'}</span>
                 <span className="city-restaurants-updown">{showSort ? <GoChevronUp /> : <GoChevronDown />}</span>
               </div>
               {showSort &&
                 <div className="city-restaurants-sort-elements">
-                  {/* <div className="city-sort-elements">Rating</div>
-                  <div className="city-sort-elements">Popularity</div> */}
-                  <div className="city-sort-elements" onClick={() => { setSortBy('rating'); setShowSort(false); setSortByPriceLowToHigh(false); setSortByPriceHighToLow(false); }}>Rating</div>
-                  <div className="city-sort-elements" onClick={() => { setSortBy('lowToHigh'); setShowSort(false); setSortByPriceLowToHigh(true); setSortByPriceHighToLow(false); }}>Price: Low to High</div>
-                  <div className="city-sort-elements" onClick={() => { setSortBy('highToLow'); setShowSort(false); setSortByPriceLowToHigh(false); setSortByPriceHighToLow(true); }}>Price: High to Low</div>
+                  {sortOptions.map(option => (
+                    <div
+                      key={option.value}
+                      className="city-sort-elements"
+                      onClick={() => { setSortBy(option.value); setShowSort(false); }}
+                    >
+                      {option.label}
+                    </div>
+                  ))}
                 </div>
               }
             </div>
