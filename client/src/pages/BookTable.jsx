@@ -22,7 +22,7 @@ const BookTable = () => {
 
   const [showCuisineFilters, setShowCuisineFilters] = useState(true);
   const [showTypeFilters, setShowTypeFilters] = useState(true);
-  const [showFeatureFilters, setShowFeatureFilters] = useState(false);
+  const [showFeatureFilters, setShowFeatureFilters] = useState(true);
 
   const [showMoreCuisine, setShowMoreCuisine] = useState(false);
   const [showMoreTypes, setShowMoreTypes] = useState(false);

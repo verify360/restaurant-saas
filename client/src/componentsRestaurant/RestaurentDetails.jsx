@@ -16,7 +16,7 @@ const RestaurentDetails = () => {
 
     const [bookingDetails, setBookingDetails] = useState([]);
     const [showFilterOptions, setShowFilterOptions] = useState(false);
-    const [filter, setFilter] = useState('All');
+    const [filter, setFilter] = useState('Pending');
 
     const handleFilter = () => {
         setShowFilterOptions(!showFilterOptions);
@@ -26,6 +26,36 @@ const RestaurentDetails = () => {
         setFilter(option);
         setShowFilterOptions(false);
     };
+
+    let pendingCount = 0;
+    let confirmedCount = 0;
+    let cancelledCount = 0;
+    let unattendedCount = 0;
+    let fulfilledCount = 0;
+
+    // Iterate through the booking details and count the occurrences of each status
+    bookingDetails.forEach((booking) => {
+        switch (booking.status) {
+            case "Pending":
+                pendingCount++;
+                break;
+            case "Confirmed":
+                confirmedCount++;
+                break;
+            case "Cancelled":
+                cancelledCount++;
+                break;
+            case "Unattended":
+                unattendedCount++;
+                break;
+            case "Fulfilled":
+                fulfilledCount++;
+                break;
+            default:
+                // Handle any unexpected status
+                break;
+        }
+    });
 
     const filteredReservations = bookingDetails.filter((booking) => {
         switch (filter.toLowerCase()) {
@@ -296,12 +326,29 @@ const RestaurentDetails = () => {
                     )}
                 </div>
             </div>
+            <div className='reservations-counts'>
+                <div className='reservations-count'>
+                    <span style={{ backgroundColor: getStatusCircleColor('Fulfilled'), }} />Fulfilled: {fulfilledCount}
+                </div>
+                <div className='reservations-count'>
+                    <span style={{ backgroundColor: getStatusCircleColor('Pending'), }} />Pending: {pendingCount}
+                </div>
+                <div className='reservations-count'>
+                    <span style={{ backgroundColor: getStatusCircleColor('Confirmed'), }} />Confirmed: {confirmedCount}
+                </div>
+                <div className='reservations-count'>
+                    <span style={{ backgroundColor: getStatusCircleColor('Cancelled'), }} />Cancelled: {cancelledCount}
+                </div>
+                <div className='reservations-count'>
+                    <span style={{ backgroundColor: getStatusCircleColor('Unattended'), }} />Unattended: {unattendedCount}
+                </div>
+            </div>
             <div className="reservations-container">
                 {filteredReservations.length === 0 ? (
                     <p className='history-not-found'>No {filter === "All" ? " " : filter} Reservations Found.</p>
                 ) : (
                     <div className='history-list'>
-                        {filteredReservations.map((booking) => (
+                        {filteredReservations.reverse().map((booking) => (
                             <div key={booking._id} className='history-items'>
                                 <div className='history-item booked-item' title={`Reservation ${booking.status}`}>
                                     <span
