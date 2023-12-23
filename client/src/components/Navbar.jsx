@@ -6,13 +6,20 @@ import Signin from "./Signin";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import cities from "../allCities";
+import { FaCaretDown, FaCaretUp } from "react-icons/fa6";
 
 function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [showLogin, setShowLogin] = useState(false);
+  const [showKey, setShowKey] = useState(false);
   const [filteredCities, setFilteredCities] = useState([]);
 
   const [user] = useAuthState(auth);
+
+  const toggleDropdown = () => {
+    setFilteredCities(filteredCities.length ? [] : cities);
+    setShowKey(!showKey)
+  };
 
   const links = [
     { name: "Home", link: "/" },
@@ -30,6 +37,7 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
     setFilteredCities([]);
     onSelectCity(selectedCity);
     onCityChangeRedirect(selectedCity);
+    setShowKey(false);
   };
 
   const handleLoginButtonClick = () => {
@@ -56,13 +64,14 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
           </span>
           <input
             type="text"
-            placeholder={city ? capitalizeWords(city) : "Search City.."}
+            placeholder={showKey ? "Search City.." : capitalizeWords(city) }
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
               handleCitySearch(e.target.value);
             }}
             onFocus={() => searchTerm === '' && setFilteredCities(cities)}
+            onClick={() => setShowKey(true)}
             className="searchInput"
           />
           {filteredCities && (
@@ -73,6 +82,11 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
                 </li>
               ))}
             </ul>
+          )}
+          {!showKey ? (
+            <FaCaretDown onClick={() => toggleDropdown()} className="locationIcon showKey" />
+          ) : (
+            <FaCaretUp onClick={() => toggleDropdown()} className="locationIcon showKey" />
           )}
         </div>
         <div className="flex-item">

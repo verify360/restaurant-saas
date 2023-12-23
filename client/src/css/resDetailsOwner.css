@@ -105,7 +105,7 @@
 
 .reservations-counts {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     width: 1300px;
     gap: 50px;
 }
