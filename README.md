@@ -26,21 +26,35 @@ Taste&Flavor is a comprehensive restaurant management system that caters to both
 - **For Customers:**
 
   - **Home Page:** Login/Signup with Firebase authentication and authorization | Footer is dynamic for all cities.
-    ![Getting Started](/UIs/home.png)
-  - **Restaurant Listing Page:** Restaurants can be filtered and sorted in this page based on various parameters.
-    ![Getting Started](/UIs/listing.png)
-  - **Restaurant Details Page:** Reviews can be seen from latest to oldest order and given on clicking stars | Users can book slots as their prefered date and time | Booking and Giving reviews can only be done if user is logged in so the user will be authenticated in this process.
-    ![Getting Started](/UIs/res.png)
-  - **Profile Page:** All Customer Details can be found in this page, to make it more attractive filter option has been added.
-    ![Getting Started](/UIs/profile.png)
+
+    <img src="/UIs/home.png" alt="Getting Started" width="300" height="200">
+
+  - **Restaurant Listing Page:** Restaurants can be filtered and sorted on this page based on various parameters.
+
+    <img src="/UIs/listing.png" alt="Getting Started" width="300" height="200">
+
+  - **Restaurant Details Page:** Reviews can be seen from the latest to the oldest order and given by clicking stars. Users can book slots for their preferred date and time. Booking and giving reviews can only be done if the user is logged in, so the user will be authenticated in this process.
+
+    <img src="/UIs/res.png" alt="Getting Started" width="300" height="200">
+
+  - **Profile Page:** All customer details can be found on this page. To make it more attractive, a filter option has been added.
+
+    <img src="/UIs/profile.png" alt="Getting Started" width="300" height="200">
 
 - **For Restaurant Owners:**
 
-  - **Login/Registration Page:** Login/Signup with JW Token, whenever a user/owner logins a token is generated and the token is added to middleware for user authentication.
-    ![Getting Started](/UIs/login.png)
-  - **Home Page:** All restaurant of an owner is listed in this page along with the owner details which can be updated | On clicking any restaurant details the restaurant details opens.
-    ![Getting Started](/UIs/owner-home.png)
-  - **Restaurant Details Page:** All the bookings details for that restaurant is present here | owner can change the status of the booking accordingly.
-    ![Getting Started](/UIs/res-det.png)
-  - **Add Restaurant Page:** This is how a new restaurant can be added | Multiple images allowed.
-    ![Getting Started](/UIs/add-res.png)
+  - **Login/Registration Page:** Login/Signup with JW Token. Whenever a user/owner logs in, a token is generated, and the token is added to middleware for user authentication.
+
+    <img src="/UIs/login.png" alt="Getting Started" width="300" height="200">
+
+  - **Home Page:** All restaurants of an owner are listed on this page along with the owner details, which can be updated. Clicking any restaurant details opens the restaurant details.
+
+    <img src="/UIs/owner-home.png" alt="Getting Started" width="300" height="200">
+
+  - **Restaurant Details Page:** All the booking details for that restaurant are present here. The owner can change the status of the booking accordingly.
+
+    <img src="/UIs/res-det.png" alt="Getting Started" width="300" height="200">
+
+  - **Add Restaurant Page:** This is how a new restaurant can be added, with multiple images allowed.
+
+    <img src="/UIs/add-res.png" alt="Getting Started" width="300" height="200">
