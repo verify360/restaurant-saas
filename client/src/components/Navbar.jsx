@@ -7,10 +7,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import cities from "../allCities";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa6";
+import Signup from "./Signup";
 
 function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [showLogin, setShowLogin] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
   const [showKey, setShowKey] = useState(false);
   const [filteredCities, setFilteredCities] = useState([]);
 
@@ -64,7 +66,7 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
           </span>
           <input
             type="text"
-            placeholder={showKey ? "Search City.." : capitalizeWords(city) }
+            placeholder={showKey ? "Search City.." : capitalizeWords(city)}
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
@@ -111,7 +113,12 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
           </button>
         </div>
       </nav>
-      {showLogin && <Signin onClose={() => setShowLogin(false)} />}
+      {showLogin && <Signin onClose={() => setShowLogin(false)}
+        handleSignUp={() => { setShowLogin(false); setShowSignUp(true); }}
+      />}
+      {showSignUp && <Signup onClose={() => setShowSignUp(false)} 
+        handleSignIn={() => { setShowSignUp(false); setShowLogin(true)}}
+      />}
     </>
   );
 }

@@ -14,6 +14,7 @@ import RestaurentDetails from './componentsRestaurant/RestaurentDetails';
 import UpdateRestaurant from './componentsRestaurant/UpdateRestaurant';
 import Restaurant from './pages/Restaurant';
 import History from './pages/History';
+import Signup from './components/Signup';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route exact path="/" element={<Home/>}></Route>
       <Route exact path="/:city" element={<Home/>}></Route>
       <Route exact path="/login" element={<Signin/>}></Route>
+      <Route exact path='/signup' element={Signup}></Route>
       <Route exact path="/logout" element={<Home/>}></Route>
       <Route path="/:city-restaurants" element={<BookTable />} />
       <Route path="/:city-restaurants/:cuisine-cuisine" element={<BookTable />} />
