@@ -463,11 +463,9 @@ router.post("/book", async (req, res) => {
       bookingDate,
       entryTime,
       specialRequest,
-      creationTime,
-      lastSignInTime,
     } = req.body;
 
-    if (!userEmail || !fullName || !phoneNumber) {
+    if (!userEmail || !phoneNumber) {
       res.status(402).json({ error: "Marked Fields Are Mandatory" });
       return;
     }
@@ -519,7 +517,6 @@ router.post("/book", async (req, res) => {
       await newUser.save();
       existingUser = newUser;
     } else {
-      existingUser.fullName = fullName;
       existingUser.phoneNumber = phoneNumber;
       await existingUser.save();
     }
@@ -613,39 +610,15 @@ router.patch("/reservations/:bookingId", async (req, res) => {
 
 router.post("/add-review", async (req, res) => {
   try {
-    const {
-      userEmail,
-      fullName,
-      rating,
-      comment,
-      liked,
-      disLiked,
-      canBeImproved,
-      creationTime,
-      lastSignInTime,
-    } = req.body;
+    const { userEmail, rating, comment, liked, disLiked, canBeImproved } =
+      req.body;
 
-    if (!userEmail || !fullName || !rating) {
+    if (!userEmail || !rating) {
       res.status(402).json({ error: "Attributes Missing." });
       return;
     }
 
-    let user = await User.findOne({ userEmail });
-
-    if (!user) {
-      user = new User({
-        userEmail,
-        fullName,
-        creationTime,
-        lastSignInTime,
-      });
-      await user.save();
-    } else {
-      if (fullName) {
-        user.fullName = fullName;
-        await user.save();
-      }
-    }
+    const user = await User.findOne({ userEmail });
 
     const restaurantId = req.query.restaurantId;
     const restaurant = await Restaurant.findById(restaurantId);
@@ -717,6 +690,32 @@ router.get("/reviews", async (req, res) => {
     res.status(200).json(reviews);
   } catch (error) {
     console.error("Error fetching review details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/add-user", async (req, res) => {
+  try {
+    const { fullName, userEmail, creationTime, lastSignInTime } = req.body;
+
+    let user = await User.findOne({ userEmail });
+
+    if (fullName && userEmail && creationTime && lastSignInTime) {
+      if (!user) {
+        user = new User({
+          userEmail,
+          fullName,
+          creationTime,
+          lastSignInTime,
+        });
+        await user.save();
+        res.status(200).json({ message: "User Created." });
+      }else{
+        res.status(202).json({message: "User exist."})
+      }
+    }
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

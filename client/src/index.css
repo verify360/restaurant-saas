@@ -8,6 +8,10 @@
   color: #FF5757 !important;
 }
 
+.hover-not-allowed{
+  cursor: not-allowed;
+}
+
 .subHeading {
   color: #FF5757;
   margin-bottom: 0.5rem;

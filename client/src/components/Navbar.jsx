@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import logo from "../assets/logo.png";
@@ -10,6 +10,8 @@ import { FaCaretDown, FaCaretUp } from "react-icons/fa6";
 import Signup from "./Signup";
 
 function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
+
+  const [userDetails, setUserDetails] = useState(null)
   const [searchTerm, setSearchTerm] = useState("");
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
@@ -17,6 +19,50 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
   const [filteredCities, setFilteredCities] = useState([]);
 
   const [user] = useAuthState(auth);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const res = await fetch(`/user-info?userEmail=${user.email}`);
+        if (res.ok) {
+          const data = await res.json();
+          setUserDetails(data);
+        } else {
+          console.error('Failed to fetch user details');
+        }
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+
+    const handlePostUser = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/add-user", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fullName: user.displayName,
+            userEmail: user.email,
+            creationTime: user.metadata.creationTime,
+            lastSignInTime: user.metadata.lastSignInTime,
+          }),
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (user) {
+      fetchUserDetails();
+
+      if (userDetails === null) {
+        handlePostUser();
+      }
+    }
+
+  }, [user]);
 
   const toggleDropdown = () => {
     setFilteredCities(filteredCities.length ? [] : cities);
@@ -116,8 +162,8 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
       {showLogin && <Signin onClose={() => setShowLogin(false)}
         handleSignUp={() => { setShowLogin(false); setShowSignUp(true); }}
       />}
-      {showSignUp && <Signup onClose={() => setShowSignUp(false)} 
-        handleSignIn={() => { setShowSignUp(false); setShowLogin(true)}}
+      {showSignUp && <Signup onClose={() => setShowSignUp(false)}
+        handleSignIn={() => { setShowSignUp(false); setShowLogin(true) }}
       />}
     </>
   );

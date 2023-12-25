@@ -11,7 +11,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
     const [reviewDetails, setReviewDetails] = useState([])
 
     const [rate, setRate] = useState(ratingD ? ratingD : 0);
-    const [fullName, setFullName] = useState(fullNameD ? fullNameD : '');
+    // const [fullName, setFullName] = useState(fullNameD ? fullNameD : '');
     const [comment, setComment] = useState(commentD ? commentD : '');
 
     const [selectedDisliked, setSelectedDisliked] = useState([]);
@@ -102,9 +102,6 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
                 },
                 body: JSON.stringify({
                     userEmail: user.email,
-                    creationTime: user.metadata.creationTime,
-                    lastSignInTime: user.metadata.lastSignInTime,
-                    fullName,
                     rating: rate,
                     comment,
                     liked: selectedLiked.join(','),
@@ -326,7 +323,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
 
                             </div>
                             <div className="reviews-input-container-item-3">
-                                <input type="text" id="fullName" placeholder="Tell us your name (required)" value={fullName} onChange={(e) => setFullName(e.target.value)} required /><br />
+                                {/* <input type="text" id="fullName" placeholder="Tell us your name (required)" value={fullName} onChange={(e) => setFullName(e.target.value)} required /><br /> */}
                                 <textarea id="comment" cols="42" rows="5" placeholder={`Tell us about your experience at ${restaurant.name}`} value={comment} onChange={(e) => setComment(e.target.value)}></textarea><br />
                             </div>
                             <div className="reviews-input-container-item-4" onClick={handleSubmitReview}>

@@ -116,11 +116,34 @@ const Bookings = ({ user, restaurant }) => {
         // Update state when the user logs in
         if (user) {
             setDate(minDate);
-            setGuestName("");
             setMobileNumber("");
             setSpecialRequest("");
             setShowLogin(false); // Hide the login modal when the user logs in
         }
+    }, [user]);
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const res = await fetch(`/user-info?userEmail=${user.email}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setGuestName(data.fullName);
+                    if(data.phoneNumber){
+                        setMobileNumber(data.phoneNumber);
+                    }
+                } else {
+                    console.error('Failed to fetch user details');
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+        };
+
+        if (user) {
+            fetchUserDetails();
+        }
+
     }, [user]);
 
     if (date) {
@@ -162,8 +185,6 @@ const Bookings = ({ user, restaurant }) => {
         try {
             const bookingData = {
                 userEmail: user.email,
-                creationTime: user.metadata.creationTime,
-                lastSignInTime: user.metadata.lastSignInTime,
                 restaurantId: restaurant._id,
                 restaurantName: restaurant.name,
                 fullName: guestName,
@@ -278,7 +299,7 @@ const Bookings = ({ user, restaurant }) => {
                 )}
                 <div className="booking-data">
                     <div className='booking-label'>Enter Guest Details</div>
-                    <input className='datas' type="text" placeholder='Guest Name' value={guestName} onChange={(e) => setGuestName(e.target.value)} required />
+                    <input className={`datas ${user ? "hover-not-allowed" : " "} `} type="text" placeholder='Guest Name' value={guestName} disabled={user} />
                     <input className='datas' type="text" placeholder='Mobile No.' value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} required />
                     <input className='datas' type="text" placeholder='Special Request (Optional)' value={specialRequest} onChange={(e) => setSpecialRequest(e.target.value)} />
                     {!user ? (
