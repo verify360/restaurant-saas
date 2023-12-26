@@ -28,10 +28,10 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
           const data = await res.json();
           setUserDetails(data);
         } else {
-          console.error('Failed to fetch user details');
+          // console.error('Failed to fetch user details');
         }
       } catch (error) {
-        console.error('Error fetching user details:', error);
+        // console.error('Error fetching user details:', error);
       }
     };
 
@@ -50,7 +50,7 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
           }),
         });
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
 
@@ -62,7 +62,7 @@ function Navbar({ city, onSelectCity, onCityChangeRedirect }) {
       }
     }
 
-  }, [user]);
+  }, [user, userDetails]);
 
   const toggleDropdown = () => {
     setFilteredCities(filteredCities.length ? [] : cities);

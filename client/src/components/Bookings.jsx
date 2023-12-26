@@ -9,6 +9,7 @@ const Bookings = ({ user, restaurant }) => {
     const [selectedMeal, setSelectedMeal] = useState('lunch'); // Set 'lunch' as the default meal
     const [availableSlots, setAvailableSlots] = useState([]);
     const [showLogin, setShowLogin] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -129,7 +130,7 @@ const Bookings = ({ user, restaurant }) => {
                 if (res.ok) {
                     const data = await res.json();
                     setGuestName(data.fullName);
-                    if(data.phoneNumber){
+                    if (data.phoneNumber) {
                         setMobileNumber(data.phoneNumber);
                     }
                 } else {
@@ -182,6 +183,7 @@ const Bookings = ({ user, restaurant }) => {
 
     const handleBooking = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const bookingData = {
                 userEmail: user.email,
@@ -218,7 +220,8 @@ const Bookings = ({ user, restaurant }) => {
             }
         } catch (error) {
             console.error('Error during booking:', error);
-            // window.alert('Booking failed. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -299,7 +302,7 @@ const Bookings = ({ user, restaurant }) => {
                 )}
                 <div className="booking-data">
                     <div className='booking-label'>Enter Guest Details</div>
-                    <input className={`datas ${user ? "hover-not-allowed" : " "} `} type="text" placeholder='Guest Name' value={guestName} disabled={user} />
+                    <input className={`datas ${user ? "hover-not-allowed" : " "} `} type="text" placeholder='Guest Name' value={guestName} readOnly disabled={user} />
                     <input className='datas' type="text" placeholder='Mobile No.' value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} required />
                     <input className='datas' type="text" placeholder='Special Request (Optional)' value={specialRequest} onChange={(e) => setSpecialRequest(e.target.value)} />
                     {!user ? (
@@ -308,7 +311,7 @@ const Bookings = ({ user, restaurant }) => {
                 </div>
                 {guests ? (
                     <div className="booking-button">
-                        <button type="submit">Book</button>
+                        <button type="submit">{loading ? "Booking..." : "Book"}</button>
                     </div>
                 ) : ""}
             </form>

@@ -11,7 +11,8 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
     const [reviewDetails, setReviewDetails] = useState([])
 
     const [rate, setRate] = useState(ratingD ? ratingD : 0);
-    // const [fullName, setFullName] = useState(fullNameD ? fullNameD : '');
+    const [fullName, setFullName] = useState(fullNameD ? fullNameD : '');
+    const [loading, setLoading] = useState(false);
     const [comment, setComment] = useState(commentD ? commentD : '');
 
     const [selectedDisliked, setSelectedDisliked] = useState([]);
@@ -35,6 +36,27 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
             setShowRate(true);
         }
     };
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const res = await fetch(`/user-info?userEmail=${user.email}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setFullName(data.fullName);
+                } else {
+                    console.error('Failed to fetch user details');
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+        };
+
+        if (user) {
+            fetchUserDetails();
+        }
+
+    }, [user]);
 
     useEffect(() => {
         const fetchReviewsDetails = async () => {
@@ -94,6 +116,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await fetch(`http://localhost:5000/add-review?restaurantId=${restaurant._id}`, {
                 method: 'POST',
@@ -102,6 +125,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
                 },
                 body: JSON.stringify({
                     userEmail: user.email,
+                    fullName,
                     rating: rate,
                     comment,
                     liked: selectedLiked.join(','),
@@ -125,6 +149,8 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
             }
         } catch (error) {
             console.error('Error submitting review:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -261,11 +287,11 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
                                     ))}
                                 </div>
                                 <div className="reviews-input-container-adj">
-                                    {rate === 1 ? "Terrible" :
-                                        rate === 2 ? "Bad" :
-                                            rate === 3 ? "Ok" :
-                                                rate === 4 ? "Good" :
-                                                    rate === 5 ? "Excellent" : ""
+                                    {rate == 1 ? "Terrible" :
+                                        rate == 2 ? "Bad" :
+                                            rate == 3 ? "Ok" :
+                                                rate == 4 ? "Good" :
+                                                    rate == 5 ? "Excellent" : ""
                                     }
                                 </div>
                             </div>
@@ -287,7 +313,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
                                     </>
                                 )}
 
-                                {rate === 3 && (
+                                {rate == 3 && (
                                     <>
                                         <div className="reviews-input-container-head">What could be better?</div>
                                         <div className="reviews-input-container-flex">
@@ -327,7 +353,7 @@ const Reviews = ({ user, restaurant, onReviewsData, ratingD, fullNameD, commentD
                                 <textarea id="comment" cols="42" rows="5" placeholder={`Tell us about your experience at ${restaurant.name}`} value={comment} onChange={(e) => setComment(e.target.value)}></textarea><br />
                             </div>
                             <div className="reviews-input-container-item-4" onClick={handleSubmitReview}>
-                                Rate
+                                {loading ? "Rating..." : "Rate"}
                             </div>
                         </div>
                         <div className='profile-logo-cancel' onClick={() => { setRate(0); setShowRate(false); }}>×</div>
