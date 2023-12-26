@@ -72,7 +72,7 @@ export default function Footer({ city }) {
       case 'bangalore':
         return ['Ethnic Cuisine', 'Cafe', 'GIRF Flat 50', 'Street Food', '5 Star'];
       case 'kolkata':
-        return ['Casual Dining', 'Pizza', 'QSR', 'GIRF Flat 50', 'Buffet'];
+        return ['Casual Dining', 'Pizza', 'Fine Dining', 'GIRF Flat 50', 'Buffet'];
       case 'chennai':
         return ['Fine Dining', 'Casual Dining', 'Pizza', 'QSR', 'Bakery'];
       case 'hyderabad':

@@ -13,12 +13,13 @@ import { featureOptions } from '../filterParameters';
 
 const BookTable = () => {
 
+  const { city, area, location, cuisine, types, amenities } = useParams();
   const [restaurants, setRestaurants] = useState([]);
   const [showNoRestaurant, setShowNoRestaurant] = useState(false);
 
-  const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [selectedTypes, setSelectedTypes] = useState([]);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [selectedCuisines, setSelectedCuisines] = useState(cuisine ? [convertToTitleCase(cuisine),] : []);
+  const [selectedTypes, setSelectedTypes] = useState(types ? [convertToTitleCase(types),] : []);
+  const [selectedFeatures, setSelectedFeatures] = useState(amenities ? [convertToCamelCase(amenities),] : []);
 
   const [showCuisineFilters, setShowCuisineFilters] = useState(true);
   const [showTypeFilters, setShowTypeFilters] = useState(true);
@@ -37,8 +38,6 @@ const BookTable = () => {
   const recordsPerPage = 4;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-
-  const { city, area, location, cuisine, types, amenities } = useParams();
 
   const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
 
@@ -73,6 +72,27 @@ const BookTable = () => {
         .join(' ')
       : '';
   };
+
+  function convertToCamelCase(inputString) {
+    return inputString.replace(/-([a-z])/g, function (match, group1) {
+      return group1.toUpperCase();
+    }).replace(/^\w/, c => c.toUpperCase());
+  };
+
+  function convertToTitleCase(str) {
+    return str.replace(/(?:^|-)([a-z])/g, function (match, group) {
+      return ' ' + group.toUpperCase();
+    }).trim();
+  };
+
+  let cuisineInParams, typeInParams, featureInParams;
+  if (cuisine) {
+    cuisineInParams = convertToTitleCase(cuisine);
+  } else if (types) {
+    typeInParams = convertToTitleCase(types);
+  } else if (amenities) {
+    featureInParams = convertToCamelCase(amenities);
+  }
 
   //Convert the types to desired format
   function convertToOriginalFormat(cleanedString) {
@@ -142,21 +162,21 @@ const BookTable = () => {
     // Apply cuisine filters
     if (selectedCuisines.length > 0) {
       filteredRestaurants = filteredRestaurants.filter((restaurant) =>
-        restaurant.cuisine && selectedCuisines.some((cuisine) => restaurant.cuisine.includes(cuisine))
+        restaurant.cuisine && selectedCuisines.every((cuisine) => restaurant.cuisine.includes(cuisine))
       );
     }
 
     // Apply type filters if selected
     if (selectedTypes.length > 0) {
       filteredRestaurants = filteredRestaurants.filter((restaurant) =>
-        restaurant.types && selectedTypes.some((type) => restaurant.types.includes(type))
+        restaurant.types && selectedTypes.every((type) => restaurant.types.includes(type))
       );
     }
 
     // Apply feature filters if selected
     if (selectedFeatures.length > 0) {
       filteredRestaurants = filteredRestaurants.filter((restaurant) =>
-        restaurant.amenities && selectedFeatures.some((amenity) => restaurant.amenities.includes(amenity))
+        restaurant.amenities && selectedFeatures.every((amenity) => restaurant.amenities.includes(amenity))
       );
     }
 
@@ -226,11 +246,32 @@ const BookTable = () => {
   const handleClearClick = (parameter) => {
     // Clear all selected features
     if (parameter === "features") {
-      setSelectedFeatures([]);
+      if (featureInParams) {
+        setSelectedFeatures((prev) => {
+          const filteredCuisines = prev.filter((feature) => featureInParams.includes(feature));
+          return filteredCuisines;
+        });
+      } else {
+        setSelectedFeatures([]);
+      }
     } else if (parameter === "types") {
-      setSelectedTypes([]);
+      if (typeInParams) {
+        setSelectedTypes((prev) => {
+          const filteredCuisines = prev.filter((type) => typeInParams.includes(type));
+          return filteredCuisines;
+        });
+      } else {
+        setSelectedTypes([]);
+      }
     } else {
-      setSelectedCuisines([]);
+      if (cuisineInParams) {
+        setSelectedCuisines((prev) => {
+          const filteredCuisines = prev.filter((cuisine) => cuisineInParams.includes(cuisine));
+          return filteredCuisines;
+        });
+      } else {
+        setSelectedCuisines([]);
+      }
     }
   };
 
@@ -258,7 +299,7 @@ const BookTable = () => {
               <div className="city-checkboxes">
                 {cuisineOptions.slice(0, 7).map((cuisine) => (
                   <>
-                    <input type="checkbox" id={cuisine.value} name={cuisine.value} onChange={handleCuisineChange} checked={selectedCuisines.includes(cuisine.label)} value={cuisine.label} />
+                    <input type="checkbox" id={cuisine.value} name={cuisine.value} onChange={handleCuisineChange} checked={selectedCuisines.includes(cuisine.label)} value={cuisine.label} disabled={cuisineInParams === cuisine.label} />
                     <label htmlFor={cuisine.value}>{cuisine.label}</label><br />
                   </>
                 ))}
@@ -279,7 +320,7 @@ const BookTable = () => {
                       <div className='book-table-filter-modal-content'>
                         {cuisineOptions.map((cuisine) => (
                           <div key={cuisine.value} title={`${cuisine.label} Cuisines`} className='book-table-filter-modal-actual-content'>
-                            <input type="checkbox" id={cuisine.value} name={cuisine.value} onChange={handleCuisineChange} checked={selectedCuisines.includes(cuisine.label)} value={cuisine.label} />
+                            <input type="checkbox" id={cuisine.value} name={cuisine.value} onChange={handleCuisineChange} checked={selectedCuisines.includes(cuisine.label)} value={cuisine.label} disabled={cuisineInParams === cuisine.label} />
                             <label htmlFor={cuisine.value}>{cuisine.label}</label>
                           </div>
                         ))}
@@ -307,7 +348,7 @@ const BookTable = () => {
               <div className="city-checkboxes">
                 {typesOptions.slice(0, 7).map((types) => (
                   <>
-                    <input type="checkbox" id={types.value} name={types.value} onChange={handleTypeChange} checked={selectedTypes.includes(types.label)} value={types.label} />
+                    <input type="checkbox" id={types.value} name={types.value} onChange={handleTypeChange} checked={selectedTypes.includes(types.label)} value={types.label} disabled={typeInParams === types.label} />
                     <label htmlFor={types.value}>
                       {
                         types.label === 'Qsr' ? 'QSR' :
@@ -338,7 +379,7 @@ const BookTable = () => {
                               types.label === 'Girf Flat 50' ? 'GIRF Flat 50' : types.label
                             } Restaurants`}
                             className='book-table-filter-modal-actual-content'>
-                            <input type="checkbox" id={types.value} name={types.value} onChange={handleTypeChange} checked={selectedTypes.includes(types.label)} value={types.label} />
+                            <input type="checkbox" id={types.value} name={types.value} onChange={handleTypeChange} checked={selectedTypes.includes(types.label)} value={types.label} disabled={typeInParams === types.label} />
                             <label htmlFor={types.value}>
                               {
                                 types.label === 'Qsr' ? 'QSR' :
@@ -372,7 +413,7 @@ const BookTable = () => {
               <div className="city-checkboxes">
                 {featureOptions.slice(0, 7).map((feature) => (
                   <>
-                    <input type="checkbox" id={feature.value} name={feature.value} onChange={handleFeatureChange} checked={selectedFeatures.includes(feature.value)} value={feature.value} />
+                    <input type="checkbox" id={feature.value} name={feature.value} onChange={handleFeatureChange} checked={selectedFeatures.includes(feature.value)} value={feature.value} disabled={featureInParams === feature.value} />
                     <label htmlFor={feature.value}>{feature.label}</label><br />
                   </>
                 ))}
@@ -393,7 +434,7 @@ const BookTable = () => {
                       <div className='book-table-filter-modal-content'>
                         {featureOptions.map((feature) => (
                           <div key={feature.value} title={`${feature.label} Feature`} className='book-table-filter-modal-actual-content'>
-                            <input type="checkbox" id={feature.value} name={feature.value} onChange={handleFeatureChange} checked={selectedFeatures.includes(feature.value)} value={feature.value} />
+                            <input type="checkbox" id={feature.value} name={feature.value} onChange={handleFeatureChange} checked={selectedFeatures.includes(feature.value)} value={feature.value} disabled={featureInParams === feature.value} />
                             <label htmlFor={feature.value}>{feature.label}</label>
                           </div>
                         ))}

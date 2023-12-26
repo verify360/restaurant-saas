@@ -41,6 +41,7 @@
 
 .city-checkboxes>input {
     margin: 0px 10px 12px 12px;
+    cursor: pointer;
 }
 
 .city-checkboxes>label {
@@ -207,7 +208,7 @@
     background-color: #ddd;
 }
 
-.city-no-restaurant{
+.city-no-restaurant {
     font-size: 50px;
     color: #ff5757;
     margin: 140px 0px 0px 240px;
@@ -245,35 +246,35 @@
     font-size: 15px;
 }
 
-.book-table-filter-close{
+.book-table-filter-close {
     font-size: 25px;
     cursor: pointer;
 }
 
-.book-table-filter-close:hover {
+.book-table-filter-close:hover, .book-table-filter-modal-footer:hover {
     color: rgb(89, 89, 165);
 }
 
-.book-table-filter-modal-content{
+.book-table-filter-modal-content {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     padding: 10px 20px 10px 20px;
 }
 
-.book-table-filter-modal-actual-content{
+.book-table-filter-modal-actual-content {
     display: flex;
     align-items: center;
     width: 150px;
     margin-bottom: 5px;
 }
 
-.book-table-filter-modal-actual-content > input{
+.book-table-filter-modal-actual-content>input {
     margin-right: 10px;
     cursor: pointer;
 }
 
-.book-table-filter-modal-footer{
+.book-table-filter-modal-footer {
     cursor: pointer;
     padding: 0 0 10px 10px;
     font-weight: 200;
