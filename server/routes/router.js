@@ -116,9 +116,9 @@ router.post("/owner-login", async (req, res) => {
 
 router.post("/update-owner-details", authMiddleware, async (req, res) => {
   const userId = req.user._id;
-  const { username, password, email, fullName, phoneNumber } = req.body;
+  const { username, email, fullName, phoneNumber } = req.body;
 
-  if (!username || !password || !email || !fullName || !phoneNumber) {
+  if (!username || !email || !fullName || !phoneNumber) {
     return res.status(422).json({ error: "All Fields are Mandatory." });
   }
 
@@ -131,7 +131,6 @@ router.post("/update-owner-details", authMiddleware, async (req, res) => {
 
     // Update user's details if provided, otherwise keep the existing values
     existingUser.username = username || existingUser.username;
-    existingUser.password = password || existingUser.password;
     existingUser.email = email || existingUser.email;
     existingUser.fullName = fullName || existingUser.fullName;
     existingUser.phoneNumber = phoneNumber || existingUser.phoneNumber;

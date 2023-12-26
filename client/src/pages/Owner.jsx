@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "../css/ownerHome.css";
 import { FaUser } from "react-icons/fa";
-import { RiLockPasswordFill } from "react-icons/ri";
 import { MdEmail } from "react-icons/md";
 import { FaHouseUser } from "react-icons/fa";
 import { AiTwotoneEdit } from "react-icons/ai";
@@ -78,8 +77,6 @@ const Owner = () => {
     }
   }
 
-
-
   if (userData) {
     return (
       <>
@@ -88,10 +85,6 @@ const Owner = () => {
             <div className="subItems">
               <div className="icon"><FaHouseUser /></div>
               <div className="content"><h3>{userData.username}</h3></div>
-            </div>
-            <div className="subItems">
-              <div className="icon"><RiLockPasswordFill /></div>
-              <div className="content"><h3>xxxxxx</h3></div>
             </div>
             <div className="subItems">
               <div className="icon"><MdEmail /></div>
@@ -105,10 +98,12 @@ const Owner = () => {
               <div className="icon"><BsFillTelephoneInboundFill /></div>
               <div className="content"><h3>{userData.phoneNumber}</h3></div>
             </div>
+            <div className='subItems editIcon' title='Edit User Details' onClick={handleEditButton}>
+              <AiTwotoneEdit />
+            </div>
           </div>
-          <div className='editIcon' title='Edit User Details' onClick={handleEditButton}><AiTwotoneEdit /></div>
         </form>
-        {showEdit && <Edit data={userData} onClose={() => setShowEdit(false)}/>}
+        {showEdit && <Edit data={userData} onClose={() => setShowEdit(false)} />}
         <div className="resContainer">
           <div className="resItems">
             <div className="Heading">My Restaurants</div>

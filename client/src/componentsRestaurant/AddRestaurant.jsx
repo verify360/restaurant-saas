@@ -22,6 +22,7 @@ const AddRestaurant = () => {
 
   const [showCuisineExample, setShowCuisineExample] = useState(false);
   const [showTypesExample, setShowTypesExample] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -116,6 +117,7 @@ const AddRestaurant = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
@@ -170,6 +172,8 @@ const AddRestaurant = () => {
     } catch (error) {
       setError("Failed to add restaurant.");
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -379,7 +383,7 @@ const AddRestaurant = () => {
         </div>
         <div className="info">
           {error && <div className="error-message">{error}</div>}
-          <button className='resButton button' type="submit">Add Restaurant</button>
+          <button className='resButton button' type="submit">{loading ? "Adding..." : "Add Restaurant"}</button>
         </div>
       </form>
     </div>
