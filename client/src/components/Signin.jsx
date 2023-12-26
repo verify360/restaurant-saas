@@ -4,12 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import '../css/signin.css';
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { IoMdClose } from 'react-icons/io';
+import { LuEye, LuEyeOff } from 'react-icons/lu';
 
 export default function Signin({ onClose, handleSignUp }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [seePassword, setSeePassword] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSignin = async (e) => {
@@ -37,7 +40,8 @@ export default function Signin({ onClose, handleSignUp }) {
             <input type="email" placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="form-group sign-up-form">
-            <input type="password" placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <span className='password-hide-user' onClick={() => setSeePassword(!seePassword)}>{!seePassword ? (<LuEye />) : (<LuEyeOff />)}</span>
+            <input type={`${seePassword ? "" : "password"}`} placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
           {error && <div className="signup-error-message">{error}</div>}
           <button className='subLogin button login-form-button' type="submit" disabled={isLoading}>

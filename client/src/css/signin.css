@@ -59,7 +59,7 @@
   display: flex;
 }
 
-.signup-model-overlay{
+.signup-model-overlay {
   flex-direction: column;
 }
 
@@ -116,8 +116,16 @@
   color: #484747;
 }
 
-.signup-error-message{
+.signup-error-message {
   margin-bottom: 10px;
   font-size: 14px;
   color: red;
+}
+
+.password-hide-user {
+  position: absolute;
+  margin: 14px 0 0 250px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #7a7878;
 }

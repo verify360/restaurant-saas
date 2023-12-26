@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "../css/ownerLogin.css";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 
 const Login = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [seePassword, setSeePassword] = useState(false);
 
   const [owner, setOwner] = useState({
     username: "", password: ""
@@ -46,7 +48,7 @@ const Login = () => {
       }
     } catch (error) {
       window.alert("Error:", error.message);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -60,7 +62,8 @@ const Login = () => {
             <input type="text" id="username" name="username" placeholder='Username' required value={owner.username} onChange={handleInputs} />
           </div>
           <div className="form-group">
-            <input type="password" id="password" name="password" placeholder='Password' required value={owner.password} onChange={handleInputs} />
+            <span className='password-hide' onClick={() => setSeePassword(!seePassword)}>{!seePassword ? (<LuEye />) : (<LuEyeOff />)}</span>
+            <input type={`${seePassword ? "" : "password"}`} id="password" name="password" placeholder='Password' required value={owner.password} onChange={handleInputs} />
           </div>
           <button type="submit" className="submit-btn button">{loading ? "Logging in..." : "Login"}</button>
         </form>
