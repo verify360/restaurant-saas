@@ -25,11 +25,11 @@ Taste&Flavor is a comprehensive restaurant management system that caters to both
 
 - **For Customers:**
 
-  - **Home Page:**Footer is dynamic for all different cities.
+  - **Home Page:** Footer is dynamic for all different cities.
 
     ![Getting Started](./UIs/home.png)
 
-  - **Login/Signup:** Login/Signup with Firebase authentication and authorization | Footer is dynamic for all cities.
+  - **Login/Signup:** Login/Signup with Firebase authentication and authorization.
 
     ![Getting Started](./UIs/login.png)
 
