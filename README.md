@@ -25,9 +25,15 @@ Taste&Flavor is a comprehensive restaurant management system that caters to both
 
 - **For Customers:**
 
-  - **Home Page:** Login/Signup with Firebase authentication and authorization | Footer is dynamic for all cities.
+  - **Home Page:**Footer is dynamic for all different cities.
 
     ![Getting Started](./UIs/home.png)
+
+  - **Login/Signup:** Login/Signup with Firebase authentication and authorization | Footer is dynamic for all cities.
+
+    ![Getting Started](./UIs/login.png)
+
+    ![Getting Started](./UIs/signup.png)
 
   - **Restaurant Listing Page:** Restaurants can be filtered and sorted on this page based on various parameters.
 
@@ -37,15 +43,21 @@ Taste&Flavor is a comprehensive restaurant management system that caters to both
 
     ![Getting Started](./UIs/res.png)
 
+  - **Review Page:** After Authentication user can give reviews.
+
+    ![Getting Started](./UIs/review.png)
+
   - **Profile Page:** All customer details can be found on this page. To make it more attractive, a filter option has been added.
 
     ![Getting Started](./UIs/profile.png)
 
 - **For Restaurant Owners:**
 
-  - **Login/Registration Page:** Login/Signup with JW Token. Whenever a user/owner logs in, a token is generated, and the token is added to middleware for user authentication.
+  - **Login/Registration Page:** Login/Registration with JW Token. Whenever a user/owner logs in, a token is generated, and the token is added to middleware for user authentication.
 
-    ![Getting Started](./UIs/login.png)
+    ![Getting Started](./UIs/owner-reg.png)
+
+    ![Getting Started](./UIs/owner-login.png)
 
   - **Home Page:** All restaurants of an owner are listed on this page along with the owner details, which can be updated. Clicking any restaurant details opens the restaurant details.
 
