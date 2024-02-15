@@ -1,5 +1,5 @@
 .city-restaurant {
-    padding: 10px 370px 50px 370px;
+    padding:40px;
     height: max-content;
     background-color: #f3f3f3;
     display: flex;
@@ -210,7 +210,7 @@
 
 .city-no-restaurant {
     font-size: 50px;
-    color: #ff5757;
+    color: #4CAF50;
     margin: 140px 0px 0px 240px;
 }
 
