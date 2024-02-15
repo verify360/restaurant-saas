@@ -1,3 +1,6 @@
+This application is developed by samsujjohalaskar. 
+
+
 # Taste&Flavor
 
 Taste&Flavor is a comprehensive restaurant management system that caters to both diners and restaurant owners. This platform facilitates a seamless dining experience by offering an array of features. Users can explore diverse restaurants, read authentic reviews, and effortlessly make reservations. Restaurant owners, on the other hand, benefit from streamlined management tools to enhance their business operations.
