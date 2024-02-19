@@ -293,7 +293,7 @@ const History = () => {
                             <div>Fulfilled</div>
                         </div>
                     )}
-                    <h1>Booking History</h1>
+                    <h1 style={{color: '#00635A'}}>Booking History</h1>
                     {filteredReservations.length === 0 ? (
                         <p className='history-not-found'>No {filter === "All" ? " " : filter} Reservations Found.</p>
                     ) : (
@@ -343,7 +343,7 @@ const History = () => {
                     )}
                 </div>
                 <div className='history-container'>
-                    <h1>My Reviews</h1>
+                    <h1 style={{color:'#00635A'}}>My Reviews</h1>
                     {reviewDetails.length === 0 ? (
                         <p className='history-not-found'>No Reviews Found.</p>
                     ) : (
