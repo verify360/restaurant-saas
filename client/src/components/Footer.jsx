@@ -427,7 +427,7 @@ export default function Footer({ city }) {
         </div>
         <div className="footerBottom flex">
           <div className="mainColor flex-item logo">
-            <img src={logo} alt="" />
+          <span style={{color:'#00635A', fontSize:'2.5rem', paddingLeft:'0.6rem'}}>𝑻𝒂𝒔𝒕𝒆&𝑭𝒍𝒂𝒗𝒐𝒓</span>
           </div>
           <div className="flex-item">
             <p>Every Bite Speaks Taste, Flavorful Journey</p>

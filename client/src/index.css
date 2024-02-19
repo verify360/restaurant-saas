@@ -239,10 +239,25 @@ a {
 }
 
 .bestOffers {
-  height: 212px;
+  /* height: 212px; */
   /* border: red solid 2px; */
   background-color: #f3f3f3;
-  padding: 45px 370px 50px 370px;
+  padding: 45px 250px 50px 250px;
+}
+
+
+.restaurant-slides {
+  background-color: #fff;
+  padding: 30px;
+}
+
+.restaurant-slides .restaurant-Img {
+  width: 100px;
+  height: 331px;
+}
+
+.slide-item {
+  padding: 0 10px;
 }
 
 .offersActual {
@@ -508,4 +523,24 @@ a {
     margin-right: 0;
     margin-bottom: 10px;
   }
+}
+
+.offersActual {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.offer {
+  width: 25%;
+  margin: 10px;
+}
+
+.offer-link {
+  display: block;
+}
+
+.offer-link img {
+  width: 100%; /* Make the images fill their container */
+  height: auto; /* Maintain aspect ratio */
 }

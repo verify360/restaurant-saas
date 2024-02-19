@@ -11,11 +11,11 @@
 
 .city-cuisine-filters, .city-type-filters, .city-feature-filters {
     width: 200px;
-    background-color: #fff;
+    background-color: #4CAF4F;
     padding: 13px 18px 13px 12px;
     border-radius: 7px 7px 0px 0px;
     border-bottom: 2px solid #f3f3f3;
-    color: #a0a0a0;
+    color: #fff;
     font-size: 14px;
     font-weight: bolder;
 }
@@ -54,6 +54,7 @@
     font-weight: 600;
     margin-bottom: 20px;
     width: 590px;
+    color: #00635a;
 }
 
 .city-restaurants-heading-sort {
@@ -173,7 +174,7 @@
 
 .city-show-more {
     cursor: pointer;
-    color: #b8b3b3;
+    color: #fff;
     font-weight: 100;
     font-size: 13px;
 }
@@ -235,6 +236,7 @@
     height: max-content;
     width: 500px;
     flex-direction: column;
+    color: #000;
 }
 
 .book-table-filter-modal-header {
@@ -267,6 +269,7 @@
     align-items: center;
     width: 150px;
     margin-bottom: 5px;
+    font-size: 0.8rem;
 }
 
 .book-table-filter-modal-actual-content>input {
@@ -276,6 +279,9 @@
 
 .book-table-filter-modal-footer {
     cursor: pointer;
-    padding: 0 0 10px 10px;
+    padding: 10px 10px 10px 10px;
     font-weight: 200;
+    width: '100%';
+    display: flex;
+    justify-content: flex-end;
 }
